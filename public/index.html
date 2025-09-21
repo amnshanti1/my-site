@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Adam Shanti — Engineering Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Engineering projects, experiments, and tools by Adam Shanti." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/publish/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="site-logo" href="/">Adam Shanti</a>
+      <nav class="site-nav">
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn-small" href="/Adam_Shanti_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="scene-wrap" id="top">
+    <canvas id="scene-canvas" aria-hidden="true"></canvas>
+
+    <div class="bg-title" aria-hidden="true">
+      <span>crafted for</span>
+      <span>aerial excellence</span>
+    </div>
+
+    <div class="center-hub">
+      <p class="eyebrow">Aerospace Engineer · Builder</p>
+      <h1>Adam Shanti</h1>
+      <p class="hub-tagline">Rapid prototyping, propulsion test, and mission-scale simulation stitched into one flight-ready toolkit.</p>
+      <div class="hub-actions">
+        <a class="btn" href="/Adam_Shanti_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+        <a class="btn btn-ghost" href="mailto:adam@adamshanti.com">Email</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/..." target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <span class="hint">Drag to orbit · Scroll to explore</span>
+    </div>
+
+    <div class="island-labels">
+      <a class="island-label" style="--x: 21%; --y: 38%;" href="/projects/mk4.html">Mk4 Modular UAV</a>
+      <a class="island-label" style="--x: 78%; --y: 42%;" href="/projects/turbojet.html">Turbojet Test Stand</a>
+      <a class="island-label" style="--x: 50%; --y: 66%;" href="/projects/mission-sim.html">Mission Profile Simulator</a>
+    </div>
+  </section>
+
+  <main>
+    <section id="projects" class="section section-projects">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Featured work</p>
+            <h2>Projects</h2>
+          </div>
+          <label class="tag-controls">
+            <span>Filter</span>
+            <select id="tagFilter" aria-label="Filter projects by tag">
+              <option value="all">All</option>
+              <option value="aero">Aero</option>
+              <option value="propulsion">Propulsion</option>
+              <option value="software">Software</option>
+              <option value="hardware">Hardware</option>
+              <option value="analysis">Analysis</option>
+              <option value="controls">Controls</option>
+              <option value="design">Design</option>
+              <option value="testing">Testing</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="project-grid">
+          <article class="card" data-tags="aero design analysis">
+            <img src="/images/mk4-thumb.jpg" alt="Mk4 modular UAV thumbnail" loading="lazy" />
+            <div class="card-body">
+              <h3 class="card-title">Mk4 Modular UAV</h3>
+              <p class="card-text">Modular, 3D-printed fixed-wing UAV with supercapacitor power, rib-and-spar wing, and rapid field repair.</p>
+              <ul class="tags">
+                <li>aero</li><li>design</li><li>analysis</li>
+              </ul>
+              <div class="card-actions">
+                <a class="btn" href="/projects/mk4.html">Case Study</a>
+                <a class="btn btn-ghost" href="https://github.com/..." target="_blank" rel="noopener">Code</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-tags="propulsion testing hardware">
+            <img src="/images/engine-test-thumb.jpg" alt="Engine test stand thumbnail" loading="lazy" />
+            <div class="card-body">
+              <h3 class="card-title">Turbojet Test Stand</h3>
+              <p class="card-text">Instrumented test stand with DAQ, safety interlocks, and calibrated thrust measurement for turbojet characterization.</p>
+              <ul class="tags">
+                <li>propulsion</li><li>testing</li><li>hardware</li>
+              </ul>
+              <div class="card-actions">
+                <a class="btn" href="/projects/turbojet.html">Case Study</a>
+                <a class="btn btn-ghost" href="https://youtu.be/..." target="_blank" rel="noopener">Demo</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-tags="software analysis controls">
+            <img src="/images/mission-sim-thumb.jpg" alt="Mission simulation plot thumbnail" loading="lazy" />
+            <div class="card-body">
+              <h3 class="card-title">Mission Profile Simulator</h3>
+              <p class="card-text">Segment-based aircraft mission sim with carpet plots for TSL vs WTOS and fuel split visualizations.</p>
+              <ul class="tags">
+                <li>software</li><li>analysis</li><li>controls</li>
+              </ul>
+              <div class="card-actions">
+                <a class="btn" href="/projects/mission-sim.html">Case Study</a>
+                <a class="btn btn-ghost" href="https://github.com/..." target="_blank" rel="noopener">Repo</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section section-about">
+      <div class="container">
+        <p class="eyebrow">Who I am</p>
+        <h2>About</h2>
+        <p class="lede">I’m an aerospace engineer focused on propulsion test, conceptual aircraft design, and simulation. I build tooling and rigs that bridge the gap between first sketch and flight-ready data.</p>
+        <div class="about-grid">
+          <div>
+            <h3>Strengths</h3>
+            <ul>
+              <li>Full-stack prototyping across CAD, firmware, and cloud orchestration.</li>
+              <li>High-fidelity test design with instrumentation, sensor fusion, and safety interlocks.</li>
+              <li>Mission analysis and controls modeling for multi-segment flight envelopes.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Currently</h3>
+            <ul>
+              <li>Building flight-worthy infrastructure that scales from lab rigs to high-altitude operations.</li>
+              <li>Exploring reusable airframes and rapid repair workflows for field teams.</li>
+              <li>Experimenting with virtual mission rehearsal for distributed pilots.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section-contact">
+      <div class="container">
+        <p class="eyebrow">Let’s collaborate</p>
+        <h2>Contact</h2>
+        <p class="lede">Reach out for propulsion test campaigns, mission tooling, or to collaborate on aerial systems.</p>
+        <div class="contact-actions">
+          <a class="btn" href="mailto:adam@adamshanti.com">adam@adamshanti.com</a>
+          <a class="btn btn-ghost" href="https://www.linkedin.com/in/..." target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Adam Shanti · Built for the cloud edge</small>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const select = document.getElementById('tagFilter');
+    const cards = Array.from(document.querySelectorAll('.project-grid .card'));
+    if (select) {
+      select.addEventListener('change', () => {
+        const tag = select.value;
+        cards.forEach(card => {
+          const tags = (card.getAttribute('data-tags') || '').split(/\s+/);
+          const show = tag === 'all' || tags.includes(tag);
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    }
+  </script>
+
+  <script type="module">
+    const root = document.documentElement;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function hasWebGL() {
+      try {
+        const canvas = document.createElement('canvas');
+        return !!window.WebGLRenderingContext && !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+      } catch (err) {
+        return false;
+      }
+    }
+
+    if (!hasWebGL()) {
+      root.classList.add('no-webgl');
+      console.warn('WebGL not available; keeping fallback labels visible.');
+    } else {
+      root.classList.add('has-webgl');
+      try {
+        const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.module.js');
+        const { OrbitControls } = await import('https://cdn.jsdelivr.net/npm/three@0.156.1/examples/jsm/controls/OrbitControls.js');
+
+        const canvas = document.getElementById('scene-canvas');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x040818, 0.06);
+
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(0x000000, 0);
+
+        const camera = new THREE.PerspectiveCamera(48, canvas.clientWidth / canvas.clientHeight, 0.1, 120);
+        camera.position.set(0, 3.2, 9);
+
+        const controls = new OrbitControls(camera, canvas);
+        controls.enableDamping = true;
+        controls.enablePan = false;
+        controls.minDistance = 4.5;
+        controls.maxDistance = 12;
+        controls.minPolarAngle = 0.3;
+        controls.maxPolarAngle = Math.PI / 2.05;
+
+        const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambient);
+
+        const keyLight = new THREE.DirectionalLight(0x7fd1ff, 1.9);
+        keyLight.position.set(5, 8, 4);
+        scene.add(keyLight);
+
+        const rimLight = new THREE.DirectionalLight(0xffc9ff, 1.1);
+        rimLight.position.set(-7, 5, -6);
+        scene.add(rimLight);
+
+        const ground = new THREE.Mesh(
+          new THREE.CircleGeometry(9, 48),
+          new THREE.MeshBasicMaterial({ color: 0x13213a, transparent: true, opacity: 0.45 })
+        );
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -1.6;
+        scene.add(ground);
+
+        const aura = new THREE.Mesh(
+          new THREE.CylinderGeometry(9, 9, 0.05, 64, 1, true),
+          new THREE.MeshBasicMaterial({ color: 0x1c3a66, transparent: true, opacity: 0.18 })
+        );
+        aura.rotation.x = -Math.PI / 2;
+        aura.position.y = -1.55;
+        scene.add(aura);
+
+        const starCount = 520;
+        const starGeometry = new THREE.BufferGeometry();
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i += 1) {
+          starPositions[i * 3 + 0] = (Math.random() - 0.5) * 60;
+          starPositions[i * 3 + 1] = Math.random() * 30 + 2;
+          starPositions[i * 3 + 2] = (Math.random() - 0.5) * 60;
+        }
+        starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        const starMaterial = new THREE.PointsMaterial({ color: 0x6db8ff, size: 0.08, transparent: true, opacity: 0.65, depthWrite: false });
+        const stars = new THREE.Points(starGeometry, starMaterial);
+        scene.add(stars);
+
+        const islandSpecs = [
+          { position: new THREE.Vector3(-2.9, 0.4, -1.6), scale: 1.2, topColor: 0x63e2ff, skirtColor: 0x3fa4ff, speed: 0.85 },
+          { position: new THREE.Vector3(2.8, 0.5, -1.1), scale: 1.3, topColor: 0xffd58a, skirtColor: 0xffa060, speed: 1.1 },
+          { position: new THREE.Vector3(0.2, 0.8, 2.1), scale: 1.15, topColor: 0xb9a6ff, skirtColor: 0x8d7cff, speed: 0.75 }
+        ];
+
+        const floatingIslands = islandSpecs.map((spec, index) => {
+          const group = new THREE.Group();
+          group.position.copy(spec.position);
+          group.scale.setScalar(spec.scale);
+
+          const top = new THREE.Mesh(
+            new THREE.CylinderGeometry(1.6, 1.2, 0.6, 8, 1),
+            new THREE.MeshStandardMaterial({
+              color: spec.topColor,
+              metalness: 0.25,
+              roughness: 0.5,
+              emissive: 0x0,
+              envMapIntensity: 0.8
+            })
+          );
+          top.position.y = 0.4;
+          group.add(top);
+
+          const skirt = new THREE.Mesh(
+            new THREE.ConeGeometry(1.15, 1.8, 8, 1, true),
+            new THREE.MeshStandardMaterial({
+              color: spec.skirtColor,
+              metalness: 0.1,
+              roughness: 0.85,
+              side: THREE.DoubleSide
+            })
+          );
+          skirt.position.y = -0.65;
+          group.add(skirt);
+
+          const cap = new THREE.Mesh(
+            new THREE.CylinderGeometry(1.3, 1.3, 0.08, 32),
+            new THREE.MeshStandardMaterial({
+              color: 0xffffff,
+              transparent: true,
+              opacity: 0.16,
+              emissive: 0x0,
+              metalness: 0.2,
+              roughness: 0.1
+            })
+          );
+          cap.position.y = 0.73;
+          group.add(cap);
+
+          const halo = new THREE.Mesh(
+            new THREE.RingGeometry(1.3, 1.55, 48),
+            new THREE.MeshBasicMaterial({ color: spec.topColor, transparent: true, opacity: 0.3, side: THREE.DoubleSide })
+          );
+          halo.rotation.x = -Math.PI / 2;
+          halo.position.y = 0.72;
+          group.add(halo);
+
+          group.rotation.y = Math.random() * Math.PI;
+          scene.add(group);
+          return { group, baseY: group.position.y, phase: Math.random() * Math.PI * 2, speed: spec.speed ?? (0.9 + index * 0.1) };
+        });
+
+        const clock = new THREE.Clock();
+
+        function resizeRenderer() {
+          const pixelRatio = Math.min(window.devicePixelRatio, 2);
+          const width = canvas.clientWidth;
+          const height = canvas.clientHeight;
+          if (canvas.width !== Math.floor(width * pixelRatio) || canvas.height !== Math.floor(height * pixelRatio)) {
+            renderer.setSize(width, height, false);
+            renderer.setPixelRatio(pixelRatio);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+          }
+        }
+
+        function render() {
+          resizeRenderer();
+          const elapsed = clock.getElapsedTime();
+
+          if (!prefersReducedMotion.matches) {
+            floatingIslands.forEach((island, index) => {
+              island.group.position.y = island.baseY + Math.sin(elapsed * island.speed + island.phase) * 0.35;
+              island.group.rotation.y += 0.003 + index * 0.0007;
+            });
+            stars.rotation.y -= 0.00025;
+          }
+
+          controls.update();
+          renderer.render(scene, camera);
+        }
+
+        renderer.setAnimationLoop(render);
+
+        const handleMotionChange = () => {
+          if (prefersReducedMotion.matches) {
+            floatingIslands.forEach(island => {
+              island.group.position.y = island.baseY;
+            });
+          }
+        };
+
+        prefersReducedMotion.addEventListener?.('change', handleMotionChange);
+        prefersReducedMotion.addListener?.(handleMotionChange);
+      } catch (error) {
+        root.classList.remove('has-webgl');
+        root.classList.add('no-webgl');
+        console.error('Failed to start Three.js scene:', error);
+      }
+    }
+  </script>
+</body>
+</html>
