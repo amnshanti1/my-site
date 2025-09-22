@@ -29,7 +29,7 @@ body {
     radial-gradient(circle at 20% 20%, rgba(52, 97, 166, 0.28), transparent 55%),
     radial-gradient(circle at 80% 10%, rgba(111, 82, 214, 0.26), transparent 45%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 60%, var(--bg-soft) 100%);
-  padding-top: 80px;
+  padding-top: 40px;
 }
 @media (max-width: 720px) {
   body { padding-top: 72px; }
@@ -133,13 +133,13 @@ a:focus-visible {
 
 .scene-wrap {
   position: relative;
-  height: calc(100svh + 60px);
-  min-height: 660px;
+  height: calc(100svh - 10px);
+  min-height: 640px;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   display: grid;
   place-items: center;
-  padding-bottom: 160px;
+  padding-bottom: 120px;
 }
 #scene-canvas {
   position: absolute;
@@ -153,24 +153,35 @@ a:focus-visible {
 .bg-title {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   pointer-events: none;
   user-select: none;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 800;
-  color: color-mix(in oklab, var(--text) 12%, transparent);
-  -webkit-text-stroke: 1px color-mix(in oklab, var(--text) 18%, transparent);
+  color: color-mix(in oklab, var(--text) 18%, transparent);
+  text-shadow: 0 24px 42px rgba(5, 7, 18, 0.3);
   z-index: 1;
+  padding-top: clamp(54px, 13vh, 130px);
+  gap: clamp(0.2rem, 1.4vw, 0.6rem);
 }
 .bg-title span {
   display: block;
-  line-height: 0.9;
-  font-size: clamp(2.8rem, 9vw, 8.6rem);
+  line-height: 0.92;
   text-align: center;
 }
-.bg-title span + span { margin-top: -0.2em; }
+.bg-title span:first-child {
+  font-size: clamp(1.1rem, 3.2vw, 2.6rem);
+  letter-spacing: 0.36em;
+  font-weight: 600;
+  color: color-mix(in oklab, var(--text) 26%, transparent);
+}
+.bg-title span:last-child {
+  font-size: clamp(3.8rem, 12vw, 10.2rem);
+}
 
 .center-hub {
   position: relative;
@@ -186,6 +197,7 @@ a:focus-visible {
   box-shadow: var(--shadow);
   text-align: center;
   max-width: min(460px, 85vw);
+  margin-top: clamp(-36px, -6vh, -12px);
 }
 .center-hub .eyebrow {
   margin: 0;
@@ -421,15 +433,18 @@ main {
 
 @media (max-width: 960px) {
   .site-nav { gap: 14px; }
-  .scene-wrap { height: calc(100svh + 20px); min-height: 600px; padding-bottom: 130px; }
-  .center-hub { padding: 18px 20px; }
-  .bg-title span { font-size: clamp(2.4rem, 12vw, 6rem); }
+  .scene-wrap { height: calc(100svh + 30px); min-height: 620px; padding-bottom: 130px; }
+  .center-hub { padding: 18px 20px; margin-top: clamp(-28px, -5vh, -10px); }
+  .bg-title { padding-top: clamp(48px, 13vh, 120px); }
+  .bg-title span:last-child { font-size: clamp(3.2rem, 14vw, 7rem); }
 }
 @media (max-width: 720px) {
   .site-header .container { padding: 16px 0; }
   .site-nav { gap: 12px; font-size: 0.95rem; }
-  .scene-wrap { height: calc(100svh); min-height: 540px; padding-bottom: 120px; }
-  .center-hub { width: min(92vw, 440px); }
+  .scene-wrap { height: calc(100svh + 20px); min-height: 560px; padding-bottom: 120px; }
+  .bg-title { padding-top: clamp(52px, 16vh, 120px); }
+  .bg-title span:last-child { font-size: clamp(2.8rem, 16vw, 5.6rem); }
+  .center-hub { width: min(92vw, 440px); margin-top: clamp(-20px, -5vh, -6px); }
   .island-label { font-size: 0.78rem; padding: 6px 12px; }
   .section { padding: 96px 0 80px; }
   .card img { height: 160px; }
