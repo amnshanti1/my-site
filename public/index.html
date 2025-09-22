@@ -759,7 +759,7 @@
             pointer.x += (pointerTarget.x - pointer.x) * 0.08;
             pointer.y += (pointerTarget.y - pointer.y) * 0.08;
 
-            const targetY = pointer.x * 0.55;
+            const targetY = -pointer.x * 0.55;
             const targetX = THREE.MathUtils.clamp(pointer.y * 0.22, -0.2, 0.24);
             stage.rotation.y += (targetY - stage.rotation.y) * 0.05;
             stage.rotation.x += (targetX - stage.rotation.x) * 0.05;
