@@ -29,7 +29,7 @@ body {
     radial-gradient(circle at 20% 20%, rgba(52, 97, 166, 0.28), transparent 55%),
     radial-gradient(circle at 80% 10%, rgba(111, 82, 214, 0.26), transparent 45%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 60%, var(--bg-soft) 100%);
-  padding-top: 40px;
+  padding-top: 80px;
 }
 @media (max-width: 720px) {
   body { padding-top: 72px; }
