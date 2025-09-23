@@ -25,10 +25,9 @@ body {
   font-size: 16px;
   line-height: 1.65;
   color: var(--text);
-  background:
-    radial-gradient(circle at 20% 20%, rgba(52, 97, 166, 0.28), transparent 55%),
-    radial-gradient(circle at 80% 10%, rgba(111, 82, 214, 0.26), transparent 45%),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 60%, var(--bg-soft) 100%);
+  background: radial-gradient(circle at 12% -10%, rgba(133, 177, 255, 0.32), transparent 58%),
+    radial-gradient(circle at 90% 0%, rgba(167, 99, 255, 0.28), transparent 52%),
+    linear-gradient(180deg, #071126 0%, #111d38 45%, #0c152a 100%);
   padding-top: 80px;
 }
 @media (max-width: 720px) {
@@ -133,13 +132,13 @@ a:focus-visible {
 
 .scene-wrap {
   position: relative;
-  height: calc(100svh - 10px);
-  min-height: 640px;
+  height: calc(100svh - 40px);
+  min-height: 600px;
   overflow: hidden;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   display: grid;
   place-items: center;
-  padding-bottom: 120px;
+  padding-bottom: 80px;
 }
 #scene-canvas {
   position: absolute;
@@ -155,32 +154,32 @@ a:focus-visible {
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-start;
   pointer-events: none;
   user-select: none;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-weight: 800;
-  color: color-mix(in oklab, var(--text) 18%, transparent);
-  text-shadow: 0 24px 42px rgba(5, 7, 18, 0.3);
+  color: color-mix(in oklab, var(--text) 20%, transparent);
+  text-shadow: 0 24px 42px rgba(5, 7, 18, 0.32);
   z-index: 1;
-  padding-top: clamp(54px, 13vh, 130px);
-  gap: clamp(0.2rem, 1.4vw, 0.6rem);
+  padding: clamp(48px, 10vh, 120px) clamp(36px, 9vw, 120px) 0;
+  gap: clamp(0.2rem, 1vw, 0.5rem);
 }
 .bg-title span {
   display: block;
-  line-height: 0.92;
-  text-align: center;
+  line-height: 0.9;
+  text-align: left;
 }
 .bg-title span:first-child {
-  font-size: clamp(1.1rem, 3.2vw, 2.6rem);
-  letter-spacing: 0.36em;
+  font-size: clamp(1.1rem, 3vw, 2.4rem);
+  letter-spacing: 0.4em;
   font-weight: 600;
-  color: color-mix(in oklab, var(--text) 26%, transparent);
+  color: color-mix(in oklab, var(--text) 36%, transparent);
 }
 .bg-title span:last-child {
-  font-size: clamp(3.8rem, 12vw, 10.2rem);
+  font-size: clamp(4rem, 10vw, 8.6rem);
 }
 
 .center-hub {
