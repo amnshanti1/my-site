@@ -42,10 +42,7 @@
     </div>
 
     <div class="island-labels">
-      <a class="island-label" style="--x: 50%; --y: 46%;" href="/Adam_Shanti_Resume.pdf" target="_blank" rel="noopener">Resume Hub</a>
-      <a class="island-label" style="--x: 24%; --y: 34%;" href="/projects/interceptor.html">Senior Design Interceptor</a>
-      <a class="island-label" style="--x: 78%; --y: 36%;" href="/projects/mk4.html">Mk4 Drone Platform</a>
-      <a class="island-label" style="--x: 56%; --y: 70%;" href="/projects/leading-edge.html">Leading Edge Extension</a>
+      <a class="island-label" style="--x: 50%; --y: 50%;" href="/Adam_Shanti_Resume.pdf" target="_blank" rel="noopener">Resume Hub</a>
     </div>
   </section>
 
@@ -184,6 +181,7 @@
   </script>
 
   
+  
   <script type="module">
     const root = document.documentElement;
     const sceneWrap = document.querySelector('.scene-wrap');
@@ -250,571 +248,102 @@
         scene.add(topLight, topLight.target);
 
         const stage = new THREE.Group();
-        stage.position.y = 0.45;
         scene.add(stage);
 
-        const stageBasePosition = stage.position.clone();
-        const stageBaseScale = stage.scale.x;
-        const easeInOut = t => t * t * (3 - 2 * t);
-        let scrollProgress = 0;
-        let scrollProgressTarget = 0;
-        let scrollNeedsUpdate = true;
-        const headerHeight = headerEl ? headerEl.offsetHeight : 0;
-
-        const updateScrollTarget = () => {
-          const rect = sceneWrap.getBoundingClientRect();
-          const total = Math.max(sceneWrap.offsetHeight - window.innerHeight * 0.6, 1);
-          const distance = THREE.MathUtils.clamp(headerHeight - rect.top, 0, total);
-          scrollProgressTarget = distance / total;
-        };
-
-        const requestScrollUpdate = () => { scrollNeedsUpdate = true; };
-        window.addEventListener('scroll', requestScrollUpdate, { passive: true });
-
-        const gradientBacker = new THREE.Mesh(
-          new THREE.PlaneGeometry(30, 16),
-          new THREE.MeshBasicMaterial({ color: 0x1a2f56, transparent: true, opacity: 0.6 })
+        const stagePlate = new THREE.Mesh(
+          new THREE.CylinderGeometry(5.4, 5.8, 0.6, 80),
+          new THREE.MeshStandardMaterial({ color: 0x233960, metalness: 0.3, roughness: 0.78 })
         );
-        gradientBacker.position.set(0, 3, -12);
-        scene.add(gradientBacker);
+        stagePlate.position.y = -0.3;
+        stage.add(stagePlate);
 
-        const groundGlow = new THREE.Mesh(
-          new THREE.CircleGeometry(11.5, 96),
-          new THREE.MeshBasicMaterial({ color: 0x133063, transparent: true, opacity: 0.48 })
+        const platform = new THREE.Mesh(
+          new THREE.CylinderGeometry(4.2, 4.6, 0.5, 64),
+          new THREE.MeshStandardMaterial({ color: 0x3456af, metalness: 0.4, roughness: 0.55, emissive: 0x142a6a, emissiveIntensity: 0.15 })
         );
-        groundGlow.rotation.x = -Math.PI / 2;
-        groundGlow.position.y = -1.7;
-        stage.add(groundGlow);
+        stage.add(platform);
+
+        const deck = new THREE.Mesh(
+          new THREE.CylinderGeometry(3.1, 3.4, 0.35, 48),
+          new THREE.MeshStandardMaterial({ color: 0x4b6ef2, metalness: 0.42, roughness: 0.42 })
+        );
+        deck.position.y = 0.6;
+        stage.add(deck);
+
+        const archBase = new THREE.Mesh(
+          new THREE.BoxGeometry(0.5, 2.2, 2.4),
+          new THREE.MeshStandardMaterial({ color: 0x8090ff, metalness: 0.28, roughness: 0.5 })
+        );
+        archBase.position.set(-0.8, 1.5, -0.6);
+        stage.add(archBase);
+
+        const archCurve = new THREE.Mesh(
+          new THREE.TorusGeometry(1.2, 0.16, 30, 120, Math.PI),
+          new THREE.MeshStandardMaterial({ color: 0xa3b0ff, metalness: 0.26, roughness: 0.45 })
+        );
+        archCurve.position.set(-0.8, 2.4, -0.6);
+        archCurve.rotation.set(Math.PI / 2, 0, Math.PI);
+        stage.add(archCurve);
+
+        const chair = new THREE.Mesh(
+          new THREE.CapsuleGeometry(0.6, 1.8, 12, 24),
+          new THREE.MeshStandardMaterial({ color: 0xffa97c, roughness: 0.55, metalness: 0.18 })
+        );
+        chair.rotation.set(Math.PI / 2, 0.4, 0.2);
+        chair.position.set(-1.2, 0.9, 0.45);
+        stage.add(chair);
+
+        const laptop = new THREE.Mesh(
+          new THREE.BoxGeometry(0.9, 0.55, 0.05),
+          new THREE.MeshStandardMaterial({ color: 0xaee4ff, emissive: 0x63d8ff, emissiveIntensity: 0.6, roughness: 0.2 })
+        );
+        laptop.position.set(-0.3, 1.6, 0.55);
+        laptop.rotation.set(1.2, 0.34, 0.04);
+        stage.add(laptop);
+
+        const potStand = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.8, 0.85, 0.2, 32),
+          new THREE.MeshStandardMaterial({ color: 0xffecf8, metalness: 0.2, roughness: 0.5 })
+        );
+        potStand.position.set(1.1, 0.8, 0.9);
+        stage.add(potStand);
+
+        const foliage = new THREE.Mesh(
+          new THREE.ConeGeometry(0.6, 1.4, 24, 1, true),
+          new THREE.MeshStandardMaterial({ color: 0x78ffc5, transparent: true, opacity: 0.75, side: THREE.DoubleSide })
+        );
+        foliage.position.set(1.1, 1.6, 0.9);
+        stage.add(foliage);
 
         const auraRing = new THREE.Mesh(
-          new THREE.RingGeometry(6.6, 7.6, 64),
-          new THREE.MeshBasicMaterial({ color: 0x68d8ff, transparent: true, opacity: 0.32, side: THREE.DoubleSide })
+          new THREE.RingGeometry(4.6, 5.4, 64),
+          new THREE.MeshBasicMaterial({ color: 0x66d6ff, transparent: true, opacity: 0.3, side: THREE.DoubleSide })
         );
         auraRing.rotation.x = -Math.PI / 2;
-        auraRing.position.y = -0.25;
+        auraRing.position.y = -0.1;
         stage.add(auraRing);
 
-        const floatingItems = [];
-        const registerFloat = (group, amplitude = 0.2, speed = 1, spin = 0) => {
-          floatingItems.push({
-            group,
-            baseY: group.position.y,
-            amplitude,
-            speed,
-            offset: Math.random() * Math.PI * 2,
-            spin
-          });
-        };
-
-        const heroExplodePieces = [];
-        const registerHeroPiece = (mesh, { offset = new THREE.Vector3(), rotation = new THREE.Euler(), scale = 0 } = {}) => {
-          heroExplodePieces.push({
-            mesh,
-            basePosition: mesh.position.clone(),
-            baseRotation: mesh.rotation.clone(),
-            baseScale: mesh.scale.clone(),
-            offset,
-            rotation,
-            scale
-          });
-        };
-
-        const interactives = [];
-        const interactiveMeshes = [];
-        const registerInteractive = (mesh, config) => {
-          mesh.userData.interactive = config;
-          interactiveMeshes.push(mesh);
-          interactives.push(config);
-        };
-
-        const heroBadgeMaterial = new THREE.MeshStandardMaterial({
-          color: 0xffd479,
-          emissive: 0xffb13a,
-          emissiveIntensity: 0.45,
-          metalness: 0.3,
-          roughness: 0.5
-        });
-
-        const buildHeroShowcase = () => {
-          const group = new THREE.Group();
-
-          const baseLower = new THREE.Mesh(
-            new THREE.CylinderGeometry(5.8, 6.3, 0.7, 100),
-            new THREE.MeshStandardMaterial({ color: 0x202f58, metalness: 0.32, roughness: 0.78 })
-          );
-          baseLower.position.set(0, 0, 0);
-          baseLower.position.y = 0.05;
-          group.add(baseLower);
-
-          const baseMid = new THREE.Mesh(
-            new THREE.CylinderGeometry(4.6, 5.2, 0.55, 80),
-            new THREE.MeshStandardMaterial({ color: 0x2b448a, metalness: 0.38, roughness: 0.6 })
-          );
-          baseMid.position.y = 0.78;
-          group.add(baseMid);
-
-          const baseUpper = new THREE.Mesh(
-            new THREE.CylinderGeometry(3.6, 4.2, 0.45, 64),
-            new THREE.MeshStandardMaterial({ color: 0x415cd2, metalness: 0.45, roughness: 0.48, emissive: 0x172c74, emissiveIntensity: 0.2 })
-          );
-          baseUpper.position.y = 1.35;
-          group.add(baseUpper);
-
-          const terrace = new THREE.Mesh(
-            new THREE.BoxGeometry(6.2, 0.38, 3.1),
-            new THREE.MeshStandardMaterial({ color: 0x4f6ef0, metalness: 0.42, roughness: 0.45 })
-          );
-          terrace.position.set(0.2, 1.8, 0.4);
-          terrace.rotation.y = 0.18;
-          group.add(terrace);
-          registerHeroPiece(terrace, { offset: new THREE.Vector3(0.6, 0.7, -0.6), rotation: new THREE.Euler(0.08, 0.18, -0.04) });
-
-          const backdropWall = new THREE.Mesh(
-            new THREE.PlaneGeometry(5.4, 3.1),
-            new THREE.MeshStandardMaterial({ color: 0xe8ecff, metalness: 0.1, roughness: 0.92 })
-          );
-          backdropWall.position.set(0.6, 3.05, -1.3);
-          backdropWall.rotation.y = 0.32;
-          group.add(backdropWall);
-          registerHeroPiece(backdropWall, { offset: new THREE.Vector3(0.3, 0.8, -0.35), rotation: new THREE.Euler(0.05, 0.3, 0) });
-
-          const neonPanel = new THREE.Mesh(
-            new THREE.PlaneGeometry(3.2, 1.4),
-            new THREE.MeshStandardMaterial({ color: 0xd9f2ff, emissive: 0x63dfff, emissiveIntensity: 0.6, metalness: 0.08, roughness: 0.2 })
-          );
-          neonPanel.position.set(1.1, 2.9, -1.1);
-          neonPanel.rotation.y = 0.32;
-          group.add(neonPanel);
-          registerHeroPiece(neonPanel, { offset: new THREE.Vector3(0.4, 0.9, -0.4), rotation: new THREE.Euler(0.1, 0.32, 0.08) });
-
-          const archPillar = new THREE.Mesh(
-            new THREE.BoxGeometry(0.6, 2.6, 2.6),
-            new THREE.MeshStandardMaterial({ color: 0x7c8dff, metalness: 0.28, roughness: 0.52 })
-          );
-          archPillar.position.set(-0.6, 2.4, -0.7);
-          group.add(archPillar);
-          registerHeroPiece(archPillar, { offset: new THREE.Vector3(-0.2, 0.7, -0.2) });
-
-          const arch = new THREE.Mesh(
-            new THREE.TorusGeometry(1.4, 0.18, 32, 120, Math.PI),
-            new THREE.MeshStandardMaterial({ color: 0x9ca9ff, metalness: 0.22, roughness: 0.48 })
-          );
-          arch.rotation.set(Math.PI / 2, 0, Math.PI);
-          arch.position.set(-0.6, 2.9, -0.7);
-          group.add(arch);
-          registerHeroPiece(arch, { offset: new THREE.Vector3(-0.2, 0.9, -0.15), rotation: new THREE.Euler(0.15, 0.1, 0.1) });
-
-          const vine = new THREE.Mesh(
-            new THREE.PlaneGeometry(0.6, 1.8, 1, 9),
-            new THREE.MeshStandardMaterial({ color: 0x6ef8b4, transparent: true, opacity: 0.78, side: THREE.DoubleSide })
-          );
-          vine.position.set(-1.1, 2.2, -0.9);
-          vine.rotation.y = -0.12;
-          group.add(vine);
-          registerHeroPiece(vine, { offset: new THREE.Vector3(-0.25, 0.8, -0.3), rotation: new THREE.Euler(0.2, -0.1, 0.15) });
-
-          const loungeSeat = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.6, 1.8, 12, 24),
-            new THREE.MeshStandardMaterial({ color: 0xff9f70, roughness: 0.58, metalness: 0.18 })
-          );
-          loungeSeat.rotation.set(Math.PI / 2, 0.4, 0.2);
-          loungeSeat.position.set(-1.4, 1.7, 0.42);
-          group.add(loungeSeat);
-          registerHeroPiece(loungeSeat, { offset: new THREE.Vector3(-0.6, 0.6, 0.65), rotation: new THREE.Euler(0.3, 0.4, -0.2) });
-
-          const loungeBack = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.52, 1.2, 10, 22),
-            new THREE.MeshStandardMaterial({ color: 0xffb482, roughness: 0.55, metalness: 0.2 })
-          );
-          loungeBack.rotation.set(Math.PI / 2, -0.6, -0.18);
-          loungeBack.position.set(-1.1, 2.1, -0.05);
-          group.add(loungeBack);
-          registerHeroPiece(loungeBack, { offset: new THREE.Vector3(-0.38, 0.55, 0.48), rotation: new THREE.Euler(0.2, -0.25, 0.12) });
-
-          const laptopBase = new THREE.Mesh(
-            new THREE.BoxGeometry(0.96, 0.08, 0.66),
-            new THREE.MeshStandardMaterial({ color: 0x172341, roughness: 0.24, metalness: 0.7 })
-          );
-          laptopBase.position.set(-0.28, 2.0, 0.65);
-          laptopBase.rotation.set(-0.22, 0.34, 0.04);
-          group.add(laptopBase);
-          registerHeroPiece(laptopBase, { offset: new THREE.Vector3(0.22, 0.52, 0.44), rotation: new THREE.Euler(-0.12, 0.18, -0.08) });
-
-          const laptopScreen = new THREE.Mesh(
-            new THREE.BoxGeometry(0.92, 0.58, 0.05),
-            new THREE.MeshStandardMaterial({ color: 0xa7e2ff, emissive: 0x5ad6ff, emissiveIntensity: 0.65, roughness: 0.22 })
-          );
-          laptopScreen.position.set(-0.12, 2.28, 0.58);
-          laptopScreen.rotation.set(1.22, 0.34, 0.04);
-          group.add(laptopScreen);
-          registerHeroPiece(laptopScreen, { offset: new THREE.Vector3(0.26, 0.65, 0.5), rotation: new THREE.Euler(0.2, 0.22, 0.12) });
-
-          const plantStand = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.82, 0.86, 0.16, 32),
-            new THREE.MeshStandardMaterial({ color: 0xdbc9ff, metalness: 0.3, roughness: 0.4 })
-          );
-          plantStand.position.set(0.9, 1.85, 1.0);
-          group.add(plantStand);
-          registerHeroPiece(plantStand, { offset: new THREE.Vector3(0.6, 0.45, 0.5), rotation: new THREE.Euler(0.1, -0.18, 0.1) });
-
-          const plantPot = new THREE.Mesh(
-            new THREE.ConeGeometry(0.42, 0.9, 24),
-            new THREE.MeshStandardMaterial({ color: 0xf1f6ff, metalness: 0.1, roughness: 0.5 })
-          );
-          plantPot.position.set(0.9, 2.22, 1.0);
-          group.add(plantPot);
-          registerHeroPiece(plantPot, { offset: new THREE.Vector3(0.44, 0.62, 0.55) });
-
-          const foliage = new THREE.Mesh(
-            new THREE.ConeGeometry(0.7, 1.3, 32, 1, true),
-            new THREE.MeshStandardMaterial({ color: 0x7fffbe, transparent: true, opacity: 0.78, side: THREE.DoubleSide })
-          );
-          foliage.position.set(0.9, 2.68, 1.0);
-          group.add(foliage);
-          registerHeroPiece(foliage, { offset: new THREE.Vector3(0.38, 0.85, 0.6), rotation: new THREE.Euler(-0.2, 0.12, -0.08) });
-
-          const toolkit = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.38, 0.38, 0.12, 24),
-            heroBadgeMaterial.clone()
-          );
-          toolkit.position.set(1.6, 1.95, -0.32);
-          group.add(toolkit);
-          registerHeroPiece(toolkit, { offset: new THREE.Vector3(0.5, 0.48, -0.2), rotation: new THREE.Euler(-0.18, 0.22, 0.15) });
-
-          const stylus = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.05, 0.05, 0.9, 16),
-            new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.4, roughness: 0.3 })
-          );
-          stylus.rotation.set(0.12, 0, -0.6);
-          stylus.position.set(1.5, 2.08, -0.32);
-          group.add(stylus);
-          registerHeroPiece(stylus, { offset: new THREE.Vector3(0.4, 0.5, -0.35), rotation: new THREE.Euler(0.4, 0.1, -0.3) });
-
-          const heroHotspot = new THREE.Mesh(
-            new THREE.CircleGeometry(3.0, 72),
-            new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.03, depthWrite: false })
-          );
-          heroHotspot.rotation.x = -Math.PI / 2;
-          heroHotspot.position.set(0.2, 1.15, 0.4);
-          group.add(heroHotspot);
-
-          registerInteractive(heroHotspot, {
-            id: 'resume-hub',
-            onHover: isHovering => {
-              heroBadgeMaterial.emissiveIntensity = isHovering ? 1.15 : 0.45;
-            },
-            onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
-          });
-
-          return group;
-        };
-
-        const buildInterceptorIsland = () => {
-          const group = new THREE.Group();
-
-          const base = new THREE.Mesh(
-            new THREE.CylinderGeometry(2.4, 2.9, 0.36, 64),
-            new THREE.MeshStandardMaterial({ color: 0x253554, metalness: 0.42, roughness: 0.62 })
-          );
-          base.position.y = 0.18;
-          group.add(base);
-
-          const deck = new THREE.Mesh(
-            new THREE.CylinderGeometry(2.1, 2.35, 0.26, 64),
-            new THREE.MeshStandardMaterial({ color: 0x4a63c0, metalness: 0.46, roughness: 0.45 })
-          );
-          deck.position.y = 0.5;
-          group.add(deck);
-
-          const runway = new THREE.Mesh(
-            new THREE.BoxGeometry(3.6, 0.08, 1.4),
-            new THREE.MeshStandardMaterial({ color: 0x273b7a, metalness: 0.34, roughness: 0.5 })
-          );
-          runway.position.set(0.2, 0.92, -0.05);
-          runway.rotation.y = 0.18;
-          group.add(runway);
-
-          const nose = new THREE.Mesh(
-            new THREE.ConeGeometry(0.22, 0.8, 24),
-            new THREE.MeshStandardMaterial({ color: 0xffd274, metalness: 0.5, roughness: 0.32 })
-          );
-          nose.rotation.set(Math.PI / 2, 0, 0.05);
-          nose.position.set(1.36, 1.16, 0.06);
-          group.add(nose);
-
-          const fuselage = new THREE.Mesh(
-            new THREE.CapsuleGeometry(0.28, 1.6, 20, 32),
-            new THREE.MeshStandardMaterial({ color: 0xcadfff, metalness: 0.62, roughness: 0.24 })
-          );
-          fuselage.rotation.set(Math.PI / 2, 0.18, 0.02);
-          fuselage.position.set(0.3, 1.16, 0.02);
-          group.add(fuselage);
-
-          const wing = new THREE.Mesh(
-            new THREE.BoxGeometry(2.4, 0.1, 1.2),
-            new THREE.MeshStandardMaterial({ color: 0x6d86ff, metalness: 0.52, roughness: 0.34 })
-          );
-          wing.rotation.set(0.1, 0.02, 0.22);
-          wing.position.set(-0.22, 1.02, -0.18);
-          group.add(wing);
-
-          const tail = new THREE.Mesh(
-            new THREE.BoxGeometry(0.18, 0.9, 0.9),
-            new THREE.MeshStandardMaterial({ color: 0x3d4f8c, metalness: 0.4, roughness: 0.38 })
-          );
-          tail.rotation.set(0, 0.32, 0);
-          tail.position.set(-1.12, 1.42, -0.18);
-          group.add(tail);
-
-          const engine = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.18, 0.22, 0.9, 24),
-            new THREE.MeshStandardMaterial({ color: 0x1c2748, metalness: 0.48, roughness: 0.34 })
-          );
-          engine.rotation.set(Math.PI / 2, 0, 0.1);
-          engine.position.set(-0.76, 1.16, 0.2);
-          group.add(engine);
-
-          const exhaust = new THREE.Mesh(
-            new THREE.ConeGeometry(0.24, 0.5, 24),
-            new THREE.MeshStandardMaterial({ color: 0xff8b56, emissive: 0xff6323, emissiveIntensity: 0.4, transparent: true, opacity: 0.8 })
-          );
-          exhaust.rotation.set(Math.PI / 2, 0, 0.1);
-          exhaust.position.set(-1.26, 1.02, 0.22);
-          group.add(exhaust);
-
-          const victoryFlag = new THREE.Mesh(
-            new THREE.BoxGeometry(0.04, 0.64, 0.04),
-            new THREE.MeshStandardMaterial({ color: 0xf9d17a, metalness: 0.32, roughness: 0.5 })
-          );
-          victoryFlag.position.set(0.82, 1.22, -0.6);
-          group.add(victoryFlag);
-
-          const flagBanner = new THREE.Mesh(
-            new THREE.PlaneGeometry(0.6, 0.28),
-            new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide })
-          );
-          flagBanner.position.set(0.82, 1.38, -0.6);
-          flagBanner.rotation.y = 0.4;
-          group.add(flagBanner);
-
-          return group;
-        };
-        const buildMk4Island = () => {
-          const group = new THREE.Group();
-
-          const base = new THREE.Mesh(
-            new THREE.CylinderGeometry(2.2, 2.6, 0.34, 60),
-            new THREE.MeshStandardMaterial({ color: 0x223651, metalness: 0.4, roughness: 0.62 })
-          );
-          base.position.y = 0.17;
-          group.add(base);
-
-          const deck = new THREE.Mesh(
-            new THREE.CylinderGeometry(2.0, 2.18, 0.24, 60),
-            new THREE.MeshStandardMaterial({ color: 0x3f6dd0, metalness: 0.46, roughness: 0.42 })
-          );
-          deck.position.y = 0.46;
-          group.add(deck);
-
-          const table = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.4, 0.6, 0.6, 20),
-            new THREE.MeshStandardMaterial({ color: 0x242c4f, metalness: 0.38, roughness: 0.4 })
-          );
-          table.position.set(0, 0.98, 0);
-          group.add(table);
-
-          const core = new THREE.Mesh(
-            new THREE.SphereGeometry(0.32, 24, 24),
-            new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.6, roughness: 0.2 })
-          );
-          core.position.set(0, 1.3, 0);
-          group.add(core);
-
-          const armMaterial = new THREE.MeshStandardMaterial({ color: 0x84aaff, metalness: 0.55, roughness: 0.28 });
-          for (let i = 0; i < 4; i += 1) {
-            const arm = new THREE.Mesh(
-              new THREE.BoxGeometry(1.18, 0.12, 0.18),
-              armMaterial
-            );
-            arm.position.set(0, 1.3, 0);
-            arm.rotation.y = (Math.PI / 2) * i;
-            group.add(arm);
-
-            const rotor = new THREE.Mesh(
-              new THREE.TorusGeometry(0.46, 0.06, 16, 40),
-              new THREE.MeshStandardMaterial({ color: 0xfdd7a5, metalness: 0.45, roughness: 0.35 })
-            );
-            rotor.rotation.x = Math.PI / 2;
-            rotor.position.set(Math.cos((Math.PI / 2) * i) * 0.58, 1.32, Math.sin((Math.PI / 2) * i) * 0.58);
-            group.add(rotor);
-          }
-
-          const landingGear = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.18, 0.18, 0.62, 16),
-            new THREE.MeshStandardMaterial({ color: 0x2a365f, metalness: 0.35, roughness: 0.4 })
-          );
-          landingGear.rotation.z = Math.PI / 2;
-          landingGear.position.set(0.98, 0.9, -0.16);
-          group.add(landingGear);
-
-          const controller = new THREE.Mesh(
-            new THREE.BoxGeometry(0.8, 0.2, 0.4),
-            new THREE.MeshStandardMaterial({ color: 0x161f3a, metalness: 0.3, roughness: 0.45 })
-          );
-          controller.position.set(-0.92, 0.9, 0.5);
-          group.add(controller);
-
-          const antenna = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.03, 0.03, 0.6, 12),
-            new THREE.MeshStandardMaterial({ color: 0x9bd5ff, metalness: 0.4, roughness: 0.35 })
-          );
-          antenna.position.set(-0.92, 1.2, 0.5);
-          group.add(antenna);
-
-          return group;
-        };
-        const buildLeadingEdgeIsland = () => {
-          const group = new THREE.Group();
-
-          const base = new THREE.Mesh(
-            new THREE.CylinderGeometry(2.4, 2.7, 0.32, 60),
-            new THREE.MeshStandardMaterial({ color: 0x1c3a44, metalness: 0.36, roughness: 0.6 })
-          );
-          base.position.y = 0.16;
-          group.add(base);
-
-          const deck = new THREE.Mesh(
-            new THREE.CylinderGeometry(2.1, 2.3, 0.22, 60),
-            new THREE.MeshStandardMaterial({ color: 0x318f9f, metalness: 0.4, roughness: 0.4 })
-          );
-          deck.position.y = 0.42;
-          group.add(deck);
-
-          const wing = new THREE.Mesh(
-            new THREE.BoxGeometry(2.8, 0.16, 0.78),
-            new THREE.MeshStandardMaterial({ color: 0xc3f2ff, metalness: 0.5, roughness: 0.28 })
-          );
-          wing.position.set(0.1, 1.03, 0);
-          wing.rotation.set(-0.2, 0.3, 0.08);
-          group.add(wing);
-
-          const leadingEdgeTube = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.14, 0.14, 2.9, 32),
-            new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.6, roughness: 0.2 })
-          );
-          leadingEdgeTube.rotation.set(0, 0, Math.PI / 2);
-          leadingEdgeTube.position.set(0.12, 1.18, 0.16);
-          group.add(leadingEdgeTube);
-
-          const mountingPost = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.15, 0.19, 1.0, 24),
-            new THREE.MeshStandardMaterial({ color: 0x275c6a, metalness: 0.4, roughness: 0.36 })
-          );
-          mountingPost.position.set(-0.9, 1.02, -0.18);
-          group.add(mountingPost);
-
-          const instrumentation = new THREE.Mesh(
-            new THREE.ConeGeometry(0.3, 0.6, 24),
-            new THREE.MeshStandardMaterial({ color: 0x66f1ff, emissive: 0x3dd9ff, emissiveIntensity: 0.4, transparent: true, opacity: 0.7 })
-          );
-          instrumentation.position.set(1.1, 1.32, -0.32);
-          instrumentation.rotation.set(-Math.PI / 3, -0.2, 0.28);
-          group.add(instrumentation);
-
-          const wakeIndicator = new THREE.Mesh(
-            new THREE.TorusGeometry(0.42, 0.08, 18, 60),
-            new THREE.MeshStandardMaterial({ color: 0x9ffbf2, emissive: 0x63f5e2, emissiveIntensity: 0.5, transparent: true, opacity: 0.8 })
-          );
-          wakeIndicator.rotation.x = Math.PI / 2;
-          wakeIndicator.position.set(0.96, 1.48, -0.4);
-          group.add(wakeIndicator);
-
-          const measurementBoard = new THREE.Mesh(
-            new THREE.PlaneGeometry(1.2, 0.8),
-            new THREE.MeshStandardMaterial({ color: 0xf0f6ff, roughness: 0.4, metalness: 0.1 })
-          );
-          measurementBoard.position.set(-1.2, 1.4, 0.38);
-          measurementBoard.rotation.set(-Math.PI / 3.2, 0.38, 0.18);
-          group.add(measurementBoard);
-
-          return group;
-        };
-
-        const heroShowcase = buildHeroShowcase();
-        const heroShowcase = buildHeroShowcase();
-        stage.add(heroShowcase);
-        registerFloat(heroShowcase, 0.12, 0.85, 0.0008);
-
-        const interceptorIsland = buildInterceptorIsland();
-        interceptorIsland.position.set(-3.5, 0.3, -2.1);
-        stage.add(interceptorIsland);
-        registerFloat(interceptorIsland, 0.25, 1.12, 0.0016);
-
-        const mk4Island = buildMk4Island();
-        mk4Island.position.set(3.3, 0.35, -1.6);
-        stage.add(mk4Island);
-        registerFloat(mk4Island, 0.22, 0.98, -0.0014);
-
-        const leadingEdgeIsland = buildLeadingEdgeIsland();
-        leadingEdgeIsland.position.set(0.9, 0.55, 2.8);
-        stage.add(leadingEdgeIsland);
-        registerFloat(leadingEdgeIsland, 0.28, 0.9, 0.0012);
-
-        const beacon = new THREE.Mesh(
-          new THREE.SphereGeometry(0.42, 24, 24),
-          new THREE.MeshStandardMaterial({ color: 0x63d8ff, emissive: 0x2cd4ff, emissiveIntensity: 0.6 })
-        );
-        beacon.position.set(-1.45, 1.68, 1.8);
-        stage.add(beacon);
-        registerFloat(beacon, 0.35, 1.5, 0.004);
-
-        const beaconHalo = new THREE.Mesh(
-          new THREE.RingGeometry(0.45, 0.65, 64),
-          new THREE.MeshBasicMaterial({ color: 0x83f4ff, transparent: true, opacity: 0.45 })
-        );
-        beaconHalo.rotation.x = Math.PI / 2;
-        beaconHalo.position.copy(beacon.position);
-        stage.add(beaconHalo);
-
-        const probe = new THREE.Mesh(
-          new THREE.CapsuleGeometry(0.18, 0.8, 8, 16),
-          new THREE.MeshStandardMaterial({ color: 0xffe69c, metalness: 0.4, roughness: 0.3 })
-        );
-        probe.rotation.z = -0.6;
-        probe.position.set(2.1, 1.4, 1.8);
-        stage.add(probe);
-        registerFloat(probe, 0.2, 1.4, 0.003);
-
-        const probeRing = new THREE.Mesh(
-          new THREE.TorusGeometry(0.34, 0.05, 18, 70),
-          new THREE.MeshStandardMaterial({ color: 0xffae6a, metalness: 0.5, roughness: 0.4 })
-        );
-        probeRing.rotation.x = Math.PI / 2;
-        probeRing.position.set(2.1, 1.02, 1.8);
-        stage.add(probeRing);
-
-        const starCount = 720;
+        const starCount = 520;
         const starGeometry = new THREE.BufferGeometry();
         const starPositions = new Float32Array(starCount * 3);
         for (let i = 0; i < starCount; i += 1) {
           starPositions[i * 3] = (Math.random() - 0.5) * 60;
-          starPositions[i * 3 + 1] = Math.random() * 28 + 4;
+          starPositions[i * 3 + 1] = Math.random() * 30 + 2;
           starPositions[i * 3 + 2] = (Math.random() - 0.5) * 60;
         }
         starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-        const starMaterial = new THREE.PointsMaterial({ color: 0x68b7ff, size: 0.08, transparent: true, opacity: 0.55, depthWrite: false });
+        const starMaterial = new THREE.PointsMaterial({ color: 0x6db8ff, size: 0.08, transparent: true, opacity: 0.6, depthWrite: false });
         const stars = new THREE.Points(starGeometry, starMaterial);
         scene.add(stars);
 
         const pointer = { x: 0, y: 0 };
         const pointerTarget = { x: 0, y: 0 };
-        let idleTimer = 0;
+        const clock = new THREE.Clock();
 
         const updatePointer = event => {
           const rect = sceneWrap.getBoundingClientRect();
           pointerTarget.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
           pointerTarget.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
-          idleTimer = 0;
         };
 
         sceneWrap.addEventListener('pointermove', updatePointer);
@@ -824,20 +353,11 @@
           pointerTarget.y = 0;
         });
 
-        let hoveredInteractive = null;
-        let heroExplodeProgress = 0;
-        const raycaster = new THREE.Raycaster();
-        const rayPointer = new THREE.Vector2();
+        let scrollTarget = 0;
+        let scrollCurrent = 0;
+        const easeInOut = t => t * t * (3 - 2 * t);
 
-        sceneWrap.addEventListener('click', () => {
-          if (hoveredInteractive && typeof hoveredInteractive.onClick === 'function') {
-            hoveredInteractive.onClick();
-          }
-        });
-
-        const clock = new THREE.Clock();
-
-        function resizeRenderer() {
+        const resizeRenderer = () => {
           const pixelRatio = Math.min(window.devicePixelRatio, 2);
           const width = canvas.clientWidth;
           const height = canvas.clientHeight;
@@ -847,105 +367,58 @@
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
           }
-        }
+        };
+
+        const updateScroll = () => {
+          const rect = sceneWrap.getBoundingClientRect();
+          const total = Math.max(sceneWrap.offsetHeight - window.innerHeight * 0.6, 1);
+          const distance = THREE.MathUtils.clamp((headerEl ? headerEl.offsetHeight : 0) - rect.top, 0, total);
+          scrollTarget = distance / total;
+        };
+
+        window.addEventListener('scroll', updateScroll, { passive: true });
 
         function render() {
           resizeRenderer();
           const delta = clock.getDelta();
           const elapsed = clock.getElapsedTime();
-          idleTimer += delta;
-
-          if (scrollNeedsUpdate) {
-            updateScrollTarget();
-            scrollNeedsUpdate = false;
-          }
-
-          scrollProgress += (scrollProgressTarget - scrollProgress) * 0.08;
-          const easedScroll = easeInOut(scrollProgress);
-          const liftAmount = easedScroll * 4.6;
-          stage.position.y = stageBasePosition.y + liftAmount;
-          stage.position.z = stageBasePosition.z - easedScroll * 3.2;
-          const scaleFactor = THREE.MathUtils.lerp(stageBaseScale || 1, (stageBaseScale || 1) * 0.76, easedScroll);
-          stage.scale.setScalar(scaleFactor);
-
-          if (centerHubEl) {
-            const hubOpacity = Math.max(0, 1 - easedScroll * 1.4);
-            centerHubEl.style.opacity = hubOpacity.toFixed(3);
-            centerHubEl.style.transform = `translate3d(0, ${-easedScroll * 140}px, 0)`;
-          }
-
-          if (bgTitleEl) {
-            const titleOpacity = Math.max(0.1, 1 - easedScroll * 1.05);
-            bgTitleEl.style.opacity = titleOpacity.toFixed(3);
-            bgTitleEl.style.transform = `translate3d(0, ${-easedScroll * 180}px, 0)`;
-          }
-
-          if (projectsSection) {
-            const projectEase = THREE.MathUtils.clamp((scrollProgress - 0.22) / 0.55, 0, 1);
-            projectsSection.style.opacity = projectEase.toFixed(3);
-            projectsSection.style.transform = `translateY(${40 * (1 - projectEase)}px)`;
-          }
 
           pointer.x += (pointerTarget.x - pointer.x) * 0.08;
           pointer.y += (pointerTarget.y - pointer.y) * 0.08;
 
-          rayPointer.set(pointer.x, -pointer.y);
-          raycaster.setFromCamera(rayPointer, camera);
-          const hit = raycaster.intersectObjects(interactiveMeshes, false)[0];
-          const nextInteractive = hit ? hit.object.userData.interactive : null;
-          if (nextInteractive !== hoveredInteractive) {
-            if (hoveredInteractive && typeof hoveredInteractive.onHover === 'function') {
-              hoveredInteractive.onHover(false);
-            }
-            hoveredInteractive = nextInteractive || null;
-            if (hoveredInteractive && typeof hoveredInteractive.onHover === 'function') {
-              hoveredInteractive.onHover(true);
-            }
+          updateScroll();
+          scrollCurrent += (scrollTarget - scrollCurrent) * 0.08;
+          const easedScroll = easeInOut(scrollCurrent);
+
+          const targetY = -pointer.x * 0.5 * (1 - easedScroll);
+          const targetX = THREE.MathUtils.clamp(pointer.y * 0.18, -0.2, 0.2) * (1 - easedScroll);
+          stage.rotation.y += (targetY - stage.rotation.y) * 0.05;
+          stage.rotation.x += (targetX - stage.rotation.x) * 0.05;
+
+          stage.position.y = easedScroll * 4.2;
+          stage.position.z = -easedScroll * 3.6;
+          stage.scale.setScalar(1 - easedScroll * 0.2);
+
+          const hubOpacity = Math.max(0, 1 - easedScroll * 1.4);
+          if (centerHubEl) {
+            centerHubEl.style.opacity = hubOpacity.toFixed(3);
+            centerHubEl.style.transform = `translate3d(0, ${-easedScroll * 120}px, 0)`;
           }
 
-          const heroTarget = hoveredInteractive && hoveredInteractive.id === 'resume-hub' ? 1 : 0;
-          heroExplodeProgress += (heroTarget - heroExplodeProgress) * 0.12;
-          const heroEase = easeInOut(heroExplodeProgress);
-          heroExplodePieces.forEach(piece => {
-            piece.mesh.position.copy(piece.basePosition).addScaledVector(piece.offset, heroEase);
-            piece.mesh.rotation.set(
-              piece.baseRotation.x + piece.rotation.x * heroEase,
-              piece.baseRotation.y + piece.rotation.y * heroEase,
-              piece.baseRotation.z + piece.rotation.z * heroEase
-            );
-            if (piece.scale) {
-              const targetScale = piece.baseScale.x + piece.scale * heroEase;
-              piece.mesh.scale.setScalar(targetScale);
-            }
-          });
+          if (bgTitleEl) {
+            bgTitleEl.style.opacity = Math.max(0.2, 1 - easedScroll * 1.05).toFixed(3);
+            bgTitleEl.style.transform = `translate3d(0, ${-easedScroll * 180}px, 0)`;
+          }
+
+          if (projectsSection) {
+            const projectEase = THREE.MathUtils.clamp((scrollCurrent - 0.25) / 0.55, 0, 1);
+            projectsSection.style.opacity = projectEase.toFixed(3);
+            projectsSection.style.transform = `translateY(${40 * (1 - projectEase)}px)`;
+          }
 
           if (!prefersReducedMotion.matches) {
-            if (idleTimer > 6) {
-              pointerTarget.x = Math.sin(elapsed * 0.25) * 0.35;
-              pointerTarget.y = Math.cos(elapsed * 0.2) * 0.18;
-            }
-
-            const pointerInfluence = 1 - easedScroll;
-            const targetY = -pointer.x * 0.55 * pointerInfluence;
-            const targetX = THREE.MathUtils.clamp(pointer.y * 0.22, -0.2, 0.24) * pointerInfluence;
-            stage.rotation.y += (targetY - stage.rotation.y) * 0.05;
-            stage.rotation.x += (targetX - stage.rotation.x) * 0.05;
-
-            floatingItems.forEach(item => {
-              const bob = Math.sin(elapsed * item.speed + item.offset) * item.amplitude * (1 - easedScroll * 0.85);
-              item.group.position.y = item.baseY + bob;
-              if (item.spin) {
-                item.group.rotation.y += item.spin * (1 - easedScroll * 0.6);
-              }
-            });
-
             auraRing.scale.setScalar(1 + Math.sin(elapsed * 0.4) * 0.04);
-            beaconHalo.rotation.z += 0.01;
-            probeRing.rotation.y += 0.01;
             stars.rotation.y -= 0.0003;
-          } else {
-            stage.rotation.x += (0 - stage.rotation.x) * 0.08;
-            stage.rotation.y += (0 - stage.rotation.y) * 0.08;
           }
 
           renderer.render(scene, camera);
@@ -953,24 +426,7 @@
 
         renderer.setAnimationLoop(render);
 
-        const handleMotionChange = () => {
-          if (prefersReducedMotion.matches) {
-            floatingItems.forEach(item => {
-              item.group.position.y = item.baseY;
-            });
-            pointerTarget.x = 0;
-            pointerTarget.y = 0;
-          }
-        };
-
-        prefersReducedMotion.addEventListener?.('change', handleMotionChange);
-        prefersReducedMotion.addListener?.(handleMotionChange);
-
-        window.addEventListener('resize', () => {
-          resizeRenderer();
-          requestScrollUpdate();
-        });
-        requestScrollUpdate();
+        window.addEventListener('resize', resizeRenderer);
         resizeRenderer();
       } catch (error) {
         root.classList.remove('has-webgl');
@@ -979,6 +435,7 @@
       }
     }
   </script>
+
 
 </body>
 </html>
