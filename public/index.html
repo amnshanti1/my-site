@@ -236,71 +236,70 @@
         scene.add(topLight, topLight.target);
 
         const stage = new THREE.Group();
-        stage.position.set(0, 1.2, -4.6);
+        stage.position.set(0, 1.6, -3.6);
         scene.add(stage);
 
         const base = new THREE.Mesh(
-          new THREE.CylinderGeometry(5.4, 5.6, 0.6, 96),
-          new THREE.MeshStandardMaterial({ color: 0x24355c, metalness: 0.32, roughness: 0.62 })
+          new THREE.CylinderGeometry(4.8, 5.1, 0.45, 90),
+          new THREE.MeshStandardMaterial({ color: 0x203254, metalness: 0.32, roughness: 0.64 })
         );
-        base.position.y = -0.3;
+        base.position.y = -0.22;
         stage.add(base);
 
         const deck = new THREE.Mesh(
-          new THREE.CylinderGeometry(4.2, 4.3, 0.3, 80),
-          new THREE.MeshStandardMaterial({ color: 0x3b5ed8, metalness: 0.42, roughness: 0.4, emissive: 0x162c72, emissiveIntensity: 0.2 })
+          new THREE.CylinderGeometry(3.8, 4.0, 0.28, 80),
+          new THREE.MeshStandardMaterial({ color: 0x3e5fd6, metalness: 0.45, roughness: 0.42, emissive: 0x162c72, emissiveIntensity: 0.18 })
         );
-        deck.position.y = 0.4;
+        deck.position.y = 0.28;
         stage.add(deck);
 
         const infoWall = new THREE.Mesh(
-          new THREE.PlaneGeometry(5.6, 2.6),
-          new THREE.MeshStandardMaterial({ color: 0x1b2442, metalness: 0.28, roughness: 0.55 })
+          new THREE.PlaneGeometry(4.6, 2.2),
+          new THREE.MeshStandardMaterial({ color: 0x1a223d, metalness: 0.28, roughness: 0.56 })
         );
-        infoWall.position.set(0, 2.1, -1.4);
-        infoWall.rotation.y = 0.24;
+        infoWall.position.set(0, 1.8, -1.1);
+        infoWall.rotation.y = 0.22;
         stage.add(infoWall);
 
-        const glassPanel = new THREE.Mesh(
-          new THREE.PlaneGeometry(4.6, 2.1),
-          new THREE.MeshStandardMaterial({ color: 0x3a62ff, transparent: true, opacity: 0.2, emissive: 0x6ad7ff, emissiveIntensity: 0.4 })
+        const glowPanel = new THREE.Mesh(
+          new THREE.PlaneGeometry(3.8, 1.7),
+          new THREE.MeshStandardMaterial({ color: 0x4f7eff, transparent: true, opacity: 0.18, emissive: 0x66d6ff, emissiveIntensity: 0.42 })
         );
-        glassPanel.position.set(0.15, 2.1, -1.39);
-        glassPanel.rotation.y = 0.24;
-        stage.add(glassPanel);
+        glowPanel.position.set(0.12, 1.82, -1.06);
+        glowPanel.rotation.y = 0.22;
+        stage.add(glowPanel);
 
-        const resumeButton = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.2, 0.38),
-          new THREE.MeshStandardMaterial({ color: 0x66e4ff, emissive: 0x3ad2ff, emissiveIntensity: 0.6, roughness: 0.25 })
+        const resumeTile = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.4, 0.38),
+          new THREE.MeshStandardMaterial({ color: 0x66e4ff, emissive: 0x3ad2ff, emissiveIntensity: 0.55, roughness: 0.24 })
         );
-        resumeButton.position.set(-0.85, 1.96, -1.34);
-        resumeButton.rotation.y = 0.24;
-        stage.add(resumeButton);
+        resumeTile.position.set(-0.75, 1.66, -1.02);
+        resumeTile.rotation.y = 0.22;
+        stage.add(resumeTile);
 
-        const emailButton = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.1, 0.34),
-          new THREE.MeshStandardMaterial({ color: 0x8f9bff, emissive: 0x6776ff, emissiveIntensity: 0.45, roughness: 0.28 })
+        const emailTile = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.2, 0.32),
+          new THREE.MeshStandardMaterial({ color: 0x8d97ff, emissive: 0x6776ff, emissiveIntensity: 0.4, roughness: 0.28 })
         );
-        emailButton.position.set(0.15, 1.82, -1.32);
-        emailButton.rotation.y = 0.24;
-        stage.add(emailButton);
+        emailTile.position.set(0.18, 1.56, -0.96);
+        emailTile.rotation.y = 0.22;
+        stage.add(emailTile);
 
-        const linkedInButton = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.1, 0.34),
-          new THREE.MeshStandardMaterial({ color: 0xb394ff, emissive: 0x8d66ff, emissiveIntensity: 0.35, roughness: 0.3 })
+        const linkedTile = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.2, 0.32),
+          new THREE.MeshStandardMaterial({ color: 0xb48cff, emissive: 0x8c66ff, emissiveIntensity: 0.32, roughness: 0.3 })
         );
-        linkedInButton.position.set(1.1, 1.66, -1.28);
-        linkedInButton.rotation.y = 0.24;
-        stage.add(linkedInButton);
+        linkedTile.position.set(1.02, 1.46, -0.9);
+        linkedTile.rotation.y = 0.22;
+        stage.add(linkedTile);
 
         const auraRing = new THREE.Mesh(
-          new THREE.RingGeometry(4.6, 5.4, 64),
-          new THREE.MeshBasicMaterial({ color: 0x66d6ff, transparent: true, opacity: 0.3, side: THREE.DoubleSide })
+          new THREE.RingGeometry(3.8, 4.6, 72),
+          new THREE.MeshBasicMaterial({ color: 0x66d6ff, transparent: true, opacity: 0.26, side: THREE.DoubleSide })
         );
         auraRing.rotation.x = -Math.PI / 2;
-        auraRing.position.y = -0.1;
+        auraRing.position.y = -0.08;
         stage.add(auraRing);
-
         const starCount = 520;
         const starGeometry = new THREE.BufferGeometry();
         const starPositions = new Float32Array(starCount * 3);
@@ -316,7 +315,6 @@
 
         const pointer = { x: 0, y: 0 };
         const pointerTarget = { x: 0, y: 0 };
-        const interactiveMeshes = [hotspot];
         const clock = new THREE.Clock();
         const easeInOut = t => t * t * (3 - 2 * t);
         let scrollTarget = 0;
@@ -372,9 +370,9 @@
           stage.rotation.y += (targetY - stage.rotation.y) * 0.05;
           stage.rotation.x += (targetX - stage.rotation.x) * 0.05;
 
-          stage.position.y = 1.2 + easedScroll * 3.6;
-          stage.position.z = -4.6 - easedScroll * 2.4;
-          stage.scale.setScalar(1 - easedScroll * 0.18);
+          stage.position.y = 1.6 + easedScroll * 3.0;
+          stage.position.z = -3.6 - easedScroll * 2.2;
+          stage.scale.setScalar(1 - easedScroll * 0.16);
 
           if (bgTitleEl) {
             bgTitleEl.style.opacity = Math.max(0.25, 1 - easedScroll * 1.1).toFixed(3);
