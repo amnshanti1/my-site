@@ -257,12 +257,13 @@
 
         const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xf3f1ff, metalness: 0.12, roughness: 0.68 });
         const archMaterial = new THREE.MeshStandardMaterial({ color: 0x7b74ff, metalness: 0.24, roughness: 0.52 });
+        const accentMaterial = new THREE.MeshStandardMaterial({ color: 0xf7d8ff, metalness: 0.16, roughness: 0.42 });
 
         const wallFooting = new THREE.Mesh(
-          new THREE.BoxGeometry(4.0, 0.12, 0.48),
+          new THREE.BoxGeometry(4.0, 0.12, 0.46),
           new THREE.MeshStandardMaterial({ color: 0x262f4c, metalness: 0.28, roughness: 0.54 })
         );
-        wallFooting.position.set(0, 0.06, 0.05);
+        wallFooting.position.set(0, 0.06, 0.04);
         wallGroup.add(wallFooting);
 
         const mainWall = new THREE.Mesh(
@@ -273,62 +274,72 @@
         wallGroup.add(mainWall);
 
         const neonPanel = new THREE.Mesh(
-          new THREE.PlaneGeometry(2.5, 1.2),
+          new THREE.PlaneGeometry(2.55, 1.18),
           new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, emissive: 0x9da9ff, emissiveIntensity: 0.24 })
         );
-        neonPanel.position.set(0.72, 1.24, 0.18);
+        neonPanel.position.set(0.74, 1.22, 0.18);
         wallGroup.add(neonPanel);
 
         const archGroup = new THREE.Group();
-        archGroup.position.set(-1.98, 0, -0.52);
+        archGroup.position.set(-1.92, 0, -0.48);
         wallGroup.add(archGroup);
 
-        const archBacker = new THREE.Mesh(
-          new THREE.BoxGeometry(0.32, 2.18, 1.0),
+        const archColumn = new THREE.Mesh(
+          new THREE.BoxGeometry(0.36, 2.12, 0.96),
           archMaterial
         );
-        archBacker.position.set(-0.1, 1.09, 0.2);
-        archGroup.add(archBacker);
+        archColumn.position.set(-0.18, 1.06, 0.18);
+        archGroup.add(archColumn);
 
-        const archThickness = 0.28;
-        const archWidth = 1.32;
-        const archHeight = 1.68;
+        const archThickness = 0.26;
+        const archWidth = 1.28;
+        const archHeight = 1.66;
 
         const archShape = new THREE.Shape();
         archShape.moveTo(-archWidth / 2, 0);
-        archShape.lineTo(-archWidth / 2, archHeight - 0.6);
-        archShape.absarc(0, archHeight - 0.6, archWidth / 2, Math.PI, 0, false);
+        archShape.lineTo(-archWidth / 2, archHeight - 0.55);
+        archShape.absarc(0, archHeight - 0.55, archWidth / 2, Math.PI, 0, false);
         archShape.lineTo(archWidth / 2, 0);
         archShape.lineTo(-archWidth / 2, 0);
 
-        const archGeom = new THREE.ExtrudeGeometry(archShape, { depth: archThickness, bevelEnabled: false });
-        const archMesh = new THREE.Mesh(archGeom, archMaterial);
-        archMesh.rotation.y = Math.PI;
-        archMesh.position.set(-0.05, 0.14, 0.62);
-        archGroup.add(archMesh);
+        const archHole = new THREE.Path();
+        const innerWidth = archWidth - 0.24;
+        const innerHeight = archHeight - 0.34;
+        archHole.moveTo(-innerWidth / 2, 0);
+        archHole.lineTo(-innerWidth / 2, innerHeight - 0.58);
+        archHole.absarc(0, innerHeight - 0.58, innerWidth / 2, Math.PI, 0, false);
+        archHole.lineTo(innerWidth / 2, 0);
+        archHole.lineTo(-innerWidth / 2, 0);
+        archShape.holes.push(archHole);
 
-        const archLip = new THREE.Mesh(
-          new THREE.TorusGeometry(0.5, 0.07, 24, 64),
-          new THREE.MeshStandardMaterial({ color: 0xf7d6ff, metalness: 0.16, roughness: 0.38 })
-        );
-        archLip.rotation.set(Math.PI / 2, 0, Math.PI / 2);
-        archLip.position.set(-0.05, 1.86, 0.62);
-        archGroup.add(archLip);
+        const archGeometry = new THREE.ExtrudeGeometry(archShape, { depth: archThickness, bevelEnabled: false });
+        const archFacade = new THREE.Mesh(archGeometry, archMaterial);
+        archFacade.rotation.y = Math.PI;
+        archFacade.position.set(-0.04, 0.14, 0.6);
+        archGroup.add(archFacade);
 
-        const archInner = new THREE.Mesh(
-          new THREE.BoxGeometry(0.1, 1.6, 0.52),
-          new THREE.MeshStandardMaterial({ color: 0xdedcff, metalness: 0.1, roughness: 0.62 })
+        const archInterior = new THREE.Mesh(
+          new THREE.PlaneGeometry(innerWidth - 0.12, innerHeight - 0.38),
+          new THREE.MeshStandardMaterial({ color: 0xe7e3ff, metalness: 0.08, roughness: 0.72 })
         );
-        archInner.position.set(-0.05, 1.0, 0.7);
-        archGroup.add(archInner);
+        archInterior.position.set(-0.05, (innerHeight - 0.38) / 2 + 0.12, 0.62 + archThickness / 2 - 0.02);
+        archGroup.add(archInterior);
+
+        const archShelf = new THREE.Mesh(
+          new THREE.BoxGeometry(1.28, 0.08, 0.36),
+          accentMaterial
+        );
+        archShelf.position.set(-0.04, 1.86, 0.62);
+        wallGroup.add(archShelf);
 
         const vine = new THREE.Mesh(
-          new THREE.PlaneGeometry(0.32, 1.35, 1, 8),
-          new THREE.MeshStandardMaterial({ color: 0x82ffb0, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
+          new THREE.PlaneGeometry(0.34, 1.36, 1, 8),
+          new THREE.MeshStandardMaterial({ color: 0x7fffab, transparent: true, opacity: 0.72, side: THREE.DoubleSide })
         );
-        vine.position.set(-0.45, 1.52, 0.82);
-        vine.rotation.y = Math.PI / 8;
-        wallGroup.add(vine);
+        vine.position.set(-0.46, 1.48, 0.8);
+        vine.rotation.y = Math.PI / 9;
+        vine.rotation.z = 0.05;
+        archGroup.add(vine);
 
         const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.23, roughness: 0.4, emissiveIntensity: 0.32 });
         const labelCache = new Map();
@@ -357,7 +368,7 @@
           const group = new THREE.Group();
           group.position.set(...position);
 
-          const width = 1.24;
+          const width = 1.22;
           const height = 0.34;
           const depth = 0.1;
 
@@ -380,7 +391,7 @@
           group.add(topFace);
 
           const glowEdge = new THREE.Mesh(
-            new THREE.RingGeometry(width * 0.37, width * 0.41, 48),
+            new THREE.RingGeometry(width * 0.36, width * 0.4, 48),
             new THREE.MeshBasicMaterial({ color: emissive, transparent: true, opacity: 0.2 })
           );
           glowEdge.rotation.x = Math.PI / 2;
@@ -388,7 +399,7 @@
           group.add(glowEdge);
 
           const labelMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(width * 0.7, height * 0.48),
+            new THREE.PlaneGeometry(width * 0.68, height * 0.46),
             new THREE.MeshBasicMaterial({ map: createLabelTexture(label), transparent: true, depthWrite: false })
           );
           labelMesh.position.set(0, 0, depth * 0.48);
@@ -403,7 +414,7 @@
           label: 'Resume',
           color: 0x66e4ff,
           emissive: 0x3ad2ff,
-          position: [-0.42, 0.78, 0.24],
+          position: [0.2, 0.78, 0.24],
           onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
         });
         wallGroup.add(resumeButton);
