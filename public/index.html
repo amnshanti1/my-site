@@ -255,77 +255,82 @@
         wallGroup.rotation.set(0, THREE.MathUtils.degToRad(35), 0);
         stage.add(wallGroup);
 
-        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xf4f2ff, metalness: 0.16, roughness: 0.68 });
-        const baseTrimMaterial = new THREE.MeshStandardMaterial({ color: 0x222c48, metalness: 0.32, roughness: 0.5 });
-        const archMaterial = new THREE.MeshStandardMaterial({ color: 0x7868ff, metalness: 0.26, roughness: 0.54 });
+        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xf3f1ff, metalness: 0.12, roughness: 0.68 });
+        const archMaterial = new THREE.MeshStandardMaterial({ color: 0x7b74ff, metalness: 0.24, roughness: 0.52 });
 
-        const wallPlinth = new THREE.Mesh(
-          new THREE.BoxGeometry(4.2, 0.12, 0.52),
-          baseTrimMaterial
+        const wallFooting = new THREE.Mesh(
+          new THREE.BoxGeometry(4.0, 0.12, 0.48),
+          new THREE.MeshStandardMaterial({ color: 0x262f4c, metalness: 0.28, roughness: 0.54 })
         );
-        wallPlinth.position.set(0, 0.06, 0.06);
-        wallGroup.add(wallPlinth);
+        wallFooting.position.set(0, 0.06, 0.05);
+        wallGroup.add(wallFooting);
 
         const mainWall = new THREE.Mesh(
-          new THREE.BoxGeometry(4.0, 2.2, 0.16),
+          new THREE.BoxGeometry(3.8, 2.1, 0.16),
           wallMaterial
         );
-        mainWall.position.set(0.05, 1.2, 0.08);
+        mainWall.position.set(0.04, 1.16, 0.1);
         wallGroup.add(mainWall);
 
-        const neonInset = new THREE.Mesh(
-          new THREE.PlaneGeometry(2.6, 1.22),
-          new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, emissive: 0x99a7ff, emissiveIntensity: 0.22 })
+        const neonPanel = new THREE.Mesh(
+          new THREE.PlaneGeometry(2.5, 1.2),
+          new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, emissive: 0x9da9ff, emissiveIntensity: 0.24 })
         );
-        neonInset.position.set(0.76, 1.28, 0.16);
-        wallGroup.add(neonInset);
-
-        const wallHighlight = new THREE.Mesh(
-          new THREE.PlaneGeometry(4.05, 2.28),
-          new THREE.MeshBasicMaterial({ color: 0x0b1326, opacity: 0.05, transparent: true })
-        );
-        wallHighlight.position.set(0.02, 1.2, -0.02);
-        wallGroup.add(wallHighlight);
+        neonPanel.position.set(0.72, 1.24, 0.18);
+        wallGroup.add(neonPanel);
 
         const archGroup = new THREE.Group();
-        archGroup.position.set(-2.18, 0, -0.52);
+        archGroup.position.set(-1.98, 0, -0.52);
         wallGroup.add(archGroup);
 
         const archBacker = new THREE.Mesh(
-          new THREE.BoxGeometry(0.32, 2.3, 1.08),
+          new THREE.BoxGeometry(0.32, 2.18, 1.0),
           archMaterial
         );
-        archBacker.position.set(-0.05, 1.15, 0.25);
+        archBacker.position.set(-0.1, 1.09, 0.2);
         archGroup.add(archBacker);
 
-        const archColumnL = new THREE.Mesh(
-          new THREE.BoxGeometry(0.32, 1.9, 0.68),
-          archMaterial
-        );
-        archColumnL.position.set(-0.45, 0.95, 0);
-        archGroup.add(archColumnL);
+        const archThickness = 0.28;
+        const archWidth = 1.32;
+        const archHeight = 1.68;
 
-        const archColumnR = archColumnL.clone();
-        archColumnR.position.x = 0.35;
-        archGroup.add(archColumnR);
+        const archShape = new THREE.Shape();
+        archShape.moveTo(-archWidth / 2, 0);
+        archShape.lineTo(-archWidth / 2, archHeight - 0.6);
+        archShape.absarc(0, archHeight - 0.6, archWidth / 2, Math.PI, 0, false);
+        archShape.lineTo(archWidth / 2, 0);
+        archShape.lineTo(-archWidth / 2, 0);
 
-        const archTop = new THREE.Mesh(
-          new THREE.TorusGeometry(0.46, 0.12, 28, 80, Math.PI),
-          archMaterial
+        const archGeom = new THREE.ExtrudeGeometry(archShape, { depth: archThickness, bevelEnabled: false });
+        const archMesh = new THREE.Mesh(archGeom, archMaterial);
+        archMesh.rotation.y = Math.PI;
+        archMesh.position.set(-0.05, 0.14, 0.62);
+        archGroup.add(archMesh);
+
+        const archLip = new THREE.Mesh(
+          new THREE.TorusGeometry(0.5, 0.07, 24, 64),
+          new THREE.MeshStandardMaterial({ color: 0xf7d6ff, metalness: 0.16, roughness: 0.38 })
         );
-        archTop.rotation.set(Math.PI / 2, 0, Math.PI);
-        archTop.position.set(-0.05, 1.78, 0);
-        archGroup.add(archTop);
+        archLip.rotation.set(Math.PI / 2, 0, Math.PI / 2);
+        archLip.position.set(-0.05, 1.86, 0.62);
+        archGroup.add(archLip);
 
         const archInner = new THREE.Mesh(
-          new THREE.CapsuleGeometry(0.22, 0.68, 10, 24),
-          new THREE.MeshStandardMaterial({ color: 0xdcd9ff, metalness: 0.12, roughness: 0.64 })
+          new THREE.BoxGeometry(0.1, 1.6, 0.52),
+          new THREE.MeshStandardMaterial({ color: 0xdedcff, metalness: 0.1, roughness: 0.62 })
         );
-        archInner.rotation.set(Math.PI / 2, 0, 0);
-        archInner.position.set(-0.05, 1.05, 0.06);
+        archInner.position.set(-0.05, 1.0, 0.7);
         archGroup.add(archInner);
 
-        const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.25, roughness: 0.36, emissiveIntensity: 0.35 });
+        const vine = new THREE.Mesh(
+          new THREE.PlaneGeometry(0.32, 1.35, 1, 8),
+          new THREE.MeshStandardMaterial({ color: 0x82ffb0, transparent: true, opacity: 0.7, side: THREE.DoubleSide })
+        );
+        vine.position.set(-0.45, 1.52, 0.82);
+        vine.rotation.y = Math.PI / 8;
+        wallGroup.add(vine);
+
+        const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.23, roughness: 0.4, emissiveIntensity: 0.32 });
         const labelCache = new Map();
         const createLabelTexture = text => {
           if (labelCache.has(text)) return labelCache.get(text);
@@ -352,8 +357,8 @@
           const group = new THREE.Group();
           group.position.set(...position);
 
-          const width = 1.28;
-          const height = 0.36;
+          const width = 1.24;
+          const height = 0.34;
           const depth = 0.1;
 
           const base = new THREE.Mesh(
@@ -362,28 +367,28 @@
           );
           base.material.color.setHex(color);
           base.material.emissive = new THREE.Color(emissive);
-          base.material.emissiveIntensity = 0.42;
+          base.material.emissiveIntensity = 0.4;
           base.position.set(0, 0, depth / 2);
           base.geometry.translate(0, 0, -depth / 4);
           group.add(base);
 
           const topFace = new THREE.Mesh(
             new THREE.BoxGeometry(width * 0.94, height * 0.92, depth * 0.48),
-            new THREE.MeshStandardMaterial({ color: 0xf6f9ff, metalness: 0.14, roughness: 0.36 })
+            new THREE.MeshStandardMaterial({ color: 0xf8fbff, metalness: 0.12, roughness: 0.34 })
           );
           topFace.position.set(0, 0, depth * 0.42);
           group.add(topFace);
 
           const glowEdge = new THREE.Mesh(
-            new THREE.RingGeometry(width * 0.38, width * 0.42, 40),
-            new THREE.MeshBasicMaterial({ color: emissive, transparent: true, opacity: 0.22 })
+            new THREE.RingGeometry(width * 0.37, width * 0.41, 48),
+            new THREE.MeshBasicMaterial({ color: emissive, transparent: true, opacity: 0.2 })
           );
           glowEdge.rotation.x = Math.PI / 2;
           glowEdge.position.set(0, 0, depth * 0.44);
           group.add(glowEdge);
 
           const labelMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(width * 0.72, height * 0.48),
+            new THREE.PlaneGeometry(width * 0.7, height * 0.48),
             new THREE.MeshBasicMaterial({ map: createLabelTexture(label), transparent: true, depthWrite: false })
           );
           labelMesh.position.set(0, 0, depth * 0.48);
@@ -394,12 +399,11 @@
           return group;
         };
 
-
         const resumeButton = makeButton({
           label: 'Resume',
           color: 0x66e4ff,
           emissive: 0x3ad2ff,
-          position: [-0.6, 1.12, 0.22],
+          position: [-0.42, 0.78, 0.24],
           onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
         });
         wallGroup.add(resumeButton);
