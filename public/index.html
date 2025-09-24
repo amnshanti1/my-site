@@ -255,26 +255,75 @@
         wallGroup.rotation.set(0, THREE.MathUtils.degToRad(35), 0);
         stage.add(wallGroup);
 
-        const infoWall = new THREE.Mesh(
-          new THREE.PlaneGeometry(4.2, 2.2),
-          new THREE.MeshStandardMaterial({ color: 0x16203a, metalness: 0.32, roughness: 0.5 })
-        );
-        infoWall.position.set(0, 1.8, 0);
-        wallGroup.add(infoWall);
+        const wallMaterial = new THREE.MeshStandardMaterial({ color: 0xf4f2ff, metalness: 0.16, roughness: 0.68 });
+        const baseTrimMaterial = new THREE.MeshStandardMaterial({ color: 0x222c48, metalness: 0.32, roughness: 0.5 });
+        const archMaterial = new THREE.MeshStandardMaterial({ color: 0x7868ff, metalness: 0.26, roughness: 0.54 });
 
-        const infoFrame = new THREE.Mesh(
-          new THREE.PlaneGeometry(4.3, 2.3),
-          new THREE.MeshBasicMaterial({ color: 0x0c1427, side: THREE.DoubleSide })
+        const wallPlinth = new THREE.Mesh(
+          new THREE.BoxGeometry(4.2, 0.12, 0.52),
+          baseTrimMaterial
         );
-        infoFrame.position.set(0, 1.8, -0.02);
-        wallGroup.add(infoFrame);
+        wallPlinth.position.set(0, 0.06, 0.06);
+        wallGroup.add(wallPlinth);
 
-        const glowPanel = new THREE.Mesh(
-          new THREE.PlaneGeometry(3.5, 1.7),
-          new THREE.MeshStandardMaterial({ color: 0x4f7eff, transparent: true, opacity: 0.16, emissive: 0x66d6ff, emissiveIntensity: 0.38 })
+        const mainWall = new THREE.Mesh(
+          new THREE.BoxGeometry(4.0, 2.2, 0.16),
+          wallMaterial
         );
-        glowPanel.position.set(0.18, 1.82, 0.02);
-        wallGroup.add(glowPanel);
+        mainWall.position.set(0.05, 1.2, 0.08);
+        wallGroup.add(mainWall);
+
+        const neonInset = new THREE.Mesh(
+          new THREE.PlaneGeometry(2.6, 1.22),
+          new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, emissive: 0x99a7ff, emissiveIntensity: 0.22 })
+        );
+        neonInset.position.set(0.76, 1.28, 0.16);
+        wallGroup.add(neonInset);
+
+        const wallHighlight = new THREE.Mesh(
+          new THREE.PlaneGeometry(4.05, 2.28),
+          new THREE.MeshBasicMaterial({ color: 0x0b1326, opacity: 0.05, transparent: true })
+        );
+        wallHighlight.position.set(0.02, 1.2, -0.02);
+        wallGroup.add(wallHighlight);
+
+        const archGroup = new THREE.Group();
+        archGroup.position.set(-2.18, 0, -0.52);
+        wallGroup.add(archGroup);
+
+        const archBacker = new THREE.Mesh(
+          new THREE.BoxGeometry(0.32, 2.3, 1.08),
+          archMaterial
+        );
+        archBacker.position.set(-0.05, 1.15, 0.25);
+        archGroup.add(archBacker);
+
+        const archColumnL = new THREE.Mesh(
+          new THREE.BoxGeometry(0.32, 1.9, 0.68),
+          archMaterial
+        );
+        archColumnL.position.set(-0.45, 0.95, 0);
+        archGroup.add(archColumnL);
+
+        const archColumnR = archColumnL.clone();
+        archColumnR.position.x = 0.35;
+        archGroup.add(archColumnR);
+
+        const archTop = new THREE.Mesh(
+          new THREE.TorusGeometry(0.46, 0.12, 28, 80, Math.PI),
+          archMaterial
+        );
+        archTop.rotation.set(Math.PI / 2, 0, Math.PI);
+        archTop.position.set(-0.05, 1.78, 0);
+        archGroup.add(archTop);
+
+        const archInner = new THREE.Mesh(
+          new THREE.CapsuleGeometry(0.22, 0.68, 10, 24),
+          new THREE.MeshStandardMaterial({ color: 0xdcd9ff, metalness: 0.12, roughness: 0.64 })
+        );
+        archInner.rotation.set(Math.PI / 2, 0, 0);
+        archInner.position.set(-0.05, 1.05, 0.06);
+        archGroup.add(archInner);
 
         const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.25, roughness: 0.36, emissiveIntensity: 0.35 });
         const labelCache = new Map();
@@ -284,10 +333,10 @@
           canvas.width = 512;
           canvas.height = 256;
           const ctx = canvas.getContext('2d');
-          ctx.fillStyle = 'rgba(255,255,255,0)';
+          ctx.fillStyle = 'rgba(255, 255, 255, 0)';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           ctx.fillStyle = '#0b1326';
-          ctx.font = 'bold 120px \"Inter\", sans-serif';
+          ctx.font = 'bold 120px "Inter", sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(text, canvas.width / 2, canvas.height / 2);
@@ -313,31 +362,31 @@
           );
           base.material.color.setHex(color);
           base.material.emissive = new THREE.Color(emissive);
-          base.material.emissiveIntensity = 0.45;
+          base.material.emissiveIntensity = 0.42;
           base.position.set(0, 0, depth / 2);
           base.geometry.translate(0, 0, -depth / 4);
           group.add(base);
 
           const topFace = new THREE.Mesh(
-            new THREE.BoxGeometry(width * 0.94, height * 0.9, depth * 0.5),
-            new THREE.MeshStandardMaterial({ color: 0xf6f9ff, metalness: 0.18, roughness: 0.42 })
+            new THREE.BoxGeometry(width * 0.94, height * 0.92, depth * 0.48),
+            new THREE.MeshStandardMaterial({ color: 0xf6f9ff, metalness: 0.14, roughness: 0.36 })
           );
-          topFace.position.set(0, 0, depth * 0.4);
+          topFace.position.set(0, 0, depth * 0.42);
           group.add(topFace);
 
           const glowEdge = new THREE.Mesh(
-            new THREE.RingGeometry(width * 0.4, width * 0.43, 32),
-            new THREE.MeshBasicMaterial({ color: emissive, transparent: true, opacity: 0.25 })
+            new THREE.RingGeometry(width * 0.38, width * 0.42, 40),
+            new THREE.MeshBasicMaterial({ color: emissive, transparent: true, opacity: 0.22 })
           );
           glowEdge.rotation.x = Math.PI / 2;
-          glowEdge.position.set(0, 0, depth * 0.42);
+          glowEdge.position.set(0, 0, depth * 0.44);
           group.add(glowEdge);
 
           const labelMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(width * 0.78, height * 0.5),
+            new THREE.PlaneGeometry(width * 0.72, height * 0.48),
             new THREE.MeshBasicMaterial({ map: createLabelTexture(label), transparent: true, depthWrite: false })
           );
-          labelMesh.position.set(0, 0, depth * 0.46);
+          labelMesh.position.set(0, 0, depth * 0.48);
           group.add(labelMesh);
 
           base.userData = { onClick, baseEmissive: base.material.emissiveIntensity, glowEdge };
@@ -350,11 +399,11 @@
           label: 'Resume',
           color: 0x66e4ff,
           emissive: 0x3ad2ff,
-          position: [-0.82, 1.62, 0.14],
+          position: [-0.6, 1.12, 0.22],
           onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
         });
-        resumeButton.rotation.set(0, THREE.MathUtils.degToRad(8), THREE.MathUtils.degToRad(-2));
         wallGroup.add(resumeButton);
+
 
         const auraRing = new THREE.Mesh(
           new THREE.RingGeometry(3.6, 4.4, 70),
