@@ -233,20 +233,43 @@
         scene.add(topLight, topLight.target);
 
         const stage = new THREE.Group();
-        stage.position.set(0, 1.6, -3.6);
+        stage.position.set(0, 1.8, -4.6);
         scene.add(stage);
 
+        const baseShape = new THREE.Shape();
+        const corner = 0.9;
+        const length = 6.2;
+        const width = 4.8;
+        const inset = 2.2;
+
+        baseShape.moveTo(-width / 2 + corner, -length / 2);
+        baseShape.lineTo(width / 2, -length / 2);
+        baseShape.quadraticCurveTo(width / 2, -length / 2, width / 2, -length / 2 + corner);
+        baseShape.lineTo(width / 2, inset - corner);
+        baseShape.quadraticCurveTo(width / 2, inset, width / 2 - corner, inset);
+        baseShape.lineTo(-width / 2 + corner, inset);
+        baseShape.quadraticCurveTo(-width / 2, inset, -width / 2, inset - corner);
+        baseShape.lineTo(-width / 2, -length / 2 + corner);
+        baseShape.quadraticCurveTo(-width / 2, -length / 2, -width / 2 + corner, -length / 2);
+
+        const baseGeom = new THREE.ExtrudeGeometry(baseShape, { depth: 0.4, bevelEnabled: false });
+        baseGeom.translate(0, -0.2, -0.8);
+
         const base = new THREE.Mesh(
-          new THREE.CylinderGeometry(4.6, 4.8, 0.42, 90),
-          new THREE.MeshStandardMaterial({ color: 0x203254, metalness: 0.32, roughness: 0.64 })
+          baseGeom,
+          new THREE.MeshStandardMaterial({ color: 0x1e2f52, metalness: 0.3, roughness: 0.66 })
         );
-        base.position.y = -0.18;
+        base.rotation.x = -Math.PI / 2;
         stage.add(base);
 
+        const deckGeom = new THREE.ExtrudeGeometry(baseShape, { depth: 0.22, bevelEnabled: false });
+        deckGeom.translate(0, 0, -0.78);
+
         const deck = new THREE.Mesh(
-          new THREE.CylinderGeometry(3.6, 3.8, 0.26, 80),
-          new THREE.MeshStandardMaterial({ color: 0x3e5fd6, metalness: 0.45, roughness: 0.42, emissive: 0x162c72, emissiveIntensity: 0.18 })
+          deckGeom,
+          new THREE.MeshStandardMaterial({ color: 0x3c5ad9, metalness: 0.44, roughness: 0.4, emissive: 0x152b6b, emissiveIntensity: 0.16 })
         );
+        deck.rotation.x = -Math.PI / 2;
         deck.position.y = 0.24;
         stage.add(deck);
 
