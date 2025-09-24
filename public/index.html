@@ -233,48 +233,56 @@
         scene.add(topLight, topLight.target);
 
         const stage = new THREE.Group();
-        stage.position.set(0, 1.8, -4.6);
+        stage.position.set(-0.4, 1.6, -5.0);
         scene.add(stage);
 
-        const baseShape = new THREE.Shape();
-        const corner = 0.9;
-        const length = 6.2;
-        const width = 4.8;
-        const inset = 2.2;
+        const outerRadius = 0.85;
+        const halfWidth = 4.2;
+        const halfLength = 5.6;
+        const notchWidth = 2.8;
+        const notchDepth = 2.6;
 
-        baseShape.moveTo(-width / 2 + corner, -length / 2);
-        baseShape.lineTo(width / 2, -length / 2);
-        baseShape.quadraticCurveTo(width / 2, -length / 2, width / 2, -length / 2 + corner);
-        baseShape.lineTo(width / 2, inset - corner);
-        baseShape.quadraticCurveTo(width / 2, inset, width / 2 - corner, inset);
-        baseShape.lineTo(-width / 2 + corner, inset);
-        baseShape.quadraticCurveTo(-width / 2, inset, -width / 2, inset - corner);
-        baseShape.lineTo(-width / 2, -length / 2 + corner);
-        baseShape.quadraticCurveTo(-width / 2, -length / 2, -width / 2 + corner, -length / 2);
+        const islandShape = new THREE.Shape();
+        islandShape.moveTo(-halfWidth + outerRadius, -halfLength);
+        islandShape.lineTo(halfWidth - outerRadius, -halfLength);
+        islandShape.quadraticCurveTo(halfWidth, -halfLength, halfWidth, -halfLength + outerRadius);
+        islandShape.lineTo(halfWidth, halfLength - outerRadius);
+        islandShape.quadraticCurveTo(halfWidth, halfLength, halfWidth - outerRadius, halfLength);
+        islandShape.lineTo(-halfWidth + outerRadius, halfLength);
+        islandShape.quadraticCurveTo(-halfWidth, halfLength, -halfWidth, halfLength - outerRadius);
+        islandShape.lineTo(-halfWidth, -halfLength + notchDepth + outerRadius);
+        islandShape.quadraticCurveTo(-halfWidth, -halfLength + notchDepth, -halfWidth + outerRadius, -halfLength + notchDepth);
+        islandShape.lineTo(-halfWidth + notchWidth - outerRadius, -halfLength + notchDepth);
+        islandShape.quadraticCurveTo(-halfWidth + notchWidth, -halfLength + notchDepth, -halfWidth + notchWidth, -halfLength + notchDepth - outerRadius);
+        islandShape.lineTo(-halfWidth + notchWidth, -halfLength + outerRadius);
+        islandShape.quadraticCurveTo(-halfWidth + notchWidth, -halfLength, -halfWidth + notchWidth + outerRadius, -halfLength);
+        islandShape.lineTo(-halfWidth + outerRadius, -halfLength);
 
-        const baseGeom = new THREE.ExtrudeGeometry(baseShape, { depth: 0.4, bevelEnabled: false });
-        baseGeom.translate(0, -0.2, -0.8);
+        const baseGeometry = new THREE.ExtrudeGeometry(islandShape, { depth: 0.42, bevelEnabled: false });
+        baseGeometry.translate(0.3, -0.21, -1.2);
 
+        const deckGeometry = new THREE.ExtrudeGeometry(islandShape, { depth: 0.24, bevelEnabled: false });
+        deckGeometry.translate(0.3, 0, -1.08);
         const base = new THREE.Mesh(
-          baseGeom,
-          new THREE.MeshStandardMaterial({ color: 0x1e2f52, metalness: 0.3, roughness: 0.66 })
+          baseGeometry,
+          new THREE.MeshStandardMaterial({ color: 0x1c2f54, metalness: 0.3, roughness: 0.66 })
         );
         base.rotation.x = -Math.PI / 2;
         stage.add(base);
 
-        const deckGeom = new THREE.ExtrudeGeometry(baseShape, { depth: 0.22, bevelEnabled: false });
-        deckGeom.translate(0, 0, -0.78);
+        const deckGeometry = new THREE.ExtrudeGeometry(islandShape, { depth: 0.24, bevelEnabled: false });
+        deckGeometry.translate(0.3, 0, -1.08);
 
         const deck = new THREE.Mesh(
-          deckGeom,
-          new THREE.MeshStandardMaterial({ color: 0x3c5ad9, metalness: 0.44, roughness: 0.4, emissive: 0x152b6b, emissiveIntensity: 0.16 })
+          deckGeometry,
+          new THREE.MeshStandardMaterial({ color: 0x3b5bd9, metalness: 0.44, roughness: 0.4, emissive: 0x152b6b, emissiveIntensity: 0.16 })
         );
         deck.rotation.x = -Math.PI / 2;
         deck.position.y = 0.24;
         stage.add(deck);
 
         const wallGroup = new THREE.Group();
-        wallGroup.position.set(0, 0.08, -1.05);
+        wallGroup.position.set(1.1, 0.08, -1.4);
         wallGroup.rotation.set(0, THREE.MathUtils.degToRad(35), 0);
         stage.add(wallGroup);
 
