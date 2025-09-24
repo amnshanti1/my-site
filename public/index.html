@@ -252,7 +252,7 @@
 
         const wallGroup = new THREE.Group();
         wallGroup.position.set(0, 0.08, -1.05);
-        wallGroup.rotation.set(0, 0.35, THREE.MathUtils.degToRad(35));
+        wallGroup.rotation.set(0, THREE.MathUtils.degToRad(35), 0);
         stage.add(wallGroup);
 
         const infoWall = new THREE.Mesh(
@@ -353,7 +353,7 @@
           position: [-0.82, 1.62, 0.14],
           onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
         });
-        resumeButton.rotation.set(0, 0, THREE.MathUtils.degToRad(-3));
+        resumeButton.rotation.set(0, THREE.MathUtils.degToRad(8), THREE.MathUtils.degToRad(-2));
         wallGroup.add(resumeButton);
 
         const auraRing = new THREE.Mesh(
