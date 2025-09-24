@@ -251,22 +251,29 @@
         stage.add(deck);
 
         const wallGroup = new THREE.Group();
-        wallGroup.position.set(0, 0, -1.05);
-        wallGroup.rotation.set(0, 0.25, 0);
+        wallGroup.position.set(0, 0.08, -1.05);
+        wallGroup.rotation.set(0, 0.35, THREE.MathUtils.degToRad(35));
         stage.add(wallGroup);
 
         const infoWall = new THREE.Mesh(
           new THREE.PlaneGeometry(4.2, 2.2),
-          new THREE.MeshStandardMaterial({ color: 0x1a223d, metalness: 0.28, roughness: 0.56 })
+          new THREE.MeshStandardMaterial({ color: 0x16203a, metalness: 0.32, roughness: 0.5 })
         );
         infoWall.position.set(0, 1.8, 0);
         wallGroup.add(infoWall);
 
-        const glowPanel = new THREE.Mesh(
-          new THREE.PlaneGeometry(3.6, 1.8),
-          new THREE.MeshStandardMaterial({ color: 0x4f7eff, transparent: true, opacity: 0.18, emissive: 0x66d6ff, emissiveIntensity: 0.42 })
+        const infoFrame = new THREE.Mesh(
+          new THREE.PlaneGeometry(4.3, 2.3),
+          new THREE.MeshBasicMaterial({ color: 0x0c1427, side: THREE.DoubleSide })
         );
-        glowPanel.position.set(0.12, 1.82, 0.02);
+        infoFrame.position.set(0, 1.8, -0.02);
+        wallGroup.add(infoFrame);
+
+        const glowPanel = new THREE.Mesh(
+          new THREE.PlaneGeometry(3.5, 1.7),
+          new THREE.MeshStandardMaterial({ color: 0x4f7eff, transparent: true, opacity: 0.16, emissive: 0x66d6ff, emissiveIntensity: 0.38 })
+        );
+        glowPanel.position.set(0.18, 1.82, 0.02);
         wallGroup.add(glowPanel);
 
         const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.25, roughness: 0.36, emissiveIntensity: 0.35 });
@@ -296,9 +303,9 @@
           const group = new THREE.Group();
           group.position.set(...position);
 
-          const width = 1.3;
-          const height = 0.38;
-          const depth = 0.12;
+          const width = 1.28;
+          const height = 0.36;
+          const depth = 0.1;
 
           const base = new THREE.Mesh(
             new THREE.BoxGeometry(width, height, depth),
@@ -308,27 +315,45 @@
           base.material.emissive = new THREE.Color(emissive);
           base.material.emissiveIntensity = 0.45;
           base.position.set(0, 0, depth / 2);
+          base.geometry.translate(0, 0, -depth / 4);
           group.add(base);
 
+          const topFace = new THREE.Mesh(
+            new THREE.BoxGeometry(width * 0.94, height * 0.9, depth * 0.5),
+            new THREE.MeshStandardMaterial({ color: 0xf6f9ff, metalness: 0.18, roughness: 0.42 })
+          );
+          topFace.position.set(0, 0, depth * 0.4);
+          group.add(topFace);
+
+          const glowEdge = new THREE.Mesh(
+            new THREE.RingGeometry(width * 0.4, width * 0.43, 32),
+            new THREE.MeshBasicMaterial({ color: emissive, transparent: true, opacity: 0.25 })
+          );
+          glowEdge.rotation.x = Math.PI / 2;
+          glowEdge.position.set(0, 0, depth * 0.42);
+          group.add(glowEdge);
+
           const labelMesh = new THREE.Mesh(
-            new THREE.PlaneGeometry(width * 0.82, height * 0.55),
+            new THREE.PlaneGeometry(width * 0.78, height * 0.5),
             new THREE.MeshBasicMaterial({ map: createLabelTexture(label), transparent: true, depthWrite: false })
           );
-          labelMesh.position.set(0, 0, depth + 0.002);
+          labelMesh.position.set(0, 0, depth * 0.46);
           group.add(labelMesh);
 
-          base.userData = { onClick, baseEmissive: base.material.emissiveIntensity, labelMesh };
+          base.userData = { onClick, baseEmissive: base.material.emissiveIntensity, glowEdge };
           interactiveMeshes.push(base);
           return group;
         };
+
 
         const resumeButton = makeButton({
           label: 'Resume',
           color: 0x66e4ff,
           emissive: 0x3ad2ff,
-          position: [-0.92, 1.62, 0.12],
+          position: [-0.82, 1.62, 0.14],
           onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
         });
+        resumeButton.rotation.set(0, 0, THREE.MathUtils.degToRad(-3));
         wallGroup.add(resumeButton);
 
         const auraRing = new THREE.Mesh(
@@ -374,6 +399,7 @@
           pointerTarget.y = 0;
           if (hoveredButton) {
             hoveredButton.material.emissiveIntensity = hoveredButton.userData.baseEmissive;
+            hoveredButton.userData.glowEdge.material.opacity = 0.25;
             hoveredButton = null;
           }
         });
@@ -419,10 +445,12 @@
           if (nextButton !== hoveredButton) {
             if (hoveredButton) {
               hoveredButton.material.emissiveIntensity = hoveredButton.userData.baseEmissive;
+              hoveredButton.userData.glowEdge.material.opacity = 0.25;
             }
             hoveredButton = nextButton || null;
             if (hoveredButton) {
-              hoveredButton.material.emissiveIntensity = hoveredButton.userData.baseEmissive + 0.2;
+              hoveredButton.material.emissiveIntensity = hoveredButton.userData.baseEmissive + 0.25;
+              hoveredButton.userData.glowEdge.material.opacity = 0.4;
             }
           }
 
