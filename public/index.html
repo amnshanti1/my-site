@@ -272,33 +272,67 @@
         glowPanel.position.set(0.12, 1.82, 0.02);
         wallGroup.add(glowPanel);
 
-        const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.2, roughness: 0.3, emissiveIntensity: 0.4 });
+        const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.25, roughness: 0.36, emissiveIntensity: 0.35 });
+        const labelCache = new Map();
+        const createLabelTexture = text => {
+          if (labelCache.has(text)) return labelCache.get(text);
+          const canvas = document.createElement('canvas');
+          canvas.width = 512;
+          canvas.height = 256;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = 'rgba(255,255,255,0)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#0b1326';
+          ctx.font = 'bold 120px \"Inter\", sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+          const texture = new THREE.CanvasTexture(canvas);
+          texture.anisotropy = 8;
+          labelCache.set(text, texture);
+          return texture;
+        };
 
-        const resumeTile = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.38), buttonMaterial.clone());
-        resumeTile.material.color.setHex(0x66e4ff);
-        resumeTile.material.emissive = new THREE.Color(0x3ad2ff);
-        resumeTile.material.emissiveIntensity = 0.55;
-        resumeTile.position.set(-0.98, 1.7, 0.04);
-        resumeTile.userData = { onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener'), baseEmissive: resumeTile.material.emissiveIntensity };
-        wallGroup.add(resumeTile);
+        const interactiveMeshes = [];
 
-        const emailTile = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.32), buttonMaterial.clone());
-        emailTile.material.color.setHex(0x8d97ff);
-        emailTile.material.emissive = new THREE.Color(0x6776ff);
-        emailTile.material.emissiveIntensity = 0.4;
-        emailTile.position.set(0.04, 1.58, 0.04);
-        emailTile.userData = { onClick: () => window.open('mailto:adam@adamshanti.com'), baseEmissive: emailTile.material.emissiveIntensity };
-        wallGroup.add(emailTile);
+        const makeButton = ({ label, color, emissive, position, onClick }) => {
+          const group = new THREE.Group();
+          group.position.set(...position);
 
-        const linkedTile = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.32), buttonMaterial.clone());
-        linkedTile.material.color.setHex(0xb48cff);
-        linkedTile.material.emissive = new THREE.Color(0x8c66ff);
-        linkedTile.material.emissiveIntensity = 0.32;
-        linkedTile.position.set(1.02, 1.46, 0.04);
-        linkedTile.userData = { onClick: () => window.open('https://www.linkedin.com/in/...', '_blank', 'noopener'), baseEmissive: linkedTile.material.emissiveIntensity };
-        wallGroup.add(linkedTile);
+          const width = 1.3;
+          const height = 0.38;
+          const depth = 0.12;
 
-        const interactiveMeshes = [resumeTile, emailTile, linkedTile];
+          const base = new THREE.Mesh(
+            new THREE.BoxGeometry(width, height, depth),
+            buttonMaterial.clone()
+          );
+          base.material.color.setHex(color);
+          base.material.emissive = new THREE.Color(emissive);
+          base.material.emissiveIntensity = 0.45;
+          base.position.set(0, 0, depth / 2);
+          group.add(base);
+
+          const labelMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(width * 0.82, height * 0.55),
+            new THREE.MeshBasicMaterial({ map: createLabelTexture(label), transparent: true, depthWrite: false })
+          );
+          labelMesh.position.set(0, 0, depth + 0.002);
+          group.add(labelMesh);
+
+          base.userData = { onClick, baseEmissive: base.material.emissiveIntensity, labelMesh };
+          interactiveMeshes.push(base);
+          return group;
+        };
+
+        const resumeButton = makeButton({
+          label: 'Resume',
+          color: 0x66e4ff,
+          emissive: 0x3ad2ff,
+          position: [-0.92, 1.62, 0.12],
+          onClick: () => window.open('/Adam_Shanti_Resume.pdf', '_blank', 'noopener')
+        });
+        wallGroup.add(resumeButton);
 
         const auraRing = new THREE.Mesh(
           new THREE.RingGeometry(3.6, 4.4, 70),
