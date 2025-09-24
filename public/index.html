@@ -240,62 +240,61 @@
         scene.add(stage);
 
         const base = new THREE.Mesh(
-          new THREE.CylinderGeometry(4.8, 5.1, 0.45, 90),
+          new THREE.CylinderGeometry(4.6, 4.8, 0.42, 90),
           new THREE.MeshStandardMaterial({ color: 0x203254, metalness: 0.32, roughness: 0.64 })
         );
-        base.position.y = -0.22;
+        base.position.y = -0.18;
         stage.add(base);
 
         const deck = new THREE.Mesh(
-          new THREE.CylinderGeometry(3.8, 4.0, 0.28, 80),
+          new THREE.CylinderGeometry(3.6, 3.8, 0.26, 80),
           new THREE.MeshStandardMaterial({ color: 0x3e5fd6, metalness: 0.45, roughness: 0.42, emissive: 0x162c72, emissiveIntensity: 0.18 })
         );
-        deck.position.y = 0.28;
+        deck.position.y = 0.24;
         stage.add(deck);
 
+        const wallGroup = new THREE.Group();
+        wallGroup.position.set(0, 0, -1.05);
+        wallGroup.rotation.set(0.08, 0.25, 0.06);
+        stage.add(wallGroup);
+
         const infoWall = new THREE.Mesh(
-          new THREE.PlaneGeometry(4.6, 2.2),
+          new THREE.PlaneGeometry(4.2, 2.2),
           new THREE.MeshStandardMaterial({ color: 0x1a223d, metalness: 0.28, roughness: 0.56 })
         );
-        infoWall.position.set(0, 1.8, -1.1);
-        infoWall.rotation.y = 0.22;
-        stage.add(infoWall);
+        infoWall.position.set(0, 1.8, 0);
+        wallGroup.add(infoWall);
 
         const glowPanel = new THREE.Mesh(
-          new THREE.PlaneGeometry(3.8, 1.7),
+          new THREE.PlaneGeometry(3.6, 1.8),
           new THREE.MeshStandardMaterial({ color: 0x4f7eff, transparent: true, opacity: 0.18, emissive: 0x66d6ff, emissiveIntensity: 0.42 })
         );
-        glowPanel.position.set(0.12, 1.82, -1.06);
-        glowPanel.rotation.y = 0.22;
-        stage.add(glowPanel);
+        glowPanel.position.set(0.12, 1.82, 0.02);
+        wallGroup.add(glowPanel);
 
-        const resumeTile = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.4, 0.38),
-          new THREE.MeshStandardMaterial({ color: 0x66e4ff, emissive: 0x3ad2ff, emissiveIntensity: 0.55, roughness: 0.24 })
-        );
-        resumeTile.position.set(-0.75, 1.66, -1.02);
-        resumeTile.rotation.y = 0.22;
-        stage.add(resumeTile);
+        const buttonMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.2, roughness: 0.3, emissiveIntensity: 0.4 });
 
-        const emailTile = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.2, 0.32),
-          new THREE.MeshStandardMaterial({ color: 0x8d97ff, emissive: 0x6776ff, emissiveIntensity: 0.4, roughness: 0.28 })
-        );
-        emailTile.position.set(0.18, 1.56, -0.96);
-        emailTile.rotation.y = 0.22;
-        stage.add(emailTile);
+        const resumeTile = new THREE.Mesh(new THREE.PlaneGeometry(1.3, 0.38), buttonMaterial.clone());
+        resumeTile.material.color.setHex(0x66e4ff);
+        resumeTile.material.emissive = new THREE.Color(0x3ad2ff);
+        resumeTile.position.set(-0.98, 1.7, 0.04);
+        wallGroup.add(resumeTile);
 
-        const linkedTile = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.2, 0.32),
-          new THREE.MeshStandardMaterial({ color: 0xb48cff, emissive: 0x8c66ff, emissiveIntensity: 0.32, roughness: 0.3 })
-        );
-        linkedTile.position.set(1.02, 1.46, -0.9);
-        linkedTile.rotation.y = 0.22;
-        stage.add(linkedTile);
+        const emailTile = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.32), buttonMaterial.clone());
+        emailTile.material.color.setHex(0x8d97ff);
+        emailTile.material.emissive = new THREE.Color(0x6776ff);
+        emailTile.position.set(0.04, 1.58, 0.04);
+        wallGroup.add(emailTile);
+
+        const linkedTile = new THREE.Mesh(new THREE.PlaneGeometry(1.2, 0.32), buttonMaterial.clone());
+        linkedTile.material.color.setHex(0xb48cff);
+        linkedTile.material.emissive = new THREE.Color(0x8c66ff);
+        linkedTile.position.set(1.02, 1.46, 0.04);
+        wallGroup.add(linkedTile);
 
         const auraRing = new THREE.Mesh(
-          new THREE.RingGeometry(3.8, 4.6, 72),
-          new THREE.MeshBasicMaterial({ color: 0x66d6ff, transparent: true, opacity: 0.26, side: THREE.DoubleSide })
+          new THREE.RingGeometry(3.6, 4.4, 70),
+          new THREE.MeshBasicMaterial({ color: 0x66d6ff, transparent: true, opacity: 0.24, side: THREE.DoubleSide })
         );
         auraRing.rotation.x = -Math.PI / 2;
         auraRing.position.y = -0.08;
