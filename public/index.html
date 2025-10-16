@@ -351,7 +351,7 @@
       }
     };
 
-    const DEBUG_HELPERS_VISIBLE = false;
+    const DEBUG_HELPERS_VISIBLE = true;
     const labelCache = new Map();
 
     function hasWebGL() {
@@ -541,13 +541,13 @@
     function createTerrainMesh({
       width = 4,
       depth = 4,
-      segments = 64,
+      segments = 24,
       amplitude = 0.6,
-      color = 0xffffff,
-      colorStops,
-      tintStrength = 0,
       blockHeight = 1.2,
-      sideColor = 0x05070c,
+      crestColor = 0x6fb4ff,
+      troughColor = 0x0b1e36,
+      sideColor = 0x050b14,
+      highlightBias = 0.58,
       scrollSpeed = [0, 0],
       cornerRadius = 0.45,
       noiseOffset = [50, 90],
@@ -614,57 +614,15 @@
         ? { x: noiseOffset[0] || 0, z: noiseOffset[1] || 0 }
         : { x: noiseOffset.x || 0, z: noiseOffset.z || 0 };
 
-      const defaultColorStops = [
-        { stop: 0, color: 0x22507e },
-        { stop: 0.2, color: 0xd7c299 },
-        { stop: 0.45, color: 0x4f9153 },
-        { stop: 0.7, color: 0x5c6f61 },
-        { stop: 1, color: 0xf7fafb }
-      ];
-      const palette = (Array.isArray(colorStops) && colorStops.length >= 2 ? colorStops : defaultColorStops)
-        .map(entry => ({
-          stop: THREE.MathUtils.clamp(entry.stop, 0, 1),
-          color: entry.color instanceof THREE.Color ? entry.color.clone() : new THREE.Color(entry.color)
-        }))
-        .sort((a, b) => a.stop - b.stop);
-      const tintColor = new THREE.Color(color);
-      const tintMix = THREE.MathUtils.clamp(tintStrength, 0, 1);
-
       const colors = new Float32Array(vertexCount * 3);
       geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
       const colorAttribute = geometry.attributes.color;
-      const gradientColor = new THREE.Color();
+      const crest = crestColor instanceof THREE.Color ? crestColor.clone() : new THREE.Color(crestColor);
+      const trough = troughColor instanceof THREE.Color ? troughColor.clone() : new THREE.Color(troughColor);
       const sideColorValue = sideColor instanceof THREE.Color ? sideColor.clone() : new THREE.Color(sideColor);
-      const updateThreshold = 0.0025;
       const scrollState = {
         target: new THREE.Vector2(0, 0),
-        current: new THREE.Vector2(0, 0),
-        applied: new THREE.Vector2(0, 0)
-      };
-
-      const sampleColor = value => {
-        const clamped = THREE.MathUtils.clamp(value, 0, 1);
-        let lower = palette[0];
-        let upper = palette[palette.length - 1];
-        for (let index = 0; index < palette.length - 1; index += 1) {
-          const current = palette[index];
-          const next = palette[index + 1];
-          if (clamped >= current.stop && clamped <= next.stop) {
-            lower = current;
-            upper = next;
-            break;
-          }
-        }
-        const range = upper.stop - lower.stop;
-        const localT = range <= 0 ? 0 : (clamped - lower.stop) / range;
-        gradientColor.copy(lower.color);
-        if (range > 0) {
-          gradientColor.lerp(upper.color, localT);
-        }
-        if (tintMix > 0) {
-          gradientColor.lerp(tintColor, tintMix);
-        }
-        return gradientColor;
+        current: new THREE.Vector2(0, 0)
       };
 
       const applyHeightField = (offsetX = 0, offsetZ = 0) => {
@@ -680,8 +638,11 @@
             const normalizedHeight = amplitude !== 0
               ? THREE.MathUtils.clamp(elevation / amplitude + 0.5, 0, 1)
               : 0.5;
-            const colorSample = sampleColor(normalizedHeight);
-            colorAttribute.setXYZ(i, colorSample.r, colorSample.g, colorSample.b);
+            const foamWeight = Math.pow(THREE.MathUtils.clamp(normalizedHeight - highlightBias, 0, 1), 1.4);
+            const r = trough.r + (crest.r - trough.r) * foamWeight;
+            const g = trough.g + (crest.g - trough.g) * foamWeight;
+            const b = trough.b + (crest.b - trough.b) * foamWeight;
+            colorAttribute.setXYZ(i, r, g, b);
           } else {
             positions.setY(i, baseY);
             colorAttribute.setXYZ(i, sideColorValue.r, sideColorValue.g, sideColorValue.b);
@@ -694,7 +655,6 @@
       applyHeightField();
       scrollState.target.set(0, 0);
       scrollState.current.set(0, 0);
-      scrollState.applied.set(0, 0);
       geometry.computeVertexNormals();
       if (geometry.attributes.normal) {
         geometry.attributes.normal.needsUpdate = true;
@@ -704,9 +664,11 @@
       if (!material) {
         material = new THREE.MeshStandardMaterial({
           color: 0xffffff,
-          metalness: 0.22,
-          roughness: 0.88,
-          vertexColors: true
+          metalness: 0.65,
+          roughness: 0.22,
+          envMapIntensity: 1.1,
+          vertexColors: true,
+          flatShading: true
         });
         shared.terrain = material;
       }
@@ -721,18 +683,13 @@
         let normalAccumulator = 0;
         registerUpdater(({ delta = 0, elapsed = 0 }) => {
           if (!terrain.parent) return;
-          const { target, current, applied } = scrollState;
+          const { target, current } = scrollState;
           target.set(sampleSpeed.x * elapsed, sampleSpeed.z * elapsed);
           const lambda = 2.2;
           current.x = THREE.MathUtils.damp(current.x, target.x, lambda, delta);
           current.y = THREE.MathUtils.damp(current.y, target.y, lambda, delta);
 
-          const needsUpdate =
-            Math.abs(current.x - applied.x) > updateThreshold ||
-            Math.abs(current.y - applied.y) > updateThreshold;
-          if (!needsUpdate) return;
           applyHeightField(current.x, current.y);
-          applied.copy(current);
           normalAccumulator += delta;
           if (normalAccumulator >= 0.14) {
             geometry.computeVertexNormals();
@@ -747,298 +704,280 @@
       return terrain;
     }
 
-    function createCloudVolume({
-      size = [4, 2, 3],
-      spacing = 0.45,
-      threshold = 0.58,
-      radiusRange = [0.3, 0.6],
-      color = 0xf2f6ff,
-      seed = 42
-    } = {}) {
-      const { THREE } = state;
-      const [width, height, depth] = size;
-      const group = new THREE.Group();
-      const material = new THREE.MeshStandardMaterial({
-        color,
-        roughness: 0.85,
-        metalness: 0,
-        transparent: true,
-        opacity: 0.92,
-        depthWrite: false
-      });
-      const geometry = new THREE.SphereGeometry(0.5, 12, 10);
 
-      for (let x = -width / 2; x <= width / 2; x += spacing) {
-        for (let y = 0; y <= height; y += spacing) {
-          for (let z = -depth / 2; z <= depth / 2; z += spacing) {
-            const nx = (x / width) * 2.4 + seed * 0.13;
-            const ny = (y / height) * 2.4 + seed * 0.21;
-            const nz = (z / depth) * 2.4 - seed * 0.11;
-            const noiseSample = noiseUtils.fbm3(nx, ny, nz, 4, 2.1, 0.5);
-            if (noiseSample > threshold) {
-              const puff = new THREE.Mesh(geometry, material);
-              const scale = THREE.MathUtils.lerp(radiusRange[0], radiusRange[1], Math.random());
-              puff.scale.set(scale, scale, scale);
-              puff.position.set(x + (Math.random() - 0.5) * spacing * 0.35, y + Math.random() * 0.1, z + (Math.random() - 0.5) * spacing * 0.35);
-              group.add(puff);
-            }
-          }
-        }
-      }
+function createCloudVolume({
+  size = [4, 2, 3],
+  spacing = 0.45,
+  threshold = 0.72,
+  radiusRange = [0.28, 0.62],
+  seed = 42,
+  color = 0xf2f6ff
+} = {}) {
+  const { THREE } = state;
+  const shared = state.sharedMaterials || (state.sharedMaterials = {});
 
-      group.traverse(node => {
-        if (node.isMesh) {
-          node.castShadow = false;
-          node.receiveShadow = false;
-        }
-      });
+  if (!shared.cloudMaterials) {
+    shared.cloudMaterials = {
+      light: new THREE.MeshBasicMaterial({ color, toneMapped: false, side: THREE.DoubleSide, transparent: true, opacity: 0.95, depthWrite: false }),
+      shadow: new THREE.MeshBasicMaterial({ color: 0x1a2133, toneMapped: false, side: THREE.DoubleSide, transparent: true, opacity: 0.78, depthWrite: false })
+    };
+  } else {
+    shared.cloudMaterials.light.color.set(color);
+  }
 
-      return group;
-    }
+  const geometry = new THREE.SphereGeometry(0.5, 10, 8);
+  const [width, height, depth] = size;
+  const group = new THREE.Group();
+  let puffCount = 0;
+  const band = 0.1;
+  const freq = 0.38;
 
-    function createVolumetricCloud({
-      dimensions = [4.6, 2.4, 3.4],
-      textureSize = 80,
-      perlinScale = 0.05,
-      baseColor = 0x798aa0,
-      threshold = 0.25,
-      opacity = 0.32,
-      range = 0.1,
-      steps = 88,
-      scrollSpeed = [0.01, 0.004, 0.015],
-      rotationSpeed = 0
-    } = {}) {
-      const { THREE, ImprovedNoise } = state;
-      if (!THREE) throw new Error('THREE not available');
-      if (!ImprovedNoise) throw new Error('ImprovedNoise not available');
-      if (!state.renderer?.capabilities?.isWebGL2) {
-        console.warn('Volumetric clouds require WebGL2; falling back to instanced cloud volume.');
-        const fallbackColor = typeof baseColor === 'number' ? baseColor : 0xf2f6ff;
-        const fallback = createCloudVolume({
-          size: dimensions,
-          color: fallbackColor,
-          spacing: 0.5,
-          threshold: 0.58,
-          radiusRange: [0.28, 0.56],
-          seed: 17
-        });
-        const basePosition = fallback.position.clone();
-        registerUpdater(({ elapsed = 0 }) => {
-          if (!fallback.parent) return;
-          fallback.position.x = basePosition.x + Math.sin(elapsed * 0.35) * 0.18;
-          fallback.position.y = basePosition.y + Math.sin(elapsed * 0.52) * 0.14;
-          fallback.position.z = basePosition.z + Math.cos(elapsed * 0.32) * 0.2;
-        });
-        return fallback;
-      }
+  for (let x = -width / 2; x <= width / 2; x += spacing) {
+    for (let y = 0; y <= height; y += spacing) {
+      for (let z = -depth / 2; z <= depth / 2; z += spacing) {
+        const sample = noiseUtils.fbm3(
+          (x + seed * 1.7) * freq,
+          (y + seed * 0.9) * freq,
+          (z - seed * 1.3) * freq,
+          5, 2.05, 0.52
+        );
 
-      const size = Math.max(16, Math.floor(textureSize));
-      const data = new Uint8Array(size * size * size);
-
-      const perlin = new ImprovedNoise();
-      const vector = new THREE.Vector3();
-      let i = 0;
-
-      for (let z = 0; z < size; z += 1) {
-        for (let y = 0; y < size; y += 1) {
-          for (let x = 0; x < size; x += 1) {
-            const distanceFalloff = 1 - vector.set(x, y, z).subScalar(size / 2).divideScalar(size).length();
-            const noiseSample = perlin.noise((x * perlinScale) / 1.5, y * perlinScale, (z * perlinScale) / 1.5);
-            const rawValue = (128 + 128 * noiseSample) * distanceFalloff * distanceFalloff;
-            data[i] = Math.max(0, Math.min(255, Math.floor(rawValue)));
-            i += 1;
-          }
-        }
-      }
-
-      const texture = new THREE.Data3DTexture(data, size, size, size);
-      texture.format = THREE.RedFormat;
-      texture.minFilter = THREE.LinearFilter;
-      texture.magFilter = THREE.LinearFilter;
-      texture.unpackAlignment = 1;
-      texture.needsUpdate = true;
-
-      const vertexShader = /* glsl */`
-        in vec3 position;
-
-        uniform mat4 modelMatrix;
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        uniform vec3 cameraPos;
-
-        out vec3 vOrigin;
-        out vec3 vDirection;
-
-        void main() {
-          vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-
-          vOrigin = vec3( inverse( modelMatrix ) * vec4( cameraPos, 1.0 ) );
-          vDirection = position - vOrigin;
-
-          gl_Position = projectionMatrix * mvPosition;
-        }
-      `;
-
-      const fragmentShader = /* glsl */`
-        precision highp float;
-        precision highp sampler3D;
-
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-
-        in vec3 vOrigin;
-        in vec3 vDirection;
-
-        out vec4 color;
-
-        uniform vec3 base;
-        uniform sampler3D map;
-
-        uniform float threshold;
-        uniform float range;
-        uniform float opacity;
-        uniform float steps;
-        uniform float frame;
-        uniform vec3 scroll;
-
-        uint wang_hash(uint seed)
-        {
-          seed = (seed ^ 61u) ^ (seed >> 16u);
-          seed *= 9u;
-          seed = seed ^ (seed >> 4u);
-          seed *= 0x27d4eb2du;
-          seed = seed ^ (seed >> 15u);
-          return seed;
-        }
-
-        float randomFloat(inout uint seed)
-        {
-          return float(wang_hash(seed)) / 4294967296.;
-        }
-
-        vec2 hitBox(vec3 orig, vec3 dir) {
-          const vec3 box_min = vec3(-0.5);
-          const vec3 box_max = vec3(0.5);
-          vec3 inv_dir = 1.0 / dir;
-          vec3 tmin_tmp = (box_min - orig) * inv_dir;
-          vec3 tmax_tmp = (box_max - orig) * inv_dir;
-          vec3 tmin = min(tmin_tmp, tmax_tmp);
-          vec3 tmax = max(tmin_tmp, tmax_tmp);
-          float t0 = max(tmin.x, max(tmin.y, tmin.z));
-          float t1 = min(tmax.x, min(tmax.y, tmax.z));
-          return vec2(t0, t1);
-        }
-
-        float sample1(vec3 p) {
-          return texture(map, fract(p)).r;
-        }
-
-        float shading(vec3 coord) {
-          float step = 0.01;
-          vec3 ahead = fract(coord + vec3(step));
-          vec3 behind = fract(coord - vec3(step));
-          return sample1(behind) - sample1(ahead);
-        }
-
-        vec4 linearToSRGB(in vec4 value) {
-          return vec4(
-            mix(
-              pow(value.rgb, vec3(0.41666)) * 1.055 - vec3(0.055),
-              value.rgb * 12.92,
-              vec3(lessThanEqual(value.rgb, vec3(0.0031308)))
-            ),
-            value.a
+        if (sample > threshold) {
+          const material = sample > threshold + band ? shared.cloudMaterials.light : shared.cloudMaterials.shadow;
+          const puff = new THREE.Mesh(geometry, material);
+          const scale = THREE.MathUtils.lerp(radiusRange[0], radiusRange[1], Math.random());
+          puff.scale.set(scale, scale, scale);
+          puff.position.set(
+            x + (Math.random() - 0.5) * spacing * 0.35,
+            y * 0.55 + Math.random() * 0.25,
+            z + (Math.random() - 0.5) * spacing * 0.35
           );
+          puff.rotation.set(Math.random() * Math.PI * 2, Math.random() * Math.PI * 2, Math.random() * Math.PI * 2);
+          puff.castShadow = false;
+          puff.receiveShadow = false;
+          group.add(puff);
+          puffCount += 1;
         }
-
-        void main(){
-          vec3 rayDir = normalize(vDirection);
-          vec2 bounds = hitBox(vOrigin, rayDir);
-
-          if (bounds.x > bounds.y) discard;
-
-          bounds.x = max(bounds.x, 0.0);
-
-          vec3 p = vOrigin + bounds.x * rayDir;
-          vec3 inc = 1.0 / abs(rayDir);
-          float delta = min(inc.x, min(inc.y, inc.z));
-          delta /= steps;
-
-          uint seed = uint(gl_FragCoord.x) * uint(1973) + uint(gl_FragCoord.y) * uint(9277) + uint(frame) * uint(26699);
-          vec3 size = vec3(textureSize(map, 0));
-          float randNum = randomFloat(seed) * 2.0 - 1.0;
-          p += rayDir * randNum * (1.0 / size);
-
-          vec4 ac = vec4(base, 0.0);
-
-          for (float t = bounds.x; t < bounds.y; t += delta) {
-            vec3 samplePoint = fract(p + scroll + 0.5);
-            float d = sample1(samplePoint);
-            d = smoothstep(threshold - range, threshold + range, d) * opacity;
-
-            float col = shading(samplePoint) * 3.0 + ((samplePoint.x + samplePoint.y) * 0.25) + 0.2;
-
-            ac.rgb += (1.0 - ac.a) * d * col;
-            ac.a += (1.0 - ac.a) * d;
-
-            if (ac.a >= 0.95) break;
-
-            p += rayDir * delta;
-          }
-
-          color = linearToSRGB(ac);
-
-          if (color.a == 0.0) discard;
-        }
-      `;
-
-      const material = new THREE.RawShaderMaterial({
-        glslVersion: THREE.GLSL3,
-        uniforms: {
-          base: { value: new THREE.Color(baseColor) },
-          map: { value: texture },
-          cameraPos: { value: new THREE.Vector3() },
-          threshold: { value: threshold },
-          opacity: { value: opacity },
-          range: { value: range },
-          steps: { value: steps },
-          frame: { value: 0 },
-          scroll: { value: new THREE.Vector3() }
-        },
-        vertexShader,
-        fragmentShader,
-        side: THREE.BackSide,
-        transparent: true,
-        depthWrite: false
-      });
-
-      const geometry = new THREE.BoxGeometry(1, 1, 1);
-      const mesh = new THREE.Mesh(geometry, material);
-      const [scaleX, scaleY, scaleZ] = dimensions;
-      mesh.scale.set(scaleX, scaleY, scaleZ);
-
-      const scrollVector = new THREE.Vector3(...scrollSpeed);
-      let frameCount = 0;
-
-      registerUpdater(({ delta = 0, elapsed = 0 }) => {
-        if (!mesh.parent) return;
-        frameCount += 1;
-        const shouldUpdateDenseUniforms = (frameCount & 1) === 0;
-        material.uniforms.cameraPos.value.copy(state.camera.position);
-        if (shouldUpdateDenseUniforms) {
-          material.uniforms.frame.value = frameCount;
-          const scrollValue = material.uniforms.scroll.value;
-          scrollValue.copy(scrollVector).multiplyScalar(elapsed);
-          scrollValue.x = ((scrollValue.x % 1) + 1) % 1;
-          scrollValue.y = ((scrollValue.y % 1) + 1) % 1;
-          scrollValue.z = ((scrollValue.z % 1) + 1) % 1;
-        }
-
-        mesh.rotation.y += rotationSpeed * delta;
-      });
-
-      return mesh;
+      }
     }
+  }
+
+  if (puffCount === 0) {
+    for (let i = 0; i < 24; i += 1) {
+      const puff = new THREE.Mesh(geometry, shared.cloudMaterials.light);
+      const scale = THREE.MathUtils.lerp(radiusRange[0], radiusRange[1], Math.random());
+          puff.scale.set(scale, scale, scale);
+      puff.position.set((Math.random() - 0.5) * width, Math.random() * height, (Math.random() - 0.5) * depth);
+      puff.castShadow = false;
+      puff.receiveShadow = false;
+      group.add(puff);
+    }
+  }
+
+  return group;
+}
+
+function createVolumetricCloud({
+  dimensions = [4.6, 2.4, 3.4],
+  resolution = 96,
+  threshold = 0.25,
+  range = 0.1,
+  opacity = 0.25,
+  steps = 80,
+  seed = 42,
+  scrollSpeed = [0.006, 0.002, 0.008]
+} = {}) {
+  const { THREE, ImprovedNoise } = state;
+  const supportsWebGL2 = state.renderer?.capabilities?.isWebGL2;
+  if (!THREE || !ImprovedNoise || !supportsWebGL2) {
+    return createCloudVolume({ size: dimensions, spacing: 0.5, threshold: 0.45, radiusRange: [0.32, 0.58], seed });
+  }
+
+  const size = Math.max(32, Math.floor(resolution));
+  const data = new Uint8Array(size * size * size);
+  const perlin = new ImprovedNoise();
+  const vector = new THREE.Vector3();
+  const scale = 0.05;
+  let i = 0;
+
+  for (let z = 0; z < size; z += 1) {
+    for (let y = 0; y < size; y += 1) {
+      for (let x = 0; x < size; x += 1) {
+        const d = 1.0 - vector.set(x, y, z).subScalar(size / 2).divideScalar(size).length();
+        data[i] = (128 + 128 * perlin.noise(x * scale / 1.5, y * scale, z * scale / 1.5)) * d * d;
+        i += 1;
+      }
+    }
+  }
+
+  const texture = new THREE.Data3DTexture(data, size, size, size);
+  texture.format = THREE.RedFormat;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.unpackAlignment = 1;
+  texture.needsUpdate = true;
+
+  const vertexShader = /* glsl */`
+    in vec3 position;
+
+    uniform mat4 modelMatrix;
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+    uniform vec3 cameraPos;
+
+    out vec3 vOrigin;
+    out vec3 vDirection;
+
+    void main() {
+      vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+      vOrigin = vec3(inverse(modelMatrix) * vec4(cameraPos, 1.0));
+      vDirection = position - vOrigin;
+      gl_Position = projectionMatrix * mvPosition;
+    }
+  `;
+
+  const fragmentShader = /* glsl */`
+    precision highp float;
+    precision highp sampler3D;
+
+    in vec3 vOrigin;
+    in vec3 vDirection;
+
+    out vec4 color;
+
+    uniform vec3 base;
+    uniform sampler3D map;
+    uniform float threshold;
+    uniform float range;
+    uniform float opacity;
+    uniform float steps;
+    uniform float frame;
+    uniform vec3 scroll;
+
+    uint wang_hash(uint seed) {
+      seed = (seed ^ 61u) ^ (seed >> 16u);
+      seed *= 9u;
+      seed = seed ^ (seed >> 4u);
+      seed *= 0x27d4eb2du;
+      seed = seed ^ (seed >> 15u);
+      return seed;
+    }
+
+    float randomFloat(inout uint seed) {
+      return float(wang_hash(seed)) / 4294967296.0;
+    }
+
+    vec2 hitBox(vec3 orig, vec3 dir) {
+      const vec3 box_min = vec3(-0.5);
+      const vec3 box_max = vec3(0.5);
+      vec3 inv_dir = 1.0 / dir;
+      vec3 tmin_tmp = (box_min - orig) * inv_dir;
+      vec3 tmax_tmp = (box_max - orig) * inv_dir;
+      vec3 tmin = min(tmin_tmp, tmax_tmp);
+      vec3 tmax = max(tmin_tmp, tmax_tmp);
+      float t0 = max(tmin.x, max(tmin.y, tmin.z));
+      float t1 = min(tmax.x, min(tmax.y, tmax.z));
+      return vec2(t0, t1);
+    }
+
+    float sample1(vec3 p) { return texture(map, p).r; }
+
+    float shading(vec3 coord) {
+      float step = 0.01;
+      return sample1(coord + vec3(-step)) - sample1(coord + vec3(step));
+    }
+
+    vec4 linearToSRGB(vec4 value) {
+      return vec4(
+        mix(
+          pow(value.rgb, vec3(0.41666)) * 1.055 - vec3(0.055),
+          value.rgb * 12.92,
+          vec3(lessThanEqual(value.rgb, vec3(0.0031308)))
+        ),
+        value.a
+      );
+    }
+
+    void main(){
+      vec3 rayDir = normalize(vDirection);
+      vec2 bounds = hitBox(vOrigin, rayDir);
+      if (bounds.x > bounds.y) discard;
+      bounds.x = max(bounds.x, 0.0);
+
+      vec3 p = vOrigin + bounds.x * rayDir;
+      vec3 inc = 1.0 / abs(rayDir);
+      float delta = min(inc.x, min(inc.y, inc.z));
+      delta /= steps;
+
+      uint seed = uint(gl_FragCoord.x) * uint(1973) + uint(gl_FragCoord.y) * uint(9277) + uint(frame) * uint(26699);
+      vec3 size = vec3(textureSize(map, 0));
+      float randNum = randomFloat(seed) * 2.0 - 1.0;
+      p += rayDir * randNum * (1.0 / size);
+
+      vec4 acc = vec4(base, 0.0);
+
+      for (float t = bounds.x; t < bounds.y; t += delta) {
+        vec3 samplePoint = fract(p + scroll + 0.5);
+        float d = sample1(samplePoint);
+        d = smoothstep(threshold - range, threshold + range, d) * opacity;
+
+        float col = shading(samplePoint) * 3.0 + ((samplePoint.x + samplePoint.y) * 0.25) + 0.2;
+
+        acc.rgb += (1.0 - acc.a) * d * col;
+        acc.a += (1.0 - acc.a) * d;
+
+        if (acc.a >= 0.95) break;
+
+        p += rayDir * delta;
+      }
+
+      color = linearToSRGB(acc);
+      if (color.a == 0.0) discard;
+    }
+  `;
+
+  const material = new THREE.RawShaderMaterial({
+    glslVersion: THREE.GLSL3,
+    uniforms: {
+      base: { value: new THREE.Color(0x798aa0) },
+      map: { value: texture },
+      cameraPos: { value: new THREE.Vector3() },
+      threshold: { value: threshold },
+      opacity: { value: opacity },
+      range: { value: range },
+      steps: { value: steps },
+      frame: { value: 0 },
+      scroll: { value: new THREE.Vector3() }
+    },
+    vertexShader,
+    fragmentShader,
+    side: THREE.BackSide,
+    transparent: true,
+    depthWrite: false
+  });
+
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const mesh = new THREE.Mesh(geometry, material);
+  const [scaleX, scaleY, scaleZ] = dimensions;
+  mesh.scale.set(scaleX, scaleY, scaleZ);
+  mesh.castShadow = false;
+  mesh.receiveShadow = false;
+
+  const scrollVector = new THREE.Vector3(...scrollSpeed);
+
+  registerUpdater(({ delta = 0, elapsed = 0 }) => {
+    if (!mesh.parent) return;
+    material.uniforms.cameraPos.value.copy(state.camera.position);
+    material.uniforms.frame.value += 1;
+    const scroll = material.uniforms.scroll.value;
+    scroll.copy(scrollVector).multiplyScalar(elapsed);
+    scroll.x -= Math.floor(scroll.x);
+    scroll.y -= Math.floor(scroll.y);
+    scroll.z -= Math.floor(scroll.z);
+  });
+
+  return mesh;
+}
 
     function applyLineOpacity(material, opacity) {
       const materials = Array.isArray(material) ? material : [material];
@@ -1629,7 +1568,7 @@
 
     function resizeRenderer() {
       const { renderer, camera } = state;
-      const pixelRatio = Math.min(window.devicePixelRatio, 1.75);
+      const pixelRatio = Math.min(window.devicePixelRatio, 2);
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       if (canvas.width !== Math.floor(width * pixelRatio) || canvas.height !== Math.floor(height * pixelRatio)) {
@@ -1686,7 +1625,7 @@
         state.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
         state.renderer.shadowMap.enabled = true;
         state.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        state.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+        state.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         state.renderer.outputColorSpace = THREE.SRGBColorSpace;
 
         state.scene = new THREE.Scene();
@@ -1705,7 +1644,7 @@
         topLight.position.set(0, 7, 2);
         topLight.target.position.set(0, 0, 0);
         keyLight.castShadow = true;
-        keyLight.shadow.mapSize.set(1024, 1024);
+        keyLight.shadow.mapSize.set(4096, 4096);
         keyLight.shadow.camera.left = -18;
         keyLight.shadow.camera.right = 18;
         keyLight.shadow.camera.top = 14;
@@ -1716,8 +1655,8 @@
         keyLight.shadow.camera.updateProjectionMatrix();
         rimLight.castShadow = true;
         topLight.castShadow = true;
-        topLight.shadow.mapSize.set(512, 512);
-        topLight.shadow.bias = -0.0004;
+        topLight.shadow.mapSize.set(2048, 2048);
+        topLight.shadow.bias = -0.00025;
         state.scene.add(ambient);
 
         state.stage = createStage();
@@ -1816,7 +1755,7 @@
 
         const eastIsland = createIsland({
           id: 'east',
-          position: [-4, 0, 5],
+          position: [-5, 0, 5],
           rotation: [0, THREE.MathUtils.degToRad(40), 0],
           scale: 0.8,
           footprint: {
@@ -1832,12 +1771,15 @@
         const eastTerrain = createTerrainMesh({
           width: 5.2,
           depth: 8.6,
-          segments: 60,
+          segments: 24,
           amplitude: 1.15,
           blockHeight: 1.8,
-          sideColor: 0x000000,
+          crestColor: 0x4af3ff,
+          troughColor: 0x143354,
+          sideColor: 0x04101d,
+          highlightBias: 0.54,
           cornerRadius: 0.9,
-          scrollSpeed: [0, -0.06]
+          scrollSpeed: [0, 0.4]
         });
         eastTerrainAnchor.add(eastTerrain);
         ensureAnchorMarker(eastTerrainAnchor);
@@ -1845,17 +1787,16 @@
 
         const eastCloudAnchor = eastIsland.createAnchor('clouds', { position: [0, 0, 0] });
         const eastClouds = createVolumetricCloud({
-          dimensions: [5.2, 2.4, 5.4],
-          textureSize: 88,
-          threshold: 0.28,
-          opacity: 0.34,
-          range: 0.12,
-          scrollSpeed: [0.016, 0.006, 0.02],
-          rotationSpeed: 0
+          dimensions: [5.2, 2.4, 8.6],
+          resolution: 96,
+          threshold: 0.34,
+          range: 0.1,
+          opacity: 0.26,
+          steps: 110,
+          seed: 73,
+          scrollSpeed: [0, 0, 0.2]
         });
-        if (eastClouds.isMesh) {
-          eastClouds.position.set(0, 1.2, 0.4);
-        }
+        eastClouds.position.set(0, 1.2, 0.4);
         eastCloudAnchor.add(eastClouds);
         ensureAnchorMarker(eastCloudAnchor);
         eastIsland.setAnchorGlobalPosition('clouds', [-4, 1.7, 5.2]);
@@ -1888,16 +1829,16 @@
           gltf => {
             const qf01 = gltf.scene;
             qf01.traverse(node => {
-              if (node.isMesh) {
-                node.castShadow = true;
-                node.receiveShadow = true;
-              }
+              if (!node.isMesh) return;
+              node.castShadow = true;
+              node.receiveShadow = true;
+
             });
             qf01.scale.set(0.32, 0.32, 0.32);
             qf01.rotation.set(0, THREE.MathUtils.degToRad(0), 0);
             qf01Anchor.add(qf01);
             ensureAnchorMarker(qf01Anchor);
-            eastIsland.setAnchorGlobalPosition('qf01', [-4, 1, 5]);
+            eastIsland.setAnchorGlobalPosition('qf01', [-4, 1.2, 5]);
 
             const baseY = qf01.position.y;
             const baseRotation = qf01.rotation.clone();
@@ -1914,7 +1855,7 @@
             });
           },
           undefined,
-          error => console.error('Failed to load qf01pCOpenable.glb', error)
+          error => console.error('Failed to load qf01RangerwNo.glb', error)
         );
 
 
