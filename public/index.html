@@ -30,146 +30,12 @@
     </div>
 
   </section>
-
-  <main>
-    <section id="projects" class="section section-projects">
-      <div class="container">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Featured work</p>
-            <h2>Projects</h2>
-          </div>
-          <label class="tag-controls">
-            <span>Filter</span>
-            <select id="tagFilter" aria-label="Filter projects by tag">
-              <option value="all">All</option>
-              <option value="aero">Aero</option>
-              <option value="propulsion">Propulsion</option>
-              <option value="software">Software</option>
-              <option value="hardware">Hardware</option>
-              <option value="analysis">Analysis</option>
-              <option value="controls">Controls</option>
-              <option value="design">Design</option>
-              <option value="testing">Testing</option>
-            </select>
-          </label>
-        </div>
-
-        <div class="project-grid">
-          <article class="card" data-tags="aero design analysis">
-            <img src="/images/mk4-thumb.jpg" alt="Mk4 modular UAV thumbnail" loading="lazy" />
-            <div class="card-body">
-              <h3 class="card-title">Mk4 Modular UAV</h3>
-              <p class="card-text">Modular, 3D-printed fixed-wing UAV with supercapacitor power, rib-and-spar wing, and rapid field repair.</p>
-              <ul class="tags">
-                <li>aero</li><li>design</li><li>analysis</li>
-              </ul>
-              <div class="card-actions">
-                <a class="btn" href="/projects/mk4.html">Case Study</a>
-                <a class="btn btn-ghost" href="https://github.com/..." target="_blank" rel="noopener">Code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card" data-tags="propulsion testing hardware">
-            <img src="/images/engine-test-thumb.jpg" alt="Engine test stand thumbnail" loading="lazy" />
-            <div class="card-body">
-              <h3 class="card-title">Turbojet Test Stand</h3>
-              <p class="card-text">Instrumented test stand with DAQ, safety interlocks, and calibrated thrust measurement for turbojet characterization.</p>
-              <ul class="tags">
-                <li>propulsion</li><li>testing</li><li>hardware</li>
-              </ul>
-              <div class="card-actions">
-                <a class="btn" href="/projects/turbojet.html">Case Study</a>
-                <a class="btn btn-ghost" href="https://youtu.be/..." target="_blank" rel="noopener">Demo</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card" data-tags="software analysis controls">
-            <img src="/images/mission-sim-thumb.jpg" alt="Mission simulation plot thumbnail" loading="lazy" />
-            <div class="card-body">
-              <h3 class="card-title">Mission Profile Simulator</h3>
-              <p class="card-text">Segment-based aircraft mission sim with carpet plots for TSL vs WTOS and fuel split visualizations.</p>
-              <ul class="tags">
-                <li>software</li><li>analysis</li><li>controls</li>
-              </ul>
-              <div class="card-actions">
-                <a class="btn" href="/projects/mission-sim.html">Case Study</a>
-                <a class="btn btn-ghost" href="https://github.com/..." target="_blank" rel="noopener">Repo</a>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="about" class="section section-about">
-      <div class="container">
-        <p class="eyebrow">Who I am</p>
-        <h2>About</h2>
-        <p class="lede">I’m an aerospace engineer focused on propulsion test, conceptual aircraft design, and simulation. I build tooling and rigs that bridge the gap between first sketch and flight-ready data.</p>
-        <div class="about-grid">
-          <div>
-            <h3>Strengths</h3>
-            <ul>
-              <li>Full-stack prototyping across CAD, firmware, and cloud orchestration.</li>
-              <li>High-fidelity test design with instrumentation, sensor fusion, and safety interlocks.</li>
-              <li>Mission analysis and controls modeling for multi-segment flight envelopes.</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Currently</h3>
-            <ul>
-              <li>Building flight-worthy infrastructure that scales from lab rigs to high-altitude operations.</li>
-              <li>Exploring reusable airframes and rapid repair workflows for field teams.</li>
-              <li>Experimenting with virtual mission rehearsal for distributed pilots.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section section-contact">
-      <div class="container">
-        <p class="eyebrow">Let’s collaborate</p>
-        <h2>Contact</h2>
-        <p class="lede">Reach out for propulsion test campaigns, mission tooling, or to collaborate on aerial systems.</p>
-        <div class="contact-actions">
-          <a class="btn" href="mailto:adam@adamshanti.com">adam@adamshanti.com</a>
-          <a class="btn btn-ghost" href="https://www.linkedin.com/in/..." target="_blank" rel="noopener">LinkedIn</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">
-      <small>© <span id="year"></span> Adam Shanti · Built for the cloud edge</small>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const select = document.getElementById('tagFilter');
-    const cards = Array.from(document.querySelectorAll('.project-grid .card'));
-    if (select) {
-      select.addEventListener('change', () => {
-        const tag = select.value;
-        cards.forEach(card => {
-          const tags = (card.getAttribute('data-tags') || '').split(/\s+/);
-          const show = tag === 'all' || tags.includes(tag);
-          card.style.display = show ? '' : 'none';
-        });
-      });
-    }
-  </script>
-
   <script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.156.1/examples/jsm/"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.156.1/examples/jsm/",
+        "pdfjs-dist": "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.2.67/legacy/build/pdf.mjs"
       }
     }
   </script>
@@ -177,6 +43,12 @@
   
   
   <script type="module">
+    import { easeOutCubic } from './js/lib/math.js';
+    import { createVaraCrossSectionGuide } from './js/features/varaCrossSection.js';
+    import { generateHeatParams, solveHeatEquation } from './js/lib/heatEquation.js';
+    import { createHeatWallMesh } from './js/lib/heatWall.js';
+    import Stats from 'three/addons/libs/stats.module.js';
+    import { Sky } from 'three/addons/objects/Sky.js';
     const root = document.documentElement;
     const sceneWrap = document.querySelector('.scene-wrap');
     const canvas = document.getElementById('scene-canvas');
@@ -184,6 +56,106 @@
     const projectsSection = document.getElementById('projects');
     const headerEl = document.querySelector('.site-header');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const SKY_PRESETS = {
+      sunset: {
+        turbidity: 10,
+        rayleigh: 2.4,
+        mieCoefficient: 0.005,
+        mieDirectionalG: 0.8,
+        direction: [-10, 2, -100],
+        elevation: 2,
+        azimuth: 210,
+        exposure: 0.5
+      },
+      night: {
+        turbidity: 2.0,
+        rayleigh: 0.4,
+        mieCoefficient: 0.002,
+        mieDirectionalG: 0.9,
+        direction: [-10, -6, -100],
+        elevation: -3,
+        azimuth: 180,
+        exposure: 0.25
+      }
+    };
+    const SKY_PRESET_ORDER = ['sunset', 'night'];
+
+
+    const stats = new Stats();
+    stats.dom.style.position = 'fixed';
+    stats.dom.style.left = '12px';
+    stats.dom.style.top = '50%';
+    stats.dom.style.transform = 'translateY(-50%) scale(1.2)';
+    stats.dom.style.transformOrigin = 'top left';
+    stats.dom.style.zIndex = '50';
+    document.body.appendChild(stats.dom);
+
+    const perfOverlay = document.createElement('div');
+    perfOverlay.style.position = 'fixed';
+    perfOverlay.style.left = '12px';
+    perfOverlay.style.top = '50%';
+    perfOverlay.style.transform = 'translateY(calc(-50% + 120px))';
+    perfOverlay.style.padding = '10px 14px';
+    perfOverlay.style.background = 'rgba(8,10,14,0.8)';
+    perfOverlay.style.border = '1px solid rgba(102,196,255,0.45)';
+    perfOverlay.style.borderRadius = '8px';
+    perfOverlay.style.color = '#e4f0ff';
+    perfOverlay.style.font = '13px system-ui, sans-serif';
+    perfOverlay.style.zIndex = '49';
+    perfOverlay.style.pointerEvents = 'none';
+    document.body.appendChild(perfOverlay);
+
+    const profilerOverlay = document.createElement('div');
+    profilerOverlay.style.position = 'fixed';
+    profilerOverlay.style.left = '12px';
+    profilerOverlay.style.top = '50%';
+    profilerOverlay.style.transform = 'translateY(calc(-50% + 220px))';
+    profilerOverlay.style.padding = '10px 14px';
+    profilerOverlay.style.background = 'rgba(8,10,14,0.8)';
+    profilerOverlay.style.border = '1px solid rgba(102,196,255,0.45)';
+    profilerOverlay.style.borderRadius = '8px';
+    profilerOverlay.style.color = '#e4f0ff';
+    profilerOverlay.style.font = '12px system-ui, sans-serif';
+    profilerOverlay.style.zIndex = '49';
+    profilerOverlay.style.pointerEvents = 'none';
+    document.body.appendChild(profilerOverlay);
+
+    const perfDumpButton = document.createElement('button');
+    perfDumpButton.type = 'button';
+    perfDumpButton.textContent = 'Dump Perf Report';
+    perfDumpButton.style.position = 'fixed';
+    perfDumpButton.style.left = '12px';
+    perfDumpButton.style.top = '50%';
+    perfDumpButton.style.transform = 'translateY(calc(-50% + 330px))';
+    perfDumpButton.style.padding = '8px 12px';
+    perfDumpButton.style.background = 'rgba(12,16,24,0.9)';
+    perfDumpButton.style.border = '1px solid rgba(102,196,255,0.6)';
+    perfDumpButton.style.borderRadius = '8px';
+    perfDumpButton.style.color = '#e4f0ff';
+    perfDumpButton.style.font = '12px system-ui, sans-serif';
+    perfDumpButton.style.zIndex = '50';
+    perfDumpButton.style.cursor = 'pointer';
+    perfDumpButton.style.boxShadow = '0 8px 18px rgba(0,0,0,0.25)';
+    document.body.appendChild(perfDumpButton);
+
+    const skyToggleButton = document.createElement('button');
+    skyToggleButton.type = 'button';
+    skyToggleButton.textContent = 'Sky: Sunset';
+    skyToggleButton.style.position = 'fixed';
+    skyToggleButton.style.left = '12px';
+    skyToggleButton.style.top = '50%';
+    skyToggleButton.style.transform = 'translateY(calc(-50% + 370px))';
+    skyToggleButton.style.padding = '8px 12px';
+    skyToggleButton.style.background = 'rgba(12,16,24,0.9)';
+    skyToggleButton.style.border = '1px solid rgba(102,196,255,0.6)';
+    skyToggleButton.style.borderRadius = '8px';
+    skyToggleButton.style.color = '#e4f0ff';
+    skyToggleButton.style.font = '12px system-ui, sans-serif';
+    skyToggleButton.style.zIndex = '50';
+    skyToggleButton.style.cursor = 'pointer';
+    skyToggleButton.style.boxShadow = '0 8px 18px rgba(0,0,0,0.25)';
+    document.body.appendChild(skyToggleButton);
 
     const state = {
       THREE: null,
@@ -194,14 +166,247 @@
       islands: [],
       interactives: [],
       updaters: [],
+      assetRefs: {},
       pointer: { x: 0, y: 0 },
       pointerTarget: { x: 0, y: 0 },
+      pointerActive: false,
       scroll: { target: 0, current: 0 },
       hovered: null,
       clock: null,
       ImprovedNoise: null,
-      sharedMaterials: {}
+      sharedMaterials: {},
+      aim120Launch: null,
+      qf01Maneuver: null,
+      qf01PitchPending: null,
+      profiler: null
     };
+    window.__STATE__ = state;
+    window.dumpUpdaters = () => {
+      const arr = window.__STATE__?.updaters || [];
+      console.log('[dumpUpdaters]', {
+        count: arr.length,
+        names: arr.map(fn => fn?.name || fn?.__tag || 'anon')
+      });
+    };
+
+    const FPS_DIAG = {
+      enabled: true,
+      sampleIntervalMs: 2000,
+      lastLogMs: performance.now(),
+      frameCount: 0,
+      fps: 0,
+      lastT: performance.now()
+    };
+
+    window.__FPS_DIAG = FPS_DIAG;
+
+    const updaterProfiler = {
+      enabled: true,
+      sampleIntervalMs: 1000,
+      lastSampleMs: performance.now(),
+      entries: new Map(),
+      logToConsole: true
+    };
+    state.profiler = updaterProfiler;
+
+    function collectUpdaterStats() {
+      const rows = [];
+      updaterProfiler.entries.forEach(entry => {
+        if (entry.count === 0) return;
+        const avg = entry.total / entry.count;
+        rows.push({ name: entry.name, avgMs: Number(avg.toFixed(3)), maxMs: Number(entry.max.toFixed(3)) });
+      });
+      rows.sort((a, b) => b.avgMs - a.avgMs);
+      return rows;
+    }
+
+    function setSkyPreset(name) {
+      const preset = SKY_PRESETS[name] || SKY_PRESETS.sunset;
+      const { THREE, renderer } = state;
+      const sky = state.assetRefs.sky;
+      if (!preset || !THREE || !renderer || !sky) return;
+
+      const uniforms = sky.material.uniforms;
+      uniforms.turbidity.value = preset.turbidity;
+      uniforms.rayleigh.value = preset.rayleigh;
+      uniforms.mieCoefficient.value = preset.mieCoefficient;
+      uniforms.mieDirectionalG.value = preset.mieDirectionalG;
+
+      const sunBase = state.assetRefs.sunBase || new THREE.Vector3();
+      if (preset.direction) {
+        if (Array.isArray(preset.direction)) {
+          sunBase.set(preset.direction[0], preset.direction[1], preset.direction[2]);
+        } else {
+          sunBase.copy(preset.direction);
+        }
+        sunBase.normalize();
+      } else {
+        const phi = THREE.MathUtils.degToRad(90 - preset.elevation);
+        const theta = THREE.MathUtils.degToRad(preset.azimuth);
+        sunBase.setFromSphericalCoords(1, phi, theta);
+      }
+      uniforms.sunPosition.value.copy(sunBase);
+      renderer.toneMappingExposure = preset.exposure;
+
+      state.assetRefs.sun = uniforms.sunPosition.value;
+      state.assetRefs.sunBase = sunBase;
+      state.assetRefs.skyPreset = name;
+      skyToggleButton.textContent = `Sky: ${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+    }
+
+    function updateSkyYawFromCamera() {
+      const { THREE, camera } = state;
+      const sky = state.assetRefs.sky;
+      if (!THREE || !camera || !sky) return;
+
+      const forward = state.assetRefs.skyForward || (state.assetRefs.skyForward = new THREE.Vector3());
+      forward.set(0, 0, -1).applyQuaternion(camera.quaternion);
+      forward.y = 0;
+      if (forward.lengthSq() < 1e-6) return;
+      forward.normalize();
+
+      const yaw = Math.atan2(forward.x, forward.z);
+      sky.rotation.set(0, yaw, 0);
+      sky.position.copy(camera.position);
+
+      if (DEBUG_HELPERS_VISIBLE) {
+        const debug = state.assetRefs.skyDebug || (state.assetRefs.skyDebug = { lastLog: 0 });
+        const now = performance.now();
+        if (now - debug.lastLog > 2500) {
+          debug.lastLog = now;
+          const sunUniform = state.assetRefs.sun;
+          console.log('[sky-debug]', {
+            sunY: Number(sunUniform?.y?.toFixed?.(4) ?? 0),
+            skyRotX: Number(sky.rotation.x.toFixed(4))
+          });
+        }
+      }
+    }
+
+    function toggleSkyPreset() {
+      const current = state.assetRefs.skyPreset || SKY_PRESET_ORDER[0];
+      const idx = SKY_PRESET_ORDER.indexOf(current);
+      const next = SKY_PRESET_ORDER[(idx + 1) % SKY_PRESET_ORDER.length];
+      setSkyPreset(next);
+    }
+
+    function buildPerfReport() {
+      const renderer = state.renderer;
+      const info = renderer?.info;
+      const memory = info?.memory || {};
+      const render = info?.render || {};
+      const now = new Date();
+      return {
+        timestamp: now.toISOString(),
+        userAgent: navigator.userAgent,
+        hardware: {
+          deviceMemoryGB: navigator.deviceMemory || null,
+          cores: navigator.hardwareConcurrency || null
+        },
+        renderer: renderer ? {
+          pixelRatio: renderer.getPixelRatio?.(),
+          outputColorSpace: renderer.outputColorSpace,
+          toneMapping: renderer.toneMapping,
+          toneMappingExposure: renderer.toneMappingExposure
+        } : null,
+        memory: {
+          geometries: memory.geometries,
+          textures: memory.textures
+        },
+        render: {
+          calls: render.calls,
+          triangles: render.triangles,
+          points: render.points,
+          lines: render.lines
+        },
+        updaters: {
+          count: state.updaters.length,
+          top: collectUpdaterStats().slice(0, 12)
+        }
+      };
+    }
+
+    window.addEventListener('keydown', e => {
+      if (e.key === 'F3') {
+        FPS_DIAG.enabled = !FPS_DIAG.enabled;
+        console.log('[fps_diag] enabled:', FPS_DIAG.enabled);
+      }
+      if (e.key === 'F4') {
+        updaterProfiler.enabled = !updaterProfiler.enabled;
+        profilerOverlay.style.display = updaterProfiler.enabled ? 'block' : 'none';
+        console.log('[profiler] enabled:', updaterProfiler.enabled);
+      }
+      if (e.key === 'F5') {
+        updaterProfiler.logToConsole = !updaterProfiler.logToConsole;
+        console.log('[profiler] console logs:', updaterProfiler.logToConsole);
+      }
+    });
+
+    perfDumpButton.addEventListener('click', () => {
+      const report = buildPerfReport();
+      console.log('[perf-report]', report);
+      try {
+        const serialized = JSON.stringify(report, null, 2);
+        navigator.clipboard?.writeText?.(serialized).then(() => {
+          perfDumpButton.textContent = 'Perf Report Copied';
+          setTimeout(() => {
+            perfDumpButton.textContent = 'Dump Perf Report';
+          }, 1400);
+        }).catch(() => {
+          perfDumpButton.textContent = 'Perf Report Logged';
+          setTimeout(() => {
+            perfDumpButton.textContent = 'Dump Perf Report';
+          }, 1400);
+        });
+      } catch (err) {
+        console.warn('Failed to serialize perf report', err);
+      }
+    });
+
+    skyToggleButton.addEventListener('click', toggleSkyPreset);
+
+    function tickFpsDiag(now = performance.now()) {
+      if (!FPS_DIAG.enabled) return;
+
+      FPS_DIAG.frameCount += 1;
+
+      const dt = now - FPS_DIAG.lastT;
+
+      if (dt > 3000) {
+        FPS_DIAG.lastT = now;
+        FPS_DIAG.lastLogMs = now;
+        FPS_DIAG.frameCount = 0;
+        return;
+      }
+
+      const sinceLog = now - FPS_DIAG.lastLogMs;
+      if (sinceLog >= FPS_DIAG.sampleIntervalMs) {
+        const fps = (FPS_DIAG.frameCount * 1000) / Math.max(sinceLog, 1);
+        FPS_DIAG.fps = fps;
+
+        FPS_DIAG.frameCount = 0;
+        FPS_DIAG.lastLogMs = now;
+
+        const hoveredName = state.hovered?.name || null;
+        const calls = state.renderer?.info?.render?.calls ?? 0;
+        const tris = state.renderer?.info?.render?.triangles ?? 0;
+
+        console.log('[fps]', {
+          fps: Number(fps.toFixed(1)),
+          t: Number(now.toFixed(1)),
+          hovered: hoveredName,
+          updaters: state.updaters.length,
+          calls,
+          triangles: tris
+        });
+        console.log('gfx', {
+          dpr: window.devicePixelRatio,
+          pixelRatio: state.renderer?.getPixelRatio?.(),
+          buf: state.renderer?.getContext?.().drawingBufferWidth + 'x' + state.renderer?.getContext?.().drawingBufferHeight,
+          canvas: state.renderer?.domElement?.width + 'x' + state.renderer?.domElement?.height
+        });
+      }
+    }
 
     function registerUpdater(callback) {
       if (typeof callback !== 'function') {
@@ -216,6 +421,1399 @@
       };
     }
 
+    const DEBUG_HELPERS_VISIBLE = true;
+    const ISLAND_SPOTLIGHT_INTENSITY = 100;
+    const jetscale =0.12;
+    const labelCache = new Map();
+    const QF01_RAW_BOUNDS = {
+      min: [-5.0528846, -1.777488, -6.2814317],
+      max: [5.0528846, 1.7774872, 6.2814302]
+    };
+    const AIM_QF01_SYNC_DURATION = 2.8;
+    const QF01_PITCH_DELAY = 0.2;
+    const QF01_MANEUVER_DURATION = Math.max(AIM_QF01_SYNC_DURATION - QF01_PITCH_DELAY, 0.6);
+    const AIM120_EXPLOSION_TRIGGER = 0.72;
+    const AIM120_RESET_DELAY = 3.1;
+
+    function getLaunchMotionFactor() {
+      if (!isIslandAnimationActive('island:east')) return 0;
+      const launch = state.aim120Launch;
+      if (!launch) return 1;
+      if (launch.completed) return 0;
+      if (launch.active) {
+        const duration = Math.max(launch.duration || AIM_QF01_SYNC_DURATION, 0.001);
+        const t = Math.min(launch.timer / duration, 1);
+        return Math.pow(Math.max(1 - t, 0), 2);
+      }
+      return typeof launch.motionFactor === 'number' ? launch.motionFactor : 1;
+    }
+
+    function ensureCameraAnimator() {
+      if (state.assetRefs.cameraAnimator) return;
+      state.assetRefs.cameraAnimator = registerUpdater(({ delta = 0 }) => {
+        const move = state.assetRefs.cameraMove;
+        if (!move?.active || !state.camera) return;
+        move.timer += delta;
+        const t = Math.min(move.timer / move.duration, 1);
+        const eased = easeOutCubic(t);
+        state.camera.position.copy(move.fromPosition).lerp(move.toPosition, eased);
+        state.camera.quaternion.copy(move.fromQuaternion).slerp(move.toQuaternion, eased);
+        if (t >= 1) {
+          move.active = false;
+          state.assetRefs.cameraFocus = move.focus || null;
+        }
+      });
+    }
+
+    function startCameraMove({ position, quaternion, duration = 1.2, focus = null }) {
+      if (!state.camera || !position || !quaternion) return;
+      ensureCameraAnimator();
+      state.assetRefs.cameraMove = {
+        active: true,
+        timer: 0,
+        duration: Math.max(duration, 0.001),
+        fromPosition: state.camera.position.clone(),
+        toPosition: position.clone(),
+        fromQuaternion: state.camera.quaternion.clone(),
+        toQuaternion: quaternion.clone(),
+        focus
+      };
+      state.assetRefs.cameraFocus = focus;
+    }
+
+    function disposeExplosionMesh(mesh) {
+      if (!mesh) return;
+      mesh.parent?.remove(mesh);
+      mesh.geometry?.dispose?.();
+      const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+      materials.forEach(mat => mat?.dispose?.());
+    }
+
+    function resetAimSequence() {
+      const { THREE, assetRefs } = state;
+      const explosion = assetRefs.aim120Explosion;
+      if (explosion) {
+        explosion.fragments?.forEach(fragment => {
+          disposeExplosionMesh(fragment.mesh);
+        });
+        explosion.group?.parent?.remove(explosion.group);
+        explosion.fragments = [];
+      }
+      assetRefs.aim120Explosion = null;
+
+      const aim120Right = assetRefs.aim120Right || assetRefs.aim120;
+      const aim120Left = assetRefs.aim120Left;
+      const hardpointRight = assetRefs.aimHardpointRight || assetRefs.aimHardpoint;
+      const hardpointLeft = assetRefs.aimHardpointLeft;
+
+      assetRefs.qf01Settle = null;
+
+      if (aim120Right) {
+        aim120Right.visible = true;
+        if (hardpointRight && aim120Right.parent !== hardpointRight) {
+          hardpointRight.add(aim120Right);
+        }
+      }
+      if (aim120Left && hardpointLeft && aim120Left.parent !== hardpointLeft) {
+        hardpointLeft.add(aim120Left);
+      }
+
+      const baseRightOffset =
+        assetRefs._aimRightOffset ||
+        (assetRefs._aimRightOffset = THREE ? new THREE.Vector3(0.02, -0.02, -0.18) : null);
+      const restRight = assetRefs._aimRestQuaternionRight;
+      if (aim120Right) {
+        if (baseRightOffset && aim120Right.position.copy) {
+          aim120Right.position.copy(baseRightOffset);
+        } else if (THREE) {
+          aim120Right.position.set(0.02, -0.02, -0.18);
+        }
+        if (restRight) {
+          aim120Right.quaternion.copy(restRight);
+        }
+        aim120Right.scale.set(1.5, 1.5, 1);
+      }
+
+      state.aim120Launch = null;
+
+      const qf01 = assetRefs.qf01;
+      const basePose = assetRefs.qf01BasePose;
+      const last = assetRefs.qf01LastManeuver || {};
+      state.qf01Maneuver = null;
+      state.qf01PitchPending = null;
+      if (qf01 && basePose) {
+        const THREERef = state.THREE;
+        const pitch = last.pitch ?? (THREERef ? THREERef.MathUtils.degToRad(-120) : -Math.PI / 1.5);
+        const roll = last.roll ?? 0;
+        const yaw = last.yaw ?? 0;
+        const distance = last.distance ?? 2;
+        const duration = last.duration ?? QF01_MANEUVER_DURATION;
+        state.qf01Reset = {
+          active: true,
+          timer: 0,
+          duration,
+          pitch,
+          roll,
+          yaw,
+          distance,
+          basePosition: basePose.position.clone(),
+          baseRotation: basePose.rotation.clone()
+        };
+      } else {
+        state.qf01Reset = null;
+      }
+
+      Aim120.attachToJet();
+    }
+
+    function prepareAim120Fragments(root, { fragmentsPerMesh = 28 } = {}) {
+      const { THREE } = state;
+      if (!THREE || !root) return;
+      const fragmentTemplates = [];
+      const tempMatrix = new THREE.Matrix4();
+
+      root.updateMatrixWorld(true);
+      root.traverse(node => {
+        if (!node.isMesh || !node.geometry) return;
+        const baseGeometry = node.geometry.clone();
+        node.updateWorldMatrix(false, false);
+        tempMatrix.copy(node.matrix);
+        baseGeometry.applyMatrix4(tempMatrix);
+
+        const workingGeometry = baseGeometry.index ? baseGeometry.toNonIndexed() : baseGeometry;
+        const positions = workingGeometry.getAttribute('position');
+        const normals = workingGeometry.getAttribute('normal');
+        const uvs = workingGeometry.getAttribute('uv');
+        if (!positions) return;
+
+        const fragmentBuckets = Array.from({ length: fragmentsPerMesh }, () => ({
+          positions: [],
+          normals: normals ? [] : null,
+          uvs: uvs ? [] : null,
+          centroid: new THREE.Vector3(),
+          vertexCount: 0
+        }));
+
+        const triangleCount = positions.count / 3;
+        for (let tri = 0; tri < triangleCount; tri += 1) {
+          const bucketIndex = Math.floor(Math.random() * fragmentsPerMesh);
+          const bucket = fragmentBuckets[bucketIndex];
+          for (let v = 0; v < 3; v += 1) {
+            const idx = tri * 3 + v;
+            const px = positions.getX(idx);
+            const py = positions.getY(idx);
+            const pz = positions.getZ(idx);
+            bucket.positions.push(px, py, pz);
+            bucket.centroid.x += px;
+            bucket.centroid.y += py;
+            bucket.centroid.z += pz;
+            bucket.vertexCount += 1;
+            if (bucket.normals) {
+              bucket.normals.push(normals.getX(idx), normals.getY(idx), normals.getZ(idx));
+            }
+            if (bucket.uvs) {
+              bucket.uvs.push(uvs.getX(idx), uvs.getY(idx));
+            }
+          }
+        }
+
+        fragmentBuckets.forEach(bucket => {
+          if (!bucket.vertexCount) return;
+          const centroid = bucket.centroid.multiplyScalar(1 / bucket.vertexCount);
+          for (let i = 0; i < bucket.positions.length; i += 3) {
+            bucket.positions[i] -= centroid.x;
+            bucket.positions[i + 1] -= centroid.y;
+            bucket.positions[i + 2] -= centroid.z;
+          }
+          const fragmentGeometry = new THREE.BufferGeometry();
+          fragmentGeometry.setAttribute('position', new THREE.Float32BufferAttribute(bucket.positions, 3));
+          if (bucket.normals) {
+            fragmentGeometry.setAttribute('normal', new THREE.Float32BufferAttribute(bucket.normals, 3));
+          } else {
+            fragmentGeometry.computeVertexNormals();
+          }
+          if (bucket.uvs) {
+            fragmentGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(bucket.uvs, 2));
+          }
+          fragmentGeometry.computeBoundingSphere();
+
+          const createMaterialClone = material => {
+            if (!material) return null;
+            const clone = material.clone ? material.clone() : material;
+            if (!clone.userData) clone.userData = {};
+            clone.userData.baseOpacity = clone.opacity !== undefined ? clone.opacity : 1;
+            clone.transparent = true;
+            clone.depthWrite = false;
+            return clone;
+          };
+
+          let fragmentMaterial;
+          if (Array.isArray(node.material)) {
+            fragmentMaterial = node.material.map(createMaterialClone);
+          } else {
+            fragmentMaterial = createMaterialClone(node.material);
+          }
+
+          const templateMesh = new THREE.Mesh(fragmentGeometry, fragmentMaterial);
+          templateMesh.position.copy(centroid);
+          templateMesh.quaternion.identity();
+          templateMesh.scale.setScalar(1);
+          templateMesh.castShadow = node.castShadow;
+          templateMesh.receiveShadow = node.receiveShadow;
+          fragmentTemplates.push(templateMesh);
+        });
+      });
+
+      state.assetRefs.aim120FragmentTemplates = fragmentTemplates;
+    }
+
+    function ensureAim120ExplosionUpdater() {
+      if (state.assetRefs.aim120ExplosionUpdater) return;
+      state.assetRefs.aim120ExplosionUpdater = registerUpdater(updateAim120Explosion);
+    }
+
+    function startAim120Explosion(aimMesh) {
+      const { THREE } = state;
+      const templates = state.assetRefs.aim120FragmentTemplates;
+      if (!THREE || !aimMesh || !templates || !templates.length) return;
+      const parent = aimMesh.parent;
+      if (!parent) return;
+
+      if (state.assetRefs.aim120Explosion?.group) {
+        state.assetRefs.aim120Explosion.group.parent?.remove(state.assetRefs.aim120Explosion.group);
+        state.assetRefs.aim120Explosion = null;
+      }
+
+      const explosionGroup = new THREE.Group();
+      explosionGroup.name = 'Aim120ExplosionGroup';
+      explosionGroup.position.copy(aimMesh.position);
+      explosionGroup.quaternion.copy(aimMesh.quaternion);
+      explosionGroup.scale.copy(aimMesh.scale);
+      parent.add(explosionGroup);
+
+      const explosion = {
+        group: explosionGroup,
+        fragments: [],
+        timer: 0,
+        duration: 4.2,
+        active: true,
+        finished: false,
+        settleTimer: 0,
+        delayAfter: AIM120_RESET_DELAY,
+        resetTriggered: false
+      };
+
+      templates.forEach(template => {
+        const fragment = template.clone();
+        fragment.geometry = fragment.geometry.clone();
+        if (Array.isArray(fragment.material)) {
+          fragment.material = fragment.material.map(mat => (mat && mat.clone ? mat.clone() : mat));
+        } else if (fragment.material && fragment.material.clone) {
+          fragment.material = fragment.material.clone();
+        }
+        const materials = Array.isArray(fragment.material) ? fragment.material : [fragment.material];
+        materials.forEach(mat => {
+          if (!mat) return;
+          if (!mat.userData) mat.userData = {};
+          const baseOpacity = mat.userData.baseOpacity ?? (mat.opacity !== undefined ? mat.opacity : 1);
+          mat.userData.baseOpacity = baseOpacity;
+          mat.opacity = baseOpacity;
+          mat.transparent = true;
+          mat.depthWrite = false;
+        });
+
+        fragment.position.copy(template.position);
+        fragment.quaternion.copy(template.quaternion);
+        fragment.scale.copy(template.scale);
+        fragment.castShadow = template.castShadow;
+        fragment.receiveShadow = template.receiveShadow;
+
+        explosion.fragments.push({
+          mesh: fragment,
+          origin: fragment.position.clone(),
+          velocity: new THREE.Vector3(
+            (Math.random() - 0.5) * 2.2,
+            Math.random() * 1.6 + 0.2,
+            (Math.random() - 0.5) * 2.2
+          ),
+          axis: new THREE.Vector3(
+            Math.random() - 0.5,
+            Math.random() + 0.2,
+            Math.random() - 0.5
+          ).normalize(),
+          angularSpeed: THREE.MathUtils.degToRad(80 + Math.random() * 180),
+          scaleBoost: 0.4 + Math.random() * 0.5,
+          delay: Math.random() * 0.4,
+          baseQuaternion: fragment.quaternion.clone(),
+          tempQuat: new THREE.Quaternion()
+        });
+        explosionGroup.add(fragment);
+      });
+
+      state.assetRefs.aim120Explosion = explosion;
+      ensureAim120ExplosionUpdater();
+    }
+
+    function updateAim120Explosion({ delta = 0 }) {
+      if (!isIslandAnimationActive('island:east')) return;
+      const { THREE } = state;
+      const explosion = state.assetRefs.aim120Explosion;
+      if (!THREE || !explosion) return;
+
+      if (explosion.active) {
+        explosion.timer += delta;
+        const totalDuration = Math.max(explosion.duration, 0.001);
+        const tempVec = state._tempVector3B || (state._tempVector3B = new THREE.Vector3());
+
+        let anyActive = false;
+        explosion.fragments?.forEach(fragment => {
+          const mesh = fragment.mesh;
+          if (!mesh?.parent) return;
+          const timeSinceDelay = explosion.timer - fragment.delay;
+          if (timeSinceDelay <= 0) {
+            mesh.position.copy(fragment.origin);
+            mesh.quaternion.copy(fragment.baseQuaternion);
+            mesh.scale.setScalar(1);
+            return;
+          }
+
+          const t = THREE.MathUtils.clamp(timeSinceDelay / (totalDuration - fragment.delay * 0.5), 0, 1);
+          const eased = easeOutCubic(t);
+          tempVec.copy(fragment.velocity).multiplyScalar(eased * 0.8);
+          mesh.position.set(
+            fragment.origin.x + tempVec.x,
+            fragment.origin.y + tempVec.y,
+            fragment.origin.z + tempVec.z
+          );
+          mesh.quaternion.copy(fragment.baseQuaternion);
+          fragment.tempQuat.setFromAxisAngle(fragment.axis, fragment.angularSpeed * eased);
+          mesh.quaternion.multiply(fragment.tempQuat);
+          const scale = 1 + fragment.scaleBoost * eased * 0.6;
+          mesh.scale.setScalar(scale);
+
+          const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          materials.forEach(mat => {
+            if (!mat) return;
+            const baseOpacity = mat.userData?.baseOpacity ?? 1;
+            mat.opacity = baseOpacity * (1 - eased * 0.7);
+          });
+
+          if (t < 1) {
+            anyActive = true;
+          }
+        });
+
+        if (!anyActive || explosion.timer >= totalDuration) {
+          explosion.active = false;
+          explosion.finished = true;
+          explosion.settleTimer = 0;
+        }
+      } else if (explosion.finished) {
+        explosion.settleTimer = (explosion.settleTimer || 0) + delta;
+        if (!explosion.resetTriggered && explosion.settleTimer >= (explosion.delayAfter ?? AIM120_RESET_DELAY)) {
+          explosion.resetTriggered = true;
+          Aim120.reset();
+          return;
+        }
+      }
+    }
+
+    function completeAim120Launch({
+      launch,
+      aim120Mesh,
+      stage,
+      basePosition = null,
+      baseQuaternion = null,
+      baseScale = null
+    }) {
+      if (!launch || !aim120Mesh) return;
+      if (launch.smokeGroup) {
+        launch.smokeTrail.forEach(segment => segment.mesh?.material.dispose?.());
+        launch.smokeGroup.parent?.remove(launch.smokeGroup);
+        launch.smokeTrail = [];
+      }
+      launch.active = false;
+      launch.completed = true;
+      launch.currentSpeed = 0;
+      if (basePosition) {
+        aim120Mesh.position.copy(basePosition);
+      }
+      if (baseQuaternion) {
+        aim120Mesh.quaternion.copy(baseQuaternion);
+      }
+      if (baseScale) {
+        aim120Mesh.scale.copy(baseScale);
+      }
+      launch.finalPosition = aim120Mesh.position.clone();
+      launch.finalQuaternion = aim120Mesh.quaternion.clone();
+      launch.finalScale = aim120Mesh.scale.clone();
+      launch.freezeParent = stage;
+      launch.motionFactor = 0;
+      if (!launch.explosionTriggered) {
+        startAim120Explosion(aim120Mesh);
+        launch.explosionTriggered = true;
+        if (!state.assetRefs.aim120Explosion) {
+          state.assetRefs.aim120Explosion = {
+            group: null,
+            fragments: [],
+            timer: 0,
+            duration: 0.0001,
+            active: false,
+            finished: true,
+            settleTimer: 0,
+            delayAfter: AIM120_RESET_DELAY,
+            resetTriggered: false
+          };
+          ensureAim120ExplosionUpdater();
+        }
+      }
+      aim120Mesh.visible = false;
+    }
+
+    function createReferenceIndicator() {
+      const { THREE } = state;
+      const group = new THREE.Group();
+      group.name = 'QF01ReferenceIndicator';
+
+      const core = new THREE.Mesh(
+        new THREE.SphereGeometry(0.12, 20, 20),
+        new THREE.MeshBasicMaterial({ color: 0x00b3ff, transparent: true, opacity: 0.92, depthTest: false, depthWrite: false })
+      );
+      group.add(core);
+
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.22, 0.015, 12, 48),
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.72, depthTest: false, depthWrite: false })
+      );
+      ring.rotation.x = Math.PI / 2;
+      group.add(ring);
+
+      const label = createDebugLabel('QF01', { color: '#a8e8ff' });
+      label.scale.set(0.22, 0.22, 0.22);
+      label.position.set(0, 0.34, 0);
+      label.material.depthTest = false;
+      group.add(label);
+
+      return group;
+    }
+
+    function createButtonLabel(text, {
+      color = '#eaf2ff',
+      fontSize = 56,
+      fontWeight = 800,
+      paddingX = 18,
+      paddingY = 12,
+      background = 'rgba(0,0,0,0.0)'
+    } = {}) {
+      const measureCanvas = document.createElement('canvas');
+      const measureCtx = measureCanvas.getContext('2d');
+      measureCtx.font = `${fontWeight} ${fontSize}px "Inter", system-ui, sans-serif`;
+      const textWidth = Math.ceil(measureCtx.measureText(text).width);
+
+      const width = Math.max(64, textWidth + paddingX * 2);
+      const height = Math.max(48, fontSize + paddingY * 2);
+
+      const canvasEl = document.createElement('canvas');
+      canvasEl.width = width;
+      canvasEl.height = height;
+
+      const ctx = canvasEl.getContext('2d');
+      ctx.clearRect(0, 0, width, height);
+
+      if (background && background !== 'rgba(0,0,0,0.0)') {
+        ctx.fillStyle = background;
+        const r = Math.min(18, height / 2);
+        ctx.beginPath();
+        ctx.moveTo(r, 0);
+        ctx.lineTo(width - r, 0);
+        ctx.quadraticCurveTo(width, 0, width, r);
+        ctx.lineTo(width, height - r);
+        ctx.quadraticCurveTo(width, height, width - r, height);
+        ctx.lineTo(r, height);
+        ctx.quadraticCurveTo(0, height, 0, height - r);
+        ctx.lineTo(0, r);
+        ctx.quadraticCurveTo(0, 0, r, 0);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+  ctx.fillStyle = color;
+  ctx.font = `${fontWeight} ${fontSize}px "Inter", system-ui, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(text, width / 2, height / 2);
+
+  const texture = new state.THREE.CanvasTexture(canvasEl);
+  texture.anisotropy = 4;
+  texture.needsUpdate = true;
+
+  const material = new state.THREE.SpriteMaterial({
+    map: texture,
+    transparent: true,
+    depthTest: false,
+    depthWrite: false
+  });
+
+  const sprite = new state.THREE.Sprite(material);
+
+  // tuned for your scene scale
+  const scaleFactor = 0.0012;
+  sprite.scale.set(width * scaleFactor, height * scaleFactor, 1);
+
+  return sprite;
+}
+
+    function reparentPreserveWorld(object, newParent) {
+      const { THREE } = state;
+      if (!THREE || !object || !newParent) return;
+      object.updateMatrixWorld(true);
+      newParent.updateMatrixWorld(true);
+      const worldMatrix = object.matrixWorld.clone();
+      const parentInverse = new THREE.Matrix4().copy(newParent.matrixWorld).invert();
+      const localMatrix = parentInverse.multiply(worldMatrix);
+      newParent.add(object);
+      localMatrix.decompose(object.position, object.quaternion, object.scale);
+    }
+
+    function attachAim120ToJet() {
+      const { THREE, assetRefs } = state;
+      if (!THREE || !assetRefs) return;
+
+      const qf01 = assetRefs.qf01;
+      if (!qf01) return;
+
+      if (!assetRefs.qf01Reference) {
+        const reference = new THREE.Object3D();
+        reference.name = 'QF01Reference';
+        qf01.add(reference);
+        assetRefs.qf01Reference = reference;
+
+        const indicator = createReferenceIndicator();
+        indicator.renderOrder = 12;
+        indicator.visible = DEBUG_HELPERS_VISIBLE;
+        reference.add(indicator);
+        assetRefs.qf01ReferenceMarker = indicator;
+      }
+
+      const ensureHardpoint = (label, tint) => {
+        const key = `aimHardpoint${label}`;
+        if (!assetRefs[key]) {
+          const hardpoint = new THREE.Object3D();
+          hardpoint.name = `Aim120Hardpoint_${label}`;
+          assetRefs.qf01Reference.add(hardpoint);
+          assetRefs[key] = hardpoint;
+
+          const helper = new THREE.AxesHelper(0.35);
+          helper.name = `Aim120HardpointHelper_${label}`;
+          helper.renderOrder = 10;
+          const style = material => {
+            material.depthTest = false;
+            material.transparent = true;
+            material.opacity = 0.92;
+            if (material.color) material.color.setHex(tint);
+          };
+          if (Array.isArray(helper.material)) {
+            helper.material.forEach(style);
+          } else if (helper.material) {
+            style(helper.material);
+          }
+          const glow = new THREE.Mesh(
+            new THREE.RingGeometry(0.05, 0.08, 28),
+            new THREE.MeshBasicMaterial({ color: tint, transparent: true, opacity: 0.34, depthTest: false })
+          );
+          glow.rotation.x = Math.PI / 2;
+          glow.renderOrder = 11;
+          helper.add(glow);
+          helper.visible = DEBUG_HELPERS_VISIBLE;
+          hardpoint.add(helper);
+          assetRefs[`aimHelper${label}`] = helper;
+        }
+        const helper = assetRefs[`aimHelper${label}`];
+        if (helper) helper.visible = DEBUG_HELPERS_VISIBLE;
+        return assetRefs[key];
+      };
+
+      const hardpointRight = ensureHardpoint('Right', 0xff5b5b);
+      const hardpointLeft = ensureHardpoint('Left', 0x5bffd5);
+      assetRefs.aimHardpoint = hardpointRight;
+      assetRefs.aimHelper = assetRefs.aimHelperRight;
+
+      if (!assetRefs.aimBoundingHelper) {
+        const geometry = new THREE.EdgesGeometry(new THREE.BoxGeometry(1, 1, 1));
+        const material = new THREE.LineBasicMaterial({
+          color: 0x00ffff,
+          transparent: true,
+          opacity: 0.75,
+          depthTest: false
+        });
+        const orientedHelper = new THREE.LineSegments(geometry, material);
+        orientedHelper.name = 'Aim120BoundingBoxHelper';
+        orientedHelper.renderOrder = 9;
+        orientedHelper.visible = DEBUG_HELPERS_VISIBLE;
+        assetRefs.qf01Reference.add(orientedHelper);
+        assetRefs.aimBoundingHelper = orientedHelper;
+      }
+
+      if (!assetRefs.aimAttachmentUpdater) {
+        assetRefs.aimAttachmentUpdater = registerUpdater(Aim120.updateAttachment);
+      }
+
+      Aim120.updateAttachment();
+    }
+
+    function launchAim120Forward() {
+      const THREE = state.THREE;
+      if (!THREE) return;
+      const aim120Right = state.assetRefs?.aim120Right || state.assetRefs?.aim120;
+      const hardpoint = state.assetRefs?.aimHardpointRight || state.assetRefs?.aimHardpoint;
+      const stage = state.stage || state.scene;
+      if (!aim120Right || !hardpoint || !stage || state.aim120Launch?.active || state.aim120Launch?.completed) return false;
+      if (state.assetRefs.aim120Explosion?.group) {
+        state.assetRefs.aim120Explosion.group.parent?.remove(state.assetRefs.aim120Explosion.group);
+        state.assetRefs.aim120Explosion = null;
+      }
+      aim120Right.visible = true;
+      const travelDistance = 36;
+      const travelSpeed = 14;
+      const smokeGroup = new THREE.Group();
+      smokeGroup.name = 'Aim120SmokeTrail';
+      state.aim120Launch = {
+        active: true,
+        timer: 0,
+        maxDistance: travelDistance,
+        speed: travelSpeed,
+        duration: AIM_QF01_SYNC_DURATION,
+        lateralAmp: 0.05,
+        lateralFreq: 3.6,
+        verticalAmp: 0.04,
+        verticalFreq: 5.4,
+        verticalPhase: 0.6,
+        spinSpeed: THREE.MathUtils.degToRad(180),
+        smokeGroup,
+        smokeTrail: [],
+        smokeSpawnTimer: 0,
+        smokeInterval: 0.05,
+        smokeLifetime: 1.1,
+        initialized: false,
+        hardpoint,
+        stage,
+        missile: aim120Right,
+        explosionTrigger: AIM120_EXPLOSION_TRIGGER,
+        progress: 0,
+        prevProgress: 0,
+        currentSpeed: 0,
+        completed: false,
+        prevLocalPosition: null,
+        finalPosition: null,
+        finalQuaternion: null,
+        finalScale: null
+      };
+      return true;
+    }
+
+    function triggerQf01Pitch() {
+      const { THREE } = state;
+      if (!THREE) return;
+      const qf01 = state.assetRefs?.qf01;
+      const basePose = state.assetRefs?.qf01BasePose;
+      if (!qf01 || !basePose || state.qf01Maneuver?.active) return;
+      const pitch = THREE.MathUtils.degToRad(-120);
+      const roll = THREE.MathUtils.degToRad(-35);
+      const yaw = THREE.MathUtils.degToRad(-25);
+      const distance = 2;
+      const duration = QF01_MANEUVER_DURATION;
+      state.qf01Maneuver = {
+        active: true,
+        timer: 0,
+        duration,
+        pitch,
+        roll,
+        yaw,
+        distance,
+        lastElapsed: null,
+        completed: false,
+        finalPosition: null,
+        finalRotation: null
+      };
+      state.assetRefs.qf01LastManeuver = {
+        pitch,
+        roll,
+        yaw,
+        distance,
+        duration
+      };
+    }
+
+    function updateAim120Attachment({ delta = 0, elapsed } = {}) {
+      if (!isIslandAnimationActive('island:east')) return;
+      const { THREE, assetRefs } = state;
+      if (!THREE || !assetRefs) return;
+      if (elapsed === undefined) {
+        elapsed = state.clock ? state.clock.elapsedTime : 0;
+      }
+
+      const qf01 = assetRefs.qf01;
+      const reference = assetRefs.qf01Reference;
+      const hardpointRight = assetRefs.aimHardpointRight || assetRefs.aimHardpoint;
+      const hardpointLeft = assetRefs.aimHardpointLeft;
+      if (!qf01 || !reference || !hardpointRight) return;
+
+      const localCenter = assetRefs._aimLocalCenter || (assetRefs._aimLocalCenter = new THREE.Vector3());
+      const localSize = assetRefs._aimLocalSize || (assetRefs._aimLocalSize = new THREE.Vector3());
+
+      localCenter.set(
+        (QF01_RAW_BOUNDS.min[0] + QF01_RAW_BOUNDS.max[0]) * 0.5,
+        (QF01_RAW_BOUNDS.min[1] + QF01_RAW_BOUNDS.max[1]) * 0.5,
+        (QF01_RAW_BOUNDS.min[2] + QF01_RAW_BOUNDS.max[2]) * 0.5
+      );
+      localSize.set(
+        QF01_RAW_BOUNDS.max[0] - QF01_RAW_BOUNDS.min[0],
+        QF01_RAW_BOUNDS.max[1] - QF01_RAW_BOUNDS.min[1],
+        QF01_RAW_BOUNDS.max[2] - QF01_RAW_BOUNDS.min[2]
+      );
+
+      reference.position.copy(localCenter);
+      reference.rotation.set(0, 0, 0);
+      reference.scale.set(1, 1, 1);
+      reference.visible = true;
+
+      const marker = assetRefs.qf01ReferenceMarker;
+      if (marker) {
+        marker.visible = DEBUG_HELPERS_VISIBLE;
+        marker.position.set(0, localSize.y * 0.55, 0);
+        marker.rotation.set(0, 0, 0);
+      }
+
+      const helperRight = assetRefs.aimHelperRight || assetRefs.aimHelper;
+      const helperLeft = assetRefs.aimHelperLeft;
+      if (helperRight) {
+        helperRight.visible = DEBUG_HELPERS_VISIBLE;
+        helperRight.position.set(0, 0, 0);
+      }
+      if (helperLeft) {
+        helperLeft.visible = DEBUG_HELPERS_VISIBLE;
+        helperLeft.position.set(0, 0, 0);
+      }
+
+      const boundingHelper = assetRefs.aimBoundingHelper;
+      if (boundingHelper) {
+        if (boundingHelper.parent !== reference) {
+          boundingHelper.parent?.remove(boundingHelper);
+          reference.add(boundingHelper);
+        }
+        boundingHelper.visible = DEBUG_HELPERS_VISIBLE;
+        boundingHelper.position.set(0, 0, 0);
+        boundingHelper.scale.set(
+          Math.max(localSize.x, 0.001),
+          Math.max(localSize.y, 0.001),
+          Math.max(localSize.z, 0.001)
+        );
+        boundingHelper.rotation.set(0, 0, 0);
+      }
+
+      const rightX = localSize.x * 0.5 + 0.1;
+      const sharedY = -1.05;
+      const sharedZ = -0.9;
+
+      hardpointRight.position.set(rightX, sharedY, sharedZ);
+      hardpointRight.rotation.set(
+        THREE.MathUtils.degToRad(1),
+        THREE.MathUtils.degToRad(90),
+        0
+      );
+      if (hardpointLeft) {
+        hardpointLeft.position.set(
+          -rightX,
+          sharedY,
+          sharedZ
+        );
+        hardpointLeft.rotation.set(
+          THREE.MathUtils.degToRad(1),
+          THREE.MathUtils.degToRad(-90),
+          0
+        );
+      }
+
+      const aim120Right = assetRefs.aim120Right || assetRefs.aim120;
+      const aim120Left = assetRefs.aim120Left;
+
+      const baseRightOffset = assetRefs._aimRightOffset || (assetRefs._aimRightOffset = new THREE.Vector3(0.02, -0.02, -0.18));
+      const baseLeftOffset = assetRefs._aimLeftOffset || (assetRefs._aimLeftOffset = new THREE.Vector3(-0.02, -0.02, -0.18));
+
+      if (aim120Right) {
+        const baseRight = assetRefs._aimBaseQuaternionRight || (assetRefs._aimBaseQuaternionRight = new THREE.Quaternion());
+        const adjustRight = assetRefs._aimAdjustQuaternionRight || (assetRefs._aimAdjustQuaternionRight = new THREE.Quaternion());
+        const restRight = assetRefs._aimRestQuaternionRight || (assetRefs._aimRestQuaternionRight = new THREE.Quaternion());
+        baseRight.setFromEuler(new THREE.Euler(0, THREE.MathUtils.degToRad(-90), 0));
+        adjustRight.setFromEuler(new THREE.Euler(
+          THREE.MathUtils.degToRad(-2),
+          THREE.MathUtils.degToRad(4),
+          THREE.MathUtils.degToRad(-2)
+        ));
+        restRight.copy(baseRight).multiply(adjustRight);
+
+        const launch = state.aim120Launch;
+        let launching = !!launch?.active;
+
+        if (launching) {
+          // Detach missile to stage space so QF01 attitude changes do not affect the launch path.
+          const stage = state.stage || launch.stage || state.scene;
+          if (!stage) {
+            if (launch?.smokeGroup?.parent) {
+              launch.smokeTrail.forEach(segment => segment.mesh?.material.dispose?.());
+              launch.smokeGroup.parent.remove(launch.smokeGroup);
+              launch.smokeTrail = [];
+            }
+            launching = false;
+            state.aim120Launch = null;
+          } else {
+            if (!launch.initialized) {
+              launch.stage = stage;
+              stage.updateMatrixWorld(true);
+              hardpointRight.updateMatrixWorld(true);
+              const stageInverseAtLaunch = new THREE.Matrix4().copy(stage.matrixWorld).invert();
+              // Freeze the hardpoint transform relative to the stage at launch so later QF01 motion is ignored.
+              launch.frozenParentMatrix = new THREE.Matrix4().copy(stageInverseAtLaunch).multiply(hardpointRight.matrixWorld.clone());
+              launch.stageInverseMatrix = new THREE.Matrix4();
+              launch.parentMatrix = new THREE.Matrix4();
+              launch.missileLocalMatrix = new THREE.Matrix4();
+              launch.missileWorldMatrix = new THREE.Matrix4();
+              launch.stageLocalMatrix = new THREE.Matrix4();
+              launch.parentMatrix3 = new THREE.Matrix3();
+              launch.stageInverseMatrix3 = new THREE.Matrix3();
+              launch.localPosition = new THREE.Vector3();
+              launch.nextLocalPosition = new THREE.Vector3();
+              launch.directionLocal = new THREE.Vector3();
+              launch.directionWorld = new THREE.Vector3();
+              launch.directionStage = new THREE.Vector3();
+              launch.localScale = new THREE.Vector3(1.5, 1.5, 1);
+              launch.alignQuat = new THREE.Quaternion();
+              launch.spinQuat = new THREE.Quaternion();
+              launch.finalLocalQuat = new THREE.Quaternion();
+              launch.spinAxis = new THREE.Vector3(0, 0, 1);
+              launch.restRight = restRight.clone();
+              launch.restForward = new THREE.Vector3(0, 0, 1).applyQuaternion(launch.restRight).normalize();
+              launch.baseOffset = baseRightOffset.clone();
+              launch.prevLocalPosition = launch.baseOffset.clone();
+              launch.prevProgress = 0;
+              launch.progress = 0;
+              launch.lastDirectionLocal = new THREE.Vector3(0, 0, -1);
+              launch.freezeParent = stage;
+              reparentPreserveWorld(aim120Right, stage);
+              if (launch.smokeGroup && launch.smokeGroup.parent !== stage) {
+                stage.add(launch.smokeGroup);
+              }
+              launch.initialized = true;
+            }
+
+            launch.stage = stage;
+            stage.updateMatrixWorld(true);
+
+            const computeLocalPosition = (progressValue, target) => {
+              target.copy(launch.baseOffset);
+              target.x -= launch.maxDistance * progressValue;
+              target.y += launch.verticalAmp * Math.sin(progressValue * Math.PI * launch.verticalFreq + launch.verticalPhase);
+              target.z += launch.lateralAmp * Math.sin(progressValue * Math.PI * launch.lateralFreq);
+              return target;
+            };
+
+            launch.timer += delta;
+            launch.smokeSpawnTimer += delta;
+            const duration = Math.max(launch.duration || AIM_QF01_SYNC_DURATION, 0.001);
+            const timeT = Math.min(launch.timer / duration, 1);
+            const progress = easeOutCubic(timeT);
+            launch.motionFactor = Math.pow(Math.max(1 - timeT, 0), 2);
+            computeLocalPosition(progress, launch.localPosition);
+
+            const nextProgress = progress >= 1 ? progress : Math.min(progress + 0.002, 1);
+            computeLocalPosition(nextProgress, launch.nextLocalPosition);
+            launch.directionLocal.copy(launch.nextLocalPosition).sub(launch.localPosition);
+            if (launch.directionLocal.lengthSq() > 1e-6) {
+              launch.directionLocal.normalize();
+              if (launch.lastDirectionLocal) {
+                launch.lastDirectionLocal.copy(launch.directionLocal);
+              }
+            } else if (launch.lastDirectionLocal) {
+              launch.directionLocal.copy(launch.lastDirectionLocal);
+            } else {
+              launch.directionLocal.set(0, 0, -1);
+            }
+
+            launch.alignQuat.setFromUnitVectors(launch.restForward, launch.directionLocal);
+            launch.finalLocalQuat.copy(launch.restRight);
+            launch.finalLocalQuat.premultiply(launch.alignQuat);
+            launch.spinQuat.setFromAxisAngle(launch.spinAxis, launch.spinSpeed * launch.timer);
+            launch.finalLocalQuat.multiply(launch.spinQuat);
+
+            const stageMatrix = stage.matrixWorld;
+            launch.stageInverseMatrix.copy(stageMatrix).invert();
+            launch.parentMatrix.multiplyMatrices(stageMatrix, launch.frozenParentMatrix);
+            launch.parentMatrix3.setFromMatrix4(launch.parentMatrix);
+
+            launch.missileLocalMatrix.compose(launch.localPosition, launch.finalLocalQuat, launch.localScale);
+            launch.missileWorldMatrix.multiplyMatrices(launch.parentMatrix, launch.missileLocalMatrix);
+            launch.stageLocalMatrix.multiplyMatrices(launch.stageInverseMatrix, launch.missileWorldMatrix);
+            launch.stageLocalMatrix.decompose(aim120Right.position, aim120Right.quaternion, aim120Right.scale);
+
+            launch.directionWorld.copy(launch.directionLocal).applyMatrix3(launch.parentMatrix3).normalize();
+            launch.stageInverseMatrix3.setFromMatrix4(launch.stageInverseMatrix);
+            launch.directionStage.copy(launch.directionWorld).applyMatrix3(launch.stageInverseMatrix3).normalize();
+
+            const deltaProgress = Math.max(progress - launch.prevProgress, 0);
+            launch.currentSpeed = delta > 1e-5 ? (deltaProgress * launch.maxDistance) / delta : 0;
+            launch.prevProgress = progress;
+            launch.prevLocalPosition.copy(launch.localPosition);
+            launch.progress = progress;
+
+            const explosionThreshold = launch.explosionTrigger ?? AIM120_EXPLOSION_TRIGGER;
+            if (!launch.explosionTriggered && timeT >= explosionThreshold) {
+              completeAim120Launch({
+                launch,
+                aim120Mesh: aim120Right,
+                stage,
+                basePosition: aim120Right.position,
+                baseQuaternion: aim120Right.quaternion,
+                baseScale: aim120Right.scale
+              });
+              launching = false;
+            }
+
+            if (launch.active) {
+              if (launch.smokeGroup) {
+                if (launch.smokeGroup.parent !== stage) {
+                  stage.add(launch.smokeGroup);
+                }
+                if (launch.smokeSpawnTimer >= launch.smokeInterval) {
+                  launch.smokeSpawnTimer = 0;
+                  const geometry = state.sharedMaterials.smokeVoxelGeometry || (state.sharedMaterials.smokeVoxelGeometry = new THREE.BoxGeometry(0.26, 0.26, 0.26));
+                  const material = new THREE.MeshStandardMaterial({
+                    color: 0xbac4cf,
+                    transparent: true,
+                    opacity: 0.42,
+                    metalness: 0,
+                    roughness: 1
+                  });
+                  const voxel = new THREE.Mesh(geometry, material);
+                  voxel.scale.setScalar(0.28);
+                  voxel.position.copy(aim120Right.position);
+                  voxel.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+                  launch.smokeGroup.add(voxel);
+                  launch.smokeTrail.push({ mesh: voxel, age: 0, direction: launch.directionStage.clone() });
+                }
+                const lifetime = launch.smokeLifetime;
+                launch.smokeTrail = launch.smokeTrail.filter(segment => {
+                  const mesh = segment.mesh;
+                  segment.age += delta;
+                  const lifeT = segment.age / lifetime;
+                  if (lifeT >= 1 || !mesh) {
+                    mesh?.material.dispose?.();
+                    launch.smokeGroup.remove(mesh);
+                    return false;
+                  }
+                  const scale = 0.28 + lifeT * 0.65;
+                  mesh.scale.setScalar(scale);
+                  mesh.material.opacity = 0.42 * (1 - lifeT);
+                  mesh.position.addScaledVector(segment.direction, -launch.currentSpeed * delta * 0.35);
+                  return true;
+                });
+              }
+
+              if (timeT >= 1) {
+                completeAim120Launch({
+                  launch,
+                  aim120Mesh: aim120Right,
+                  stage,
+                  basePosition: aim120Right.position,
+                  baseQuaternion: aim120Right.quaternion,
+                  baseScale: aim120Right.scale
+                });
+                launching = false;
+              }
+            }
+          }
+        }
+
+        if (!launching) {
+          if (state.aim120Launch?.completed) {
+            aim120Right.visible = false;
+          } else {
+            if (aim120Right.parent !== hardpointRight) {
+              aim120Right.parent?.remove(aim120Right);
+              hardpointRight.add(aim120Right);
+            }
+            assetRefs._aimRestForwardRight = assetRefs._aimRestForwardRight || new THREE.Vector3(0, 0, 1).applyQuaternion(restRight).normalize();
+            aim120Right.position.copy(baseRightOffset);
+            aim120Right.quaternion.copy(restRight);
+            aim120Right.scale.set(1.5, 1.5, 1);
+            aim120Right.visible = true;
+          }
+          if (state.aim120Launch && !state.aim120Launch.completed) {
+            state.aim120Launch.motionFactor = 1;
+          }
+        }
+      }
+
+      if (aim120Left && hardpointLeft) {
+        if (aim120Left.parent !== hardpointLeft) {
+          aim120Left.parent?.remove(aim120Left);
+          hardpointLeft.add(aim120Left);
+        }
+        aim120Left.position.copy(baseLeftOffset);
+        const baseLeft = assetRefs._aimBaseQuaternionLeft || (assetRefs._aimBaseQuaternionLeft = new THREE.Quaternion());
+        const adjustLeft = assetRefs._aimAdjustQuaternionLeft || (assetRefs._aimAdjustQuaternionLeft = new THREE.Quaternion());
+        const finalLeft = assetRefs._aimFinalQuaternionLeft || (assetRefs._aimFinalQuaternionLeft = new THREE.Quaternion());
+        baseLeft.setFromEuler(new THREE.Euler(0, THREE.MathUtils.degToRad(90), 0));
+        adjustLeft.setFromEuler(new THREE.Euler(
+          THREE.MathUtils.degToRad(-2),
+          THREE.MathUtils.degToRad(-4),
+          THREE.MathUtils.degToRad(2)
+        ));
+        finalLeft.copy(baseLeft).multiply(adjustLeft);
+        aim120Left.quaternion.copy(finalLeft);
+        aim120Left.scale.set(1.5, 1.5, 1);
+      }
+
+    }
+
+    const Aim120 = {
+      disposeExplosionMesh,
+      reset: resetAimSequence,
+      prepareFragments: prepareAim120Fragments,
+      ensureExplosionUpdater: ensureAim120ExplosionUpdater,
+      attachToJet: attachAim120ToJet,
+      launchForward: launchAim120Forward,
+      updateAttachment: updateAim120Attachment
+    };
+
+    const Jet = {
+      triggerPitch: triggerQf01Pitch
+    };
+
+    function ensureBatteryPalette() {
+      const { THREE } = state;
+      if (!THREE) return null;
+      if (!state.assetRefs.batteryPalette) {
+        state.assetRefs.batteryPalette = {
+          inactiveColor: new THREE.Color(0x2d0c0e),
+          inactiveEmissive: new THREE.Color(0x140203),
+          tiers: [
+            { min: 0.8, color: new THREE.Color(0x12FF29), emissive: new THREE.Color(0x12FF29), intensity: 2.2 },
+            { min: 0.65, color: new THREE.Color(0xcfff6a), emissive: new THREE.Color(0xc0f55d), intensity: 2.0 },
+            { min: 0.5, color: new THREE.Color(0xffa14a), emissive: new THREE.Color(0xff8a34), intensity: 1.8 },
+            { min: 0.25, color: new THREE.Color(0xffa14a), emissive: new THREE.Color(0xff8a34), intensity: 1.6 },
+            { min: 0, color: new THREE.Color(0xff4d4d), emissive: new THREE.Color(0xff3a3a), intensity: 1.4 }
+          ]
+        };
+      }
+      return state.assetRefs.batteryPalette;
+    }
+
+    function ensureBatteryChargeState() {
+      if (!state.assetRefs.batteryCharge) {
+        state.assetRefs.batteryCharge = { current: 1, target: 1, transition: null };
+      }
+      return state.assetRefs.batteryCharge;
+    }
+
+    function getBatteryTier(charge = 0) {
+      const palette = ensureBatteryPalette();
+      if (!palette?.tiers) return null;
+      const clamped = Math.min(Math.max(charge, 0), 1);
+      const tier = palette.tiers.find(entry => clamped >= entry.min) || palette.tiers[palette.tiers.length - 1];
+      return tier;
+    }
+
+    function getBatteryCellIndex(name) {
+      if (!name) return 0;
+      if (/^\d+$/.test(name)) return Number(name);
+      const match = name.match(/Battery_Cell(\d+)/i);
+      return match ? Number(match[1]) : 0;
+    }
+
+    function getActiveCountFromCharge(chargeValue, totalCells) {
+      if (!totalCells) return 0;
+      const clamped = Math.min(Math.max(chargeValue, 0), 1);
+      if (clamped <= 0) return 0;
+      return Math.min(totalCells, Math.floor(clamped * totalCells + 1e-6));
+    }
+
+    function easeInOutPow(t, power = 3) {
+      const clamped = Math.min(Math.max(t, 0), 1);
+      if (clamped === 0 || clamped === 1) return clamped;
+      if (clamped < 0.5) {
+        return 0.5 * Math.pow(clamped * 2, power);
+      }
+      return 1 - 0.5 * Math.pow((1 - clamped) * 2, power);
+    }
+
+    function applyBatteryState(activeCount, { edgeIndex = null, edgeFade = 0, direction = -1 } = {}) {
+      const cells = state.assetRefs.batteryCells;
+      if (!cells || !cells.length) return;
+      const palette = ensureBatteryPalette();
+      if (!palette) return;
+      const totalCells = cells.length;
+      const tier = getBatteryTier(activeCount / totalCells);
+      const activeColor = tier?.color;
+      const activeEmissive = tier?.emissive;
+      const activeIntensity = tier?.intensity ?? 1.6;
+
+      cells.forEach(cell => {
+        const material = Array.isArray(cell.material) ? cell.material[0] : cell.material;
+        if (!material) return;
+        const index = getBatteryCellIndex(cell.name);
+        if (!index) return;
+        const isActive = index <= activeCount;
+        const isEdge = edgeIndex && index === edgeIndex;
+
+        if (isEdge) {
+          const fade = Math.min(Math.max(edgeFade, 0), 1);
+          const turningOff = direction < 0;
+          if (material.color) {
+            material.color.copy(turningOff ? activeColor ?? palette.inactiveColor : palette.inactiveColor);
+            if (activeColor) {
+              material.color.lerp(turningOff ? palette.inactiveColor : activeColor, fade);
+            }
+          }
+          if (material.emissive) {
+            material.emissive.copy(turningOff ? activeEmissive ?? palette.inactiveEmissive : palette.inactiveEmissive);
+            if (activeEmissive) {
+              material.emissive.lerp(turningOff ? palette.inactiveEmissive : activeEmissive, fade);
+            }
+            const fromIntensity = turningOff ? activeIntensity : 0.06;
+            const toIntensity = turningOff ? 0.06 : activeIntensity;
+            material.emissiveIntensity = state.THREE
+              ? state.THREE.MathUtils.lerp(fromIntensity, toIntensity, fade)
+              : (fromIntensity + (toIntensity - fromIntensity) * fade);
+          }
+          return;
+        }
+
+        if (material.color) {
+          if (isActive && activeColor) {
+            material.color.copy(activeColor);
+          } else {
+            material.color.copy(palette.inactiveColor);
+          }
+        }
+        if (material.emissive) {
+          if (isActive && activeEmissive) {
+            material.emissive.copy(activeEmissive);
+            material.emissiveIntensity = activeIntensity;
+          } else {
+            material.emissive.copy(palette.inactiveEmissive);
+            material.emissiveIntensity = 0.06;
+          }
+        }
+      });
+    }
+
+    function applyBatteryCharge(chargeValue = 0) {
+      const { THREE } = state;
+      if (!THREE) return;
+      const cells = state.assetRefs.batteryCells;
+      if (!cells || !cells.length) return;
+      const clamped = THREE.MathUtils.clamp(chargeValue, 0, 1);
+      const activeCount = getActiveCountFromCharge(clamped, cells.length);
+      applyBatteryState(activeCount);
+    }
+
+    function ensureBatteryUpdater() {
+      if (state.assetRefs.batteryUpdaterCleanup) return state.assetRefs.batteryUpdaterCleanup;
+      const update = ({ delta = 0 }) => {
+        const { THREE } = state;
+        if (!THREE) return;
+        const charge = ensureBatteryChargeState();
+        const pendingDelta = state.assetRefs.batteryDelta || 0;
+        if (pendingDelta) {
+          const next = THREE.MathUtils.clamp(
+            (Number.isFinite(charge.current) ? charge.current : charge.target) + pendingDelta,
+            0,
+            1
+          );
+          charge.current = next;
+          charge.target = next;
+          charge.transition = null;
+          state.assetRefs.batteryDelta = 0;
+          applyBatteryCharge(next);
+        }
+        if (!charge.transition) {
+          applyBatteryCharge(charge.current);
+          return;
+        }
+        const transition = charge.transition;
+        transition.elapsed += delta;
+        const progress = Math.min(Math.max(transition.elapsed / transition.totalDuration, 0), 1);
+        const easedProgress = easeInOutPow(progress, transition.power);
+        const stepFloat = easedProgress * transition.totalSteps;
+        const stepIndex = Math.min(transition.totalSteps, Math.floor(stepFloat));
+        const stepT = Math.min(Math.max(stepFloat - stepIndex, 0), 1);
+        const easedStep = easeInOutPow(stepT, transition.power);
+        const currentCount = transition.startCount + transition.direction * stepIndex;
+        const edgeIndex = transition.direction < 0
+          ? currentCount
+          : currentCount + 1;
+
+        applyBatteryState(currentCount, {
+          edgeIndex,
+          edgeFade: easedStep,
+          direction: transition.direction
+        });
+
+        charge.current = transition.totalCells ? currentCount / transition.totalCells : charge.current;
+
+        if (progress >= 1) {
+          charge.current = transition.targetCount / transition.totalCells;
+          charge.transition = null;
+          applyBatteryState(transition.targetCount);
+        }
+      };
+      update.__tag = 'BatteryCharge';
+      const cleanup = registerUpdater(update);
+      state.assetRefs.batteryUpdaterCleanup = cleanup;
+      return cleanup;
+    }
+
+    function setBatteryChargeTarget(value, { immediate = false } = {}) {
+      const charge = ensureBatteryChargeState();
+      const next = Math.min(Math.max(Number.isFinite(value) ? value : 0, 0), 1);
+      charge.target = next;
+      if (immediate) {
+        charge.current = next;
+        charge.transition = null;
+        applyBatteryCharge(next);
+      }
+      if (!immediate) {
+        const cellCount = state.assetRefs.batteryCells?.length || 0;
+        if (!cellCount) {
+          charge.current = next;
+          applyBatteryCharge(next);
+        } else {
+          if (charge.transition) {
+            const targetCount = getActiveCountFromCharge(next, cellCount);
+            const transition = charge.transition;
+            transition.targetCount = targetCount;
+            transition.direction = Math.sign(targetCount - transition.startCount);
+            transition.totalSteps = Math.abs(targetCount - transition.startCount);
+            transition.totalDuration = Math.min(Math.max(0.6 + transition.totalSteps * 0.12, 0.6), 5.0);
+            transition.elapsed = Math.min(transition.elapsed, transition.totalDuration);
+            if (transition.totalSteps === 0) {
+              charge.transition = null;
+              applyBatteryCharge(next);
+            }
+            ensureBatteryUpdater();
+            return next;
+          }
+          const startCount = charge.transition?.startCount ?? getActiveCountFromCharge(charge.current, cellCount);
+          const targetCount = getActiveCountFromCharge(next, cellCount);
+          if (startCount === targetCount) {
+            charge.current = next;
+            charge.transition = null;
+            applyBatteryCharge(next);
+          } else {
+            const deltaCells = Math.abs(targetCount - startCount);
+            const totalDuration = Math.min(Math.max(0.6 + deltaCells * 0.12, 0.6), 5.0);
+            charge.transition = {
+              startCount,
+              targetCount,
+              direction: Math.sign(targetCount - startCount),
+              totalSteps: deltaCells,
+              totalDuration,
+              elapsed: 0,
+              power: 2,
+              totalCells: cellCount
+            };
+          }
+        }
+      }
+      ensureBatteryUpdater();
+      return next;
+    }
+
+    function addBatteryDelta(delta = 0) {
+      if (!Number.isFinite(delta) || delta === 0) return;
+      state.assetRefs.batteryDelta = (state.assetRefs.batteryDelta || 0) + delta;
+      ensureBatteryUpdater();
+    }
+
+    function setupBatteryCells(root) {
+      if (!root) return;
+      const cells = [];
+      root.traverse(node => {
+        if (!node.isMesh) return;
+        if (node.name && (/^\d+$/.test(node.name) || /^Battery_Cell\d+$/i.test(node.name))) {
+          const baseMaterial = Array.isArray(node.material) ? node.material[0] : node.material;
+          if (baseMaterial?.clone) {
+            const cloned = baseMaterial.clone();
+            cloned.toneMapped = false;
+            if (cloned.emissive) {
+              cloned.emissiveIntensity = cloned.emissiveIntensity ?? 0.4;
+            }
+            node.material = cloned;
+          } else if (baseMaterial) {
+            baseMaterial.toneMapped = false;
+          }
+          cells.push(node);
+        }
+      });
+
+      cells.sort((a, b) => getBatteryCellIndex(b.name) - getBatteryCellIndex(a.name));
+      state.assetRefs.batteryCells = cells;
+      const charge = ensureBatteryChargeState();
+      if (!state.assetRefs.batteryChargeInitialized) {
+        const initial = Math.min(1, 1 / Math.max(cells.length, 1));
+        charge.current = initial;
+        charge.target = initial;
+        state.assetRefs.batteryChargeInitialized = true;
+      }
+      applyBatteryCharge(charge.current ?? 1);
+      ensureBatteryUpdater();
+    }
+
+    const Battery = {
+      setCharge: setBatteryChargeTarget,
+      getCharge: () => ensureBatteryChargeState().target,
+      addDelta: addBatteryDelta
+    };
+
+    state.modules = { Aim120, Jet, Battery };
+
+    function ensureAnimationActivityStore() {
+      if (!state.assetRefs.animationActivity) {
+        state.assetRefs.animationActivity = Object.create(null);
+      }
+      return state.assetRefs.animationActivity;
+    }
+
+    function setIslandAnimationActive(key, active) {
+      if (!key) return;
+      const store = ensureAnimationActivityStore();
+      const next = !!active;
+      store[key] = next;
+    }
+
+    function isIslandAnimationActive(key) {
+      if (!key) return true;
+      const store = state.assetRefs.animationActivity;
+      return !!(store && store[key]);
+    }
+
+    function syncIslandHoverStates(intersections) {
+      const prev = state.assetRefs.hoveredActivityKeys || new Set();
+      const next = new Set();
+      intersections?.forEach(({ object }) => {
+        const key = object.userData?.hoverActivityKey;
+        if (key) next.add(key);
+      });
+      prev.forEach(key => {
+        if (!next.has(key)) setIslandAnimationActive(key, false);
+      });
+      next.forEach(key => {
+        if (!prev.has(key)) setIslandAnimationActive(key, true);
+      });
+      state.assetRefs.hoveredActivityKeys = next;
+    }
+
+
     const ISLAND_DIMENSIONS = {
       outerRadius: 0.9,
       longLeg: 6.6,
@@ -228,20 +1826,21 @@
       default: ({ THREE, options }) => {
         const dims = { ...ISLAND_DIMENSIONS, ...(options.dimensions || {}) };
         const { outerRadius, longLeg, shortLeg, notchDepth, notchWidth } = dims;
+        const flipX = value => -value;
         const shape = new THREE.Shape();
-        shape.moveTo(-shortLeg / 2 + notchWidth + outerRadius, -longLeg / 2);
-        shape.lineTo(shortLeg / 2 - outerRadius, -longLeg / 2);
-        shape.quadraticCurveTo(shortLeg / 2, -longLeg / 2, shortLeg / 2, -longLeg / 2 + outerRadius);
-        shape.lineTo(shortLeg / 2, longLeg / 2 - outerRadius);
-        shape.quadraticCurveTo(shortLeg / 2, longLeg / 2, shortLeg / 2 - outerRadius, longLeg / 2);
-        shape.lineTo(-shortLeg / 2 + outerRadius, longLeg / 2);
-        shape.quadraticCurveTo(-shortLeg / 2, longLeg / 2, -shortLeg / 2, longLeg / 2 - outerRadius);
-        shape.lineTo(-shortLeg / 2, -longLeg / 2 + notchDepth + outerRadius);
-        shape.quadraticCurveTo(-shortLeg / 2, -longLeg / 2 + notchDepth, -shortLeg / 2 + outerRadius, -longLeg / 2 + notchDepth);
-        shape.lineTo(-shortLeg / 2 + notchWidth - outerRadius, -longLeg / 2 + notchDepth);
-        shape.quadraticCurveTo(-shortLeg / 2 + notchWidth, -longLeg / 2 + notchDepth, -shortLeg / 2 + notchWidth, -longLeg / 2 + notchDepth - outerRadius);
-        shape.lineTo(-shortLeg / 2 + notchWidth, -longLeg / 2 + outerRadius);
-        shape.quadraticCurveTo(-shortLeg / 2 + notchWidth, -longLeg / 2, -shortLeg / 2 + notchWidth + outerRadius, -longLeg / 2);
+        shape.moveTo(flipX(-shortLeg / 2 + notchWidth + outerRadius), -longLeg / 2);
+        shape.lineTo(flipX(shortLeg / 2 - outerRadius), -longLeg / 2);
+        shape.quadraticCurveTo(flipX(shortLeg / 2), -longLeg / 2, flipX(shortLeg / 2), -longLeg / 2 + outerRadius);
+        shape.lineTo(flipX(shortLeg / 2), longLeg / 2 - outerRadius);
+        shape.quadraticCurveTo(flipX(shortLeg / 2), longLeg / 2, flipX(shortLeg / 2 - outerRadius), longLeg / 2);
+        shape.lineTo(flipX(-shortLeg / 2 + outerRadius), longLeg / 2);
+        shape.quadraticCurveTo(flipX(-shortLeg / 2), longLeg / 2, flipX(-shortLeg / 2), longLeg / 2 - outerRadius);
+        shape.lineTo(flipX(-shortLeg / 2), -longLeg / 2 + notchDepth + outerRadius);
+        shape.quadraticCurveTo(flipX(-shortLeg / 2), -longLeg / 2 + notchDepth, flipX(-shortLeg / 2 + outerRadius), -longLeg / 2 + notchDepth);
+        shape.lineTo(flipX(-shortLeg / 2 + notchWidth - outerRadius), -longLeg / 2 + notchDepth);
+        shape.quadraticCurveTo(flipX(-shortLeg / 2 + notchWidth), -longLeg / 2 + notchDepth, flipX(-shortLeg / 2 + notchWidth), -longLeg / 2 + notchDepth - outerRadius);
+        shape.lineTo(flipX(-shortLeg / 2 + notchWidth), -longLeg / 2 + outerRadius);
+        shape.quadraticCurveTo(flipX(-shortLeg / 2 + notchWidth), -longLeg / 2, flipX(-shortLeg / 2 + notchWidth + outerRadius), -longLeg / 2);
         shape.closePath();
         return shape;
       },
@@ -351,9 +1950,6 @@
       }
     };
 
-    const DEBUG_HELPERS_VISIBLE = true;
-    const labelCache = new Map();
-
     function hasWebGL() {
       try {
         const testCanvas = document.createElement('canvas');
@@ -366,6 +1962,7 @@
     function registerInteractive(mesh, meta = {}) {
       mesh.userData = { ...mesh.userData, ...meta };
       state.interactives.push(mesh);
+      return mesh;
     }
 
     function createDebugLabel(text, { color = '#c6daff' } = {}) {
@@ -551,7 +2148,8 @@
       scrollSpeed = [0, 0],
       cornerRadius = 0.45,
       noiseOffset = [50, 90],
-      noiseScale = 3.6
+      noiseScale = 3.6,
+      activityKey = null
     } = {}) {
       const { THREE } = state;
       const shared = state.sharedMaterials || (state.sharedMaterials = {});
@@ -681,22 +2279,38 @@
 
       if (Math.hypot(sampleSpeed.x, sampleSpeed.z) > 0) {
         let normalAccumulator = 0;
-        registerUpdater(({ delta = 0, elapsed = 0 }) => {
+        let lastAppliedOffset = null;
+        registerUpdater(({ delta = 0 }) => {
           if (!terrain.parent) return;
+          if (activityKey && !isIslandAnimationActive(activityKey)) return;
           const { target, current } = scrollState;
-          target.set(sampleSpeed.x * elapsed, sampleSpeed.z * elapsed);
+          const motionFactor = getLaunchMotionFactor();
+          if (motionFactor > 0) {
+            target.x += sampleSpeed.x * delta * motionFactor;
+            target.y += sampleSpeed.z * delta * motionFactor;
+          }
           const lambda = 2.2;
           current.x = THREE.MathUtils.damp(current.x, target.x, lambda, delta);
           current.y = THREE.MathUtils.damp(current.y, target.y, lambda, delta);
 
-          applyHeightField(current.x, current.y);
-          normalAccumulator += delta;
-          if (normalAccumulator >= 0.14) {
-            geometry.computeVertexNormals();
-            if (geometry.attributes.normal) {
-              geometry.attributes.normal.needsUpdate = true;
+          const changed = !lastAppliedOffset
+            || Math.abs(current.x - lastAppliedOffset.x) > 1e-5
+            || Math.abs(current.y - lastAppliedOffset.y) > 1e-5;
+
+          if (changed) {
+            applyHeightField(current.x, current.y);
+            if (!lastAppliedOffset) {
+              lastAppliedOffset = new THREE.Vector2();
             }
-            normalAccumulator = 0;
+            lastAppliedOffset.set(current.x, current.y);
+            normalAccumulator += delta;
+            if (normalAccumulator >= 0.14) {
+              geometry.computeVertexNormals();
+              if (geometry.attributes.normal) {
+                geometry.attributes.normal.needsUpdate = true;
+              }
+              normalAccumulator = 0;
+            }
           }
         });
       }
@@ -785,7 +2399,8 @@ function createVolumetricCloud({
   opacity = 0.25,
   steps = 80,
   seed = 42,
-  scrollSpeed = [0.006, 0.002, 0.008]
+  scrollSpeed = [0.006, 0.002, 0.008],
+  activityKey = null
 } = {}) {
   const { THREE, ImprovedNoise } = state;
   const supportsWebGL2 = state.renderer?.capabilities?.isWebGL2;
@@ -931,8 +2546,9 @@ function createVolumetricCloud({
         p += rayDir * delta;
       }
 
-      color = linearToSRGB(acc);
-      if (color.a == 0.0) discard;
+      float finalAlpha = clamp(acc.a * 1.6, 0.0, 1.0);
+      color = linearToSRGB(vec4(acc.rgb, finalAlpha));
+      if (finalAlpha <= 0.001) discard;
     }
   `;
 
@@ -953,10 +2569,13 @@ function createVolumetricCloud({
     fragmentShader,
     side: THREE.BackSide,
     transparent: true,
-    depthWrite: false
+    depthWrite: true,
+    depthTest: true,
+    blending: THREE.NormalBlending
   });
 
   const geometry = new THREE.BoxGeometry(1, 1, 1);
+  geometry.computeBoundingBox();
   const mesh = new THREE.Mesh(geometry, material);
   const [scaleX, scaleY, scaleZ] = dimensions;
   mesh.scale.set(scaleX, scaleY, scaleZ);
@@ -964,20 +2583,32 @@ function createVolumetricCloud({
   mesh.receiveShadow = false;
 
   const scrollVector = new THREE.Vector3(...scrollSpeed);
+  const accumulatedScroll = new THREE.Vector3();
+  const wrapScalar = value => {
+    const mod = value % 1;
+    return mod < 0 ? mod + 1 : mod;
+  };
 
-  registerUpdater(({ delta = 0, elapsed = 0 }) => {
+  registerUpdater(({ delta = 0 }) => {
     if (!mesh.parent) return;
+    if (activityKey && !isIslandAnimationActive(activityKey)) return;
     material.uniforms.cameraPos.value.copy(state.camera.position);
-    material.uniforms.frame.value += 1;
+    const motionFactor = getLaunchMotionFactor();
+    material.uniforms.frame.value += motionFactor;
+    if (motionFactor > 0) {
+      accumulatedScroll.addScaledVector(scrollVector, delta * motionFactor);
+    }
     const scroll = material.uniforms.scroll.value;
-    scroll.copy(scrollVector).multiplyScalar(elapsed);
-    scroll.x -= Math.floor(scroll.x);
-    scroll.y -= Math.floor(scroll.y);
-    scroll.z -= Math.floor(scroll.z);
+    scroll.set(
+      wrapScalar(accumulatedScroll.x),
+      wrapScalar(accumulatedScroll.y),
+      wrapScalar(accumulatedScroll.z)
+    );
   });
 
   return mesh;
 }
+
 
     function applyLineOpacity(material, opacity) {
       const materials = Array.isArray(material) ? material : [material];
@@ -1427,7 +3058,7 @@ function createVolumetricCloud({
 
       const neonPanel = new THREE.Mesh(
         new THREE.PlaneGeometry(2.5, 1.18),
-        new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, emissive: 0x9ca8ff, emissiveIntensity: 0.24 })
+        new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0.08, emissive: 0x9ca8ff, emissiveIntensity: 1 })
       );
       neonPanel.position.set(0.72, 1.18, 0.2);
       neonPanel.castShadow = false;
@@ -1554,6 +3185,54 @@ function createVolumetricCloud({
       return new THREE.Points(starGeometry, starMaterial);
     }
 
+    function addIslandSpotlight(islandData, options = {}) {
+      const { THREE, stage } = state;
+      if (!THREE || !stage || !islandData?.group) return null;
+
+      const {
+        offset = new THREE.Vector3(3, 6, 3),
+        color = 0xffffff,
+        intensity = ISLAND_SPOTLIGHT_INTENSITY,
+        distance = 24,
+        angle = Math.PI / 6,
+        penumbra = 0.45,
+        decay = 2
+      } = options;
+
+      const light = new THREE.SpotLight(color, intensity, distance, angle, penumbra, decay);
+      light.name = `Spot_${islandData.id}`;
+      light.castShadow = false;
+
+      const target = new THREE.Object3D();
+      target.name = `SpotTarget_${islandData.id}`;
+      target.position.copy(islandData.group.position);
+      stage.add(target);
+
+      const offsetWorld = offset.clone();
+      offsetWorld.applyEuler(islandData.group.rotation);
+      light.position.copy(islandData.group.position).add(offsetWorld);
+      light.target = target;
+      stage.add(light);
+
+      if (!state.assetRefs.islandSpotlights) {
+        state.assetRefs.islandSpotlights = {};
+      }
+      state.assetRefs.islandSpotlights[islandData.id] = { light, target };
+      return light;
+    }
+
+    function initSky() {
+      const { THREE, renderer, scene, camera } = state;
+      if (!THREE || !renderer || !scene || !camera) return;
+
+      const sky = new Sky();
+      sky.scale.setScalar(camera.far * 0.9);
+      scene.add(sky);
+      state.assetRefs.sky = sky;
+      state.assetRefs.sunBase = new THREE.Vector3();
+      setSkyPreset('sunset');
+    }
+
     function easeInOut(t) {
       return t * t * (3 - 2 * t);
     }
@@ -1568,7 +3247,7 @@ function createVolumetricCloud({
 
     function resizeRenderer() {
       const { renderer, camera } = state;
-      const pixelRatio = Math.min(window.devicePixelRatio, 2);
+      const pixelRatio = 1//Math.min(window.devicePixelRatio, 2);
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       if (canvas.width !== Math.floor(width * pixelRatio) || canvas.height !== Math.floor(height * pixelRatio)) {
@@ -1581,22 +3260,43 @@ function createVolumetricCloud({
 
     function resetHoveredInteractive() {
       if (!state.hovered) return;
-      state.hovered.material.emissiveIntensity = state.hovered.userData.baseEmissive ?? state.hovered.material.emissiveIntensity;
-      if (state.hovered.userData.glowEdge) {
-        state.hovered.userData.glowEdge.material.opacity = 0.25;
+      const hovered = state.hovered;
+      if (hovered.userData?.onLeave) {
+        hovered.userData.onLeave(hovered, state.assetRefs?.lastPointerHit || null);
+      }
+      const material = Array.isArray(hovered.material) ? hovered.material[0] : hovered.material;
+      if (material?.emissive) {
+        material.emissiveIntensity = hovered.userData.baseEmissive ?? material.emissiveIntensity;
+      }
+      if (hovered.userData.glowEdge) {
+        hovered.userData.glowEdge.material.opacity = 0.25;
       }
       state.hovered = null;
     }
 
-    function setHoveredInteractive(mesh) {
-      if (state.hovered === mesh) return;
-      resetHoveredInteractive();
-      if (mesh) {
-        state.hovered = mesh;
-        state.hovered.material.emissiveIntensity = (state.hovered.userData.baseEmissive ?? 0) + 0.25;
-        if (state.hovered.userData.glowEdge) {
-          state.hovered.userData.glowEdge.material.opacity = 0.4;
+    function setHoveredInteractive(mesh, hitInfo = null) {
+      if (state.hovered === mesh) {
+        if (mesh?.userData?.onPointerMove && hitInfo) {
+          mesh.userData.onPointerMove(mesh, hitInfo);
         }
+        return;
+      }
+      resetHoveredInteractive();
+      if (!mesh) return;
+      state.hovered = mesh;
+      if (mesh.userData?.onHover) {
+        mesh.userData.onHover(mesh, hitInfo);
+      }
+      const material = Array.isArray(mesh.material) ? mesh.material[0] : mesh.material;
+      if (material?.emissive) {
+        mesh.userData.baseEmissive = mesh.userData.baseEmissive ?? material.emissiveIntensity ?? 0;
+        material.emissiveIntensity = (mesh.userData.baseEmissive ?? 0) + 0.25;
+      }
+      if (mesh.userData.glowEdge) {
+        mesh.userData.glowEdge.material.opacity = 0.4;
+      }
+      if (mesh.userData?.onPointerMove && hitInfo) {
+        mesh.userData.onPointerMove(mesh, hitInfo);
       }
     }
 
@@ -1609,9 +3309,18 @@ function createVolumetricCloud({
         const THREE = await import('three');
         state.THREE = THREE;
         const { GLTFLoader } = await import('three/addons/loaders/GLTFLoader.js');
+        const { DRACOLoader } = await import('three/addons/loaders/DRACOLoader.js');
+        const { KTX2Loader } = await import('three/addons/loaders/KTX2Loader.js');
         const { ImprovedNoise } = await import('three/addons/math/ImprovedNoise.js');
         state.ImprovedNoise = ImprovedNoise;
         const gltfLoader = new GLTFLoader();
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+        dracoLoader.preload();
+        gltfLoader.setDRACOLoader(dracoLoader);
+        const ktx2Loader = new KTX2Loader();
+        ktx2Loader.setTranscoderPath('https://unpkg.com/three@0.156.1/examples/jsm/libs/basis/');
+        gltfLoader.setKTX2Loader(ktx2Loader);
 
         if (projectsSection) {
           projectsSection.style.opacity = '0';
@@ -1627,6 +3336,10 @@ function createVolumetricCloud({
         state.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         state.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         state.renderer.outputColorSpace = THREE.SRGBColorSpace;
+        state.renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        state.renderer.toneMappingExposure = 0.5;
+
+        ktx2Loader.detectSupport(state.renderer);
 
         state.scene = new THREE.Scene();
         state.scene.fog = new THREE.Fog(0x070e1f, 14, 48);
@@ -1634,6 +3347,12 @@ function createVolumetricCloud({
         state.camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 120);
         state.camera.position.set(0, 5, 9.8);
         state.camera.rotation.x = (-20 * Math.PI) / 180;
+        state.assetRefs.cameraHome = {
+          position: state.camera.position.clone(),
+          quaternion: state.camera.quaternion.clone()
+        };
+        ensureCameraAnimator();
+        initSky();
 
         const ambient = new THREE.AmbientLight(0xe7f2ff, 0.55);
         const keyLight = new THREE.DirectionalLight(0xfff3d1, 1.9);
@@ -1708,29 +3427,68 @@ function createVolumetricCloud({
           id: 'primary',
           position: [0, 0, 1],
           rotation: [0, THREE.MathUtils.degToRad(-70), 0],
-          scale: [-1,2,1],
+          scale: [1, 1, 1],
           
           footprint: {
             variant: 'default',
             dimensions: { longLeg: 6.6, shortLeg: 4.7, notchDepth: 2.3, notchWidth: 2.4 }
-          },
-          anchors: {
-            frontWall: {
-              position: [4.1, -0.2, -1.7],
-              rotation: [0, THREE.MathUtils.degToRad(10), 0]
-            }
           }
         });
         primaryIsland.platform.scale.set(1.5,1,1.6);
+        addIslandSpotlight(primaryIsland, { offset: new THREE.Vector3(2.8, 6.2, 2.6) });
 
-        const resumeWall = createResumeWall(primaryIsland.anchors.frontWall);
-        resumeWall.scale.set(1.3, 0.7, 1.2);
+        const heatParams = generateHeatParams();
+        const { U: heatU, meta: heatMeta } = solveHeatEquation(heatParams, 64, 128);
+        const heatWall = createHeatWallMesh(
+          heatU,
+          { ...heatParams, ...heatMeta },
+          {
+            THREE,
+            width: 5.2,
+            height: 2.4,
+            scaleZ: 0.7,
+            thickness: 0.14,
+            slitCount: 6,
+            slitWidth: 0.22,
+            colorLow: 0x2b52ff,
+            colorHigh: 0xff2a2a,
+            name: 'HeatWall'
+          }
+        );
+        heatWall.position.set(-2.1, 0.3, -0.6);
+        heatWall.rotation.y = Math.PI / 2;
+        primaryIsland.group.add(heatWall);
+        state.assetRefs.heatWall = heatWall;
+        state.assetRefs.heatWallMeta = heatMeta;
 
-        const blankWallAnchor = primaryIsland.createAnchor('blankWall', { position: [0, 0, 0] });
-        const blankWall = createBlankWall(blankWallAnchor);
-        blankWall.scale.set(1.1, 0.64, 1);
-        primaryIsland.setAnchorGlobalPosition('blankWall', [1, -0.02, -3]);
-
+        const crtAnchor = primaryIsland.createAnchor('crt', { position: [0, 0, 0] });
+        gltfLoader.load(
+          '/models/CRTTV.glb',
+            gltf => {
+              const THREERef = state.THREE;
+              const crt = gltf.scene;
+              crt.traverse(node => {
+                if (!node.isMesh) return;
+                node.castShadow = true;
+                node.receiveShadow = true;
+              });
+              const baseScale = 2;
+              crt.scale.set(baseScale, baseScale, baseScale);
+              crt.position.set(0, 0, 0);
+              const crtPivot = new THREERef.Object3D();
+              crtPivot.name = 'CRT_Pivot';
+              crtPivot.position.set(0, 0.1, 0);
+              crtAnchor.add(crtPivot);
+              crtPivot.add(crt);
+              crt.rotation.set(0, THREE.MathUtils.degToRad(90), 0);
+              primaryIsland.setAnchorGlobalPosition('crt', [2, 1, 0]);
+              ensureAnchorMarker(crtAnchor);
+              state.assetRefs.crtGroup = crtPivot;
+              state.assetRefs.crtMesh = crt;
+          },
+          undefined,
+          error => console.error('Failed to load CRTTV.glb', error)
+        );
 
         const westIsland = createIsland({
           id: 'west',
@@ -1742,30 +3500,427 @@ function createVolumetricCloud({
             dimensions: { topWidth: 4.6, bottomWidth: 7.2, depth: 5.4, corner: 0.7 }
           }
         });
+        addIslandSpotlight(westIsland, { offset: new THREE.Vector3(-2.6, 5.4, 2.2) });
+        gltfLoader.load(
+          '/models/droneIslandCOMPLETE.glb',
+          gltf => {
+            const droneIsland = gltf.scene;
+            droneIsland.name = 'DroneIslandComplete';
+            droneIsland.traverse(node => {
+              if (!node.isMesh) return;
+              node.castShadow = true;
+              node.receiveShadow = true;
+              if (node.material?.clone) {
+                node.material = node.material.clone();
+              }
+            });
+
+            const topSurface = droneIsland.getObjectByName('Island_Top_Surface')
+              || droneIsland.getObjectByName('Top');
+            const topBounds = new THREE.Box3().setFromObject(topSurface || droneIsland);
+            const topCenter = topBounds.getCenter(new THREE.Vector3());
+            const topMaxY = topBounds.max.y;
+            const overallBounds = new THREE.Box3().setFromObject(droneIsland);
+            const overallCenter = overallBounds.getCenter(new THREE.Vector3());
+            const center = topSurface ? topCenter : overallCenter;
+            // Align the "Top" mesh surface to local Y=0 so island anchors sit on it.
+            droneIsland.position.set(-center.x, -topMaxY, -center.z);
+            droneIsland.rotation.set(0, 0, 0);
+            droneIsland.scale.set(1, 1, 1);
+
+            if (westIsland.platform) {
+              westIsland.group.remove(westIsland.platform);
+              westIsland.platform = null;
+              westIsland.baseMesh = null;
+            }
+
+            westIsland.group.add(droneIsland);
+            state.assetRefs.droneIsland = droneIsland;
+
+            const batteryRoot = droneIsland.getObjectByName('Battery')
+              || droneIsland.getObjectByName('battery')
+              || droneIsland.getObjectByName('BatteryIndicator')
+              || droneIsland.getObjectByName('batteryLabeled')
+              || droneIsland.getObjectByName('BatteryLabeled');
+            if (batteryRoot) {
+              setupBatteryCells(batteryRoot);
+              state.assetRefs.battery = batteryRoot;
+            } else {
+              setupBatteryCells(droneIsland);
+              state.assetRefs.battery = droneIsland;
+            }
+
+            const dynamoLookup = (name, fallback = null) =>
+              droneIsland.getObjectByName(name) || (fallback ? droneIsland.getObjectByName(fallback) : null);
+
+            const dynamoParts = [
+              { key: 'crank', object: dynamoLookup('Dynamo_Crank', 'handcrank'), direction: 1 },
+              { key: 'gear', object: dynamoLookup('Dynamo_BigGear', 'bigGear'), direction: 1 },
+              { key: 'plate', object: dynamoLookup('Dynamo_MagnetPlate', 'magnetplate'), direction: 1 },
+              { key: 'blueMagnets', object: dynamoLookup('Dynamo_BlueMagnets', 'bluemagnets'), direction: 1 },
+              { key: 'redMagnets', object: dynamoLookup('Dynamo_RedMagnets', 'redmagnets'), direction: 1 }
+            ].filter(entry => entry.object);
+
+            const dynamoSpin = {
+              active: false,
+              velocity: 0,
+              boost: 8.0,
+              maxVelocity: 16,
+              damping: 1.2,
+              chargeRateCellsPerSec: 4.2,
+              parts: dynamoParts.map(entry => ({
+                key: entry.key,
+                object: entry.object,
+                direction: entry.direction
+              }))
+            };
+
+            const propellerTarget = droneIsland.getObjectByName('Ml4_Propeller_and_Cap')
+              || droneIsland.getObjectByName('Mk4_Propeller_and_Cap')
+              || droneIsland.getObjectByName('propellers')
+              || droneIsland.getObjectByName('Propellers');
+            const propSpin = {
+              state: 'idle',
+              velocity: 0,
+              boost: 10,
+              maxVelocity: 124,
+              damping: 2.2,
+              drainRateCellsPerSec: 5.5,
+              object: propellerTarget
+            };
+
+            const triggerDynamoSpin = () => {
+              if (!dynamoSpin.parts.length) return;
+              dynamoSpin.active = true;
+              dynamoSpin.velocity = Math.min(
+                dynamoSpin.maxVelocity,
+                dynamoSpin.velocity + dynamoSpin.boost
+              );
+            };
+
+            dynamoParts.forEach(entry => {
+              registerInteractive(entry.object, { onClick: triggerDynamoSpin });
+            });
+
+            const updateDynamoSpin = ({ delta = 0 }) => {
+              if (!dynamoSpin.active) return;
+              if (dynamoSpin.velocity <= 0.0001) {
+                dynamoSpin.velocity = 0;
+                dynamoSpin.active = false;
+                return;
+              }
+              const angle = dynamoSpin.velocity * delta;
+              dynamoSpin.parts.forEach(part => {
+                part.object.rotation.z += part.direction * angle;
+              });
+              dynamoSpin.velocity *= Math.exp(-dynamoSpin.damping * delta);
+
+              const battery = state.modules?.Battery;
+              if (battery?.addDelta && dynamoSpin.velocity > 0) {
+                const cellCount = state.assetRefs.batteryCells?.length || 22;
+                const ratePerSec = dynamoSpin.chargeRateCellsPerSec / Math.max(cellCount, 1);
+                const normalizedSpeed = Math.min(dynamoSpin.velocity / Math.max(dynamoSpin.maxVelocity, 1e-6), 1);
+                const deltaCharge = ratePerSec * (normalizedSpeed) * delta;
+                if (deltaCharge > 0) {
+                  battery.addDelta(deltaCharge);
+                }
+              }
+            };
+
+            const updatePropSpin = ({ delta = 0 }) => {
+              if (!propSpin.object) return;
+              const battery = state.modules?.Battery;
+              const cellCount = state.assetRefs.batteryCells?.length || 22;
+              const currentCharge = Number.isFinite(state.assetRefs.batteryCharge?.current)
+                ? state.assetRefs.batteryCharge.current
+                : (battery?.getCharge ? battery.getCharge() : (state.assetRefs.batteryCharge?.target ?? 0));
+              const fullCharge = currentCharge >= 0.999;
+              const emptyCharge = currentCharge <= 0.001;
+
+              if (propSpin.state !== 'spinning' && fullCharge) {
+                propSpin.state = 'spinning';
+              }
+
+              if (propSpin.state === 'spinning' && emptyCharge) {
+                propSpin.state = 'cooldown';
+              }
+
+              if (propSpin.state === 'spinning') {
+                if (propSpin.velocity < propSpin.maxVelocity) {
+                  propSpin.velocity = Math.min(
+                    propSpin.maxVelocity,
+                    propSpin.velocity + propSpin.boost * delta
+                  );
+                }
+              } else {
+                propSpin.velocity *= Math.exp(-propSpin.damping * delta);
+                if (propSpin.velocity < 0.0001) {
+                  propSpin.velocity = 0;
+                }
+              }
+
+              if (propSpin.velocity > 0) {
+                propSpin.object.rotation.z += propSpin.velocity * delta;
+              }
+
+              if (propSpin.state === 'spinning' && battery?.addDelta && cellCount) {
+                const drainRate = propSpin.drainRateCellsPerSec / Math.max(cellCount, 1);
+                const normalizedSpeed = Math.min(propSpin.velocity / Math.max(propSpin.maxVelocity, 1e-6), 1);
+                const deltaDrain = drainRate * normalizedSpeed * delta;
+                if (deltaDrain > 0) {
+                  battery.addDelta(-deltaDrain);
+                }
+              }
+            };
+            updatePropSpin.__tag = 'PropSpin';
+            registerUpdater(updatePropSpin);
+            updateDynamoSpin.__tag = 'DynamoSpin';
+            registerUpdater(updateDynamoSpin);
+            state.assetRefs.dynamoSpin = dynamoSpin;
+            state.assetRefs.propSpin = propSpin;
+          },
+          undefined,
+          error => console.error('Failed to load droneIslandCOMPLETE.glb', error)
+        );
+
+        function updatePerfOverlay() {
+          if (!perfOverlay) return;
+          const info = state.renderer?.info || renderer.info;
+          const draws = info.render.calls;
+          const tris = info.render.triangles;
+          perfOverlay.textContent = `draws: ${draws}
+tris: ${tris.toLocaleString()}`;
+        }
+
+        function updateProfilerOverlay(now) {
+          if (!updaterProfiler.enabled) return;
+          if (!profilerOverlay) return;
+          const elapsed = now - updaterProfiler.lastSampleMs;
+          if (elapsed < updaterProfiler.sampleIntervalMs) return;
+          updaterProfiler.lastSampleMs = now;
+
+          const rows = [];
+          updaterProfiler.entries.forEach(entry => {
+            if (entry.count === 0) return;
+            const avg = entry.total / entry.count;
+            rows.push({ name: entry.name, avg, max: entry.max });
+            entry.total = 0;
+            entry.count = 0;
+            entry.max = 0;
+          });
+          rows.sort((a, b) => b.avg - a.avg);
+          const top = rows.slice(0, 6);
+          if (!top.length) {
+            profilerOverlay.textContent = 'updaters: (idle)';
+            return;
+          }
+          const lines = [
+            'updater ms (avg / max):',
+            ...top.map(entry => `${entry.name}: ${entry.avg.toFixed(2)} / ${entry.max.toFixed(2)}`)
+          ];
+          profilerOverlay.textContent = lines.join('\n');
+          if (updaterProfiler.logToConsole) {
+            console.log('[profiler]', lines.join(' | '));
+          }
+        }
+
         const northIsland = createIsland({
           id: 'north',
-          position: [1, 0, 6],
-          rotation: [0, THREE.MathUtils.degToRad(180), 0],
-          scale: 0.66,
+          position: [2, 0, 8],
+          rotation: [0, THREE.MathUtils.degToRad(-45), 0],
+          scale: 1.0,
           footprint: {
-            variant: 'semiCircle',
-            dimensions: { radius: 3.4, thickness: 2.4, corner: 0.6 }
+            variant: 'roundedRect',
+            dimensions: { width: 7.0, depth: 4.2, radius: 0.75 }
           }
         });
+        addIslandSpotlight(northIsland, { offset: new THREE.Vector3(2.2, 6.4, -2.4) });
+        const northHoverProxy = new THREE.Mesh(
+          new THREE.BoxGeometry(4.4, 2.4, 4.4),
+          new THREE.MeshBasicMaterial({
+            color: DEBUG_HELPERS_VISIBLE ? 0xffcc66 : 0xffffff,
+            transparent: true,
+            opacity: DEBUG_HELPERS_VISIBLE ? 0.32 : 0,
+            depthWrite: false,
+            depthTest: false,
+            wireframe: DEBUG_HELPERS_VISIBLE
+          })
+        );
+        northHoverProxy.name = 'NorthIslandHoverProxy';
+        northHoverProxy.position.set(0, 1.2, 0);
+        setIslandAnimationActive('island:north', false);
+        registerInteractive(northHoverProxy, {
+          hoverActivityKey: 'island:north',
+          pointerPassthrough: true
+        });
+
+        // Replace the default north island base with the imported platform mesh.
+        gltfLoader.load(
+          '/models/platformNorth.glb',
+          gltf => {
+            const platform = gltf.scene;
+            platform.name = 'PlatformNorthBase';
+            platform.traverse(node => {
+              if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+                // Make the base matte black; skip the button meshes so they keep their colors.
+                if (!['TopButton', 'middleButton', 'BottomButton'].includes(node.name)) {
+                  node.material = node.material.clone();
+                  node.material.color.setHex(0x0b0b0b);
+                  // Subtle metallic sheen.
+                  if ('metalness' in node.material) node.material.metalness = 0.35;
+                  if ('roughness' in node.material) node.material.roughness = 0.45;
+                  if (node.material.emissive) node.material.emissive.setHex(0x000000);
+                  node.material.toneMapped = false;
+                }
+              }
+            });
+            // Position it on the deck; adjust as needed.
+            platform.position.set(0.5, 0.15, 0.35);
+            platform.rotation.set(0, 0, 0);
+            platform.scale.set(1, 1, 1);
+
+            // Use the Mesh_0.001 as the primary platform if present.
+            const mainMesh = platform.getObjectByName('Mesh_0.001');
+            if (mainMesh) {
+              mainMesh.castShadow = true;
+              mainMesh.receiveShadow = true;
+              mainMesh.name = 'PlatformNorthBase';
+            }
+
+            // Remove the procedurally generated base to avoid duplicate meshes.
+            if (northIsland.platform) {
+              northIsland.group.remove(northIsland.platform);
+              northIsland.platform = null;
+              northIsland.baseMesh = null;
+            }
+            // Also remove any existing mesh named Mesh_0.001 under northIsland.
+            const dup = northIsland.group.getObjectByName('Mesh_0.001');
+            if (dup && dup !== platform && !platform.isDescendantOf?.(dup)) {
+              dup.parent?.remove(dup);
+            }
+
+            // Give side lights a warm emissive glow.
+            ['leftLight', 'rightLight'].forEach(lightName => {
+              const lightMesh = platform.getObjectByName(lightName);
+              if (lightMesh?.material) {
+                lightMesh.material = lightMesh.material.clone();
+                const warm = 0xffc04d;
+                lightMesh.material.color.setHex(warm);
+                if (lightMesh.material.emissive) {
+                  lightMesh.material.emissive.setHex(warm);
+                  lightMesh.material.emissiveIntensity = 1.4;
+                }
+                lightMesh.material.toneMapped = false;
+              }
+            });
+
+            northIsland.group.add(platform);
+          },
+          undefined,
+          err => console.error('Failed to load platformNorth.glb', err)
+        );
+        if (DEBUG_HELPERS_VISIBLE) {
+          const northHoverEdges = new THREE.LineSegments(
+            new THREE.EdgesGeometry(northHoverProxy.geometry.clone()),
+            new THREE.LineBasicMaterial({
+              color: 0xfff09a,
+              transparent: true,
+              opacity: 0.9,
+              depthTest: false,
+              depthWrite: false
+            })
+          );
+          northHoverEdges.renderOrder = 200;
+          northHoverEdges.frustumCulled = false;
+          northHoverProxy.add(northHoverEdges);
+        }
+        northIsland.platform.add(northHoverProxy);
+        const varaAnchor = northIsland.createAnchor('vara', { position: [0, 0, 0] });
+        gltfLoader.load(
+          '/models/vara.glb',
+          gltf => {
+            const THREERef = state.THREE;
+            const vara = gltf.scene;
+            vara.traverse(node => {
+              if (!node.isMesh) return;
+              node.castShadow = true;
+              node.receiveShadow = true;
+            });
+            const scale = 4.0;
+            vara.scale.set(scale, scale, scale);
+            vara.rotation.set(0, THREERef.MathUtils.degToRad(-90), 0);
+            vara.position.set(0, 0, 0);
+            varaAnchor.add(vara);
+            ensureAnchorMarker(varaAnchor);
+            northIsland.setAnchorGlobalPosition('vara', [1.2, 0.6, 6.8]);
+            if (state.assetRefs.varaAxes) {
+              state.assetRefs.varaAxes.parent?.remove(state.assetRefs.varaAxes);
+              state.assetRefs.varaAxes = null;
+            }
+            if (DEBUG_HELPERS_VISIBLE) {
+              const axesHelper = new THREERef.AxesHelper(0.6);
+              axesHelper.name = 'VaraReferenceAxes';
+              axesHelper.position.set(0, 0, 0);
+              vara.add(axesHelper);
+              state.assetRefs.varaAxes = axesHelper;
+            }
+
+            state.assetRefs.vara = vara;
+          },
+          undefined,
+          error => console.error('Failed to load vara.glb', error)
+        );
 
         const eastIsland = createIsland({
           id: 'east',
-          position: [-5, 0, 5],
-          rotation: [0, THREE.MathUtils.degToRad(40), 0],
+          position: [-8, 0, 5],
+          rotation: [0, THREE.MathUtils.degToRad(50), 0],
           scale: 0.8,
           footprint: {
             variant: 'roundedRect',
             dimensions: { width: 4.4, depth: 9.6, radius: 0.6 }
           }
         });
+        addIslandSpotlight(eastIsland, { offset: new THREE.Vector3(-2.8, 5.8, 2.8) });
         if (eastIsland.platform) {
           eastIsland.platform.clear();
         }
+        const eastHoverProxy = new THREE.Mesh(
+          new THREE.BoxGeometry(6.4, 2.6, 9.4),
+          new THREE.MeshBasicMaterial({
+            color: DEBUG_HELPERS_VISIBLE ? 0x66ffcc : 0xffffff,
+            transparent: true,
+            opacity: DEBUG_HELPERS_VISIBLE ? 0.32 : 0,
+            depthWrite: false,
+            depthTest: false,
+            wireframe: DEBUG_HELPERS_VISIBLE
+          })
+        );
+        eastHoverProxy.name = 'EastIslandHoverProxy';
+        eastHoverProxy.position.set(0, 1.1, 0);
+        setIslandAnimationActive('island:east', false);
+        registerInteractive(eastHoverProxy, {
+          hoverActivityKey: 'island:east',
+          pointerPassthrough: true
+        });
+        if (DEBUG_HELPERS_VISIBLE) {
+          const eastHoverEdges = new THREE.LineSegments(
+            new THREE.EdgesGeometry(eastHoverProxy.geometry.clone()),
+            new THREE.LineBasicMaterial({
+              color: 0x9afff0,
+              transparent: true,
+              opacity: 0.9,
+              depthTest: false,
+              depthWrite: false
+            })
+          );
+          eastHoverEdges.renderOrder = 200;
+          eastHoverEdges.frustumCulled = false;
+          eastHoverProxy.add(eastHoverEdges);
+        }
+        eastIsland.platform.add(eastHoverProxy);
 
         const eastTerrainAnchor = eastIsland.createAnchor('terrain', { position: [0, 0, 0] });
         const eastTerrain = createTerrainMesh({
@@ -1779,11 +3934,19 @@ function createVolumetricCloud({
           sideColor: 0x04101d,
           highlightBias: 0.54,
           cornerRadius: 0.9,
-          scrollSpeed: [0, 0.4]
+          scrollSpeed: [0, 0.4],
+          activityKey: 'island:east'
         });
         eastTerrainAnchor.add(eastTerrain);
         ensureAnchorMarker(eastTerrainAnchor);
-        eastIsland.setAnchorGlobalPosition('terrain', [-4, 0, 5.2]);
+        const eastBasePos = new THREE.Vector3().copy(eastIsland.position);
+        const eastOffsets = {
+          terrain: new THREE.Vector3(3, 0, 0.2),
+          clouds: new THREE.Vector3(3, 1.7, 0.2),
+          aim120: new THREE.Vector3(3, 0.42, -1.4),
+          qf01: new THREE.Vector3(3, 1.2, 0)
+        };
+        eastIsland.setAnchorGlobalPosition('terrain', eastBasePos.clone().add(eastOffsets.terrain));
 
         const eastCloudAnchor = eastIsland.createAnchor('clouds', { position: [0, 0, 0] });
         const eastClouds = createVolumetricCloud({
@@ -1794,12 +3957,13 @@ function createVolumetricCloud({
           opacity: 0.26,
           steps: 110,
           seed: 73,
-          scrollSpeed: [0, 0, 0.2]
+          scrollSpeed: [0, 0, 0.2],
+          activityKey: 'island:east'
         });
         eastClouds.position.set(0, 1.2, 0.4);
         eastCloudAnchor.add(eastClouds);
         ensureAnchorMarker(eastCloudAnchor);
-        eastIsland.setAnchorGlobalPosition('clouds', [-4, 1.7, 5.2]);
+        eastIsland.setAnchorGlobalPosition('clouds', eastBasePos.clone().add(eastOffsets.clouds));
 
         const aim120Anchor = eastIsland.createAnchor('aim120', { position: [0, 0, 0] });
         gltfLoader.load(
@@ -1812,12 +3976,27 @@ function createVolumetricCloud({
                 node.receiveShadow = true;
               }
             });
-            aim120.scale.set(1.5, 1.5, 1);
+            aim120.name = 'Aim120_Right';
+            state.assetRefs.aim120Right = aim120;
+            state.assetRefs.aim120 = aim120;
 
-            aim120.rotation.set(THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0));
-            aim120Anchor.add(aim120);
-            ensureAnchorMarker(aim120Anchor);
-            eastIsland.setAnchorGlobalPosition('aim120', [-4, 0.42, 3.6]);
+            const aim120Mirror = aim120.clone(true);
+            aim120Mirror.name = 'Aim120_Left';
+            aim120Mirror.traverse(node => {
+              if (node.isMesh && node.material && node.material.clone) {
+                node.material = node.material.clone();
+                node.castShadow = true;
+                node.receiveShadow = true;
+              }
+            });
+            state.assetRefs.aim120Left = aim120Mirror;
+
+            Aim120.prepareFragments(aim120);
+
+              ensureAnchorMarker(aim120Anchor);
+            eastIsland.setAnchorGlobalPosition('aim120', eastBasePos.clone().add(eastOffsets.aim120));
+
+            Aim120.attachToJet();
           },
           undefined,
           error => console.error('Failed to load Aim120.glb', error)
@@ -1825,39 +4004,205 @@ function createVolumetricCloud({
 
         const qf01Anchor = eastIsland.createAnchor('qf01', { position: [0, 0, 0] });
         gltfLoader.load(
-          '/models/qf01pCOpenable.glb',
+          '/models/qf01full.glb',
           gltf => {
             const qf01 = gltf.scene;
+            const { THREE } = state;
             qf01.traverse(node => {
               if (!node.isMesh) return;
               node.castShadow = true;
               node.receiveShadow = true;
-
             });
-            qf01.scale.set(0.32, 0.32, 0.32);
+
+            qf01.scale.set(jetscale, jetscale, jetscale);
             qf01.rotation.set(0, THREE.MathUtils.degToRad(0), 0);
             qf01Anchor.add(qf01);
-            ensureAnchorMarker(qf01Anchor);
-            eastIsland.setAnchorGlobalPosition('qf01', [-4, 1.2, 5]);
+              ensureAnchorMarker(qf01Anchor);
+            eastIsland.setAnchorGlobalPosition('qf01', eastBasePos.clone().add(eastOffsets.qf01));
+            eastIsland.setAnchorGlobalPosition('aim120', eastBasePos.clone().add(eastOffsets.aim120));
 
-            const baseY = qf01.position.y;
+            const qf01AnchorMarker = qf01Anchor.children.find(child => child.name && child.name.startsWith('AnchorMarker_'));
+            if (qf01AnchorMarker) {
+              qf01AnchorMarker.visible = false;
+              state.assetRefs.qf01AnchorMarker = qf01AnchorMarker;
+            }
+
+            state.assetRefs.qf01 = qf01;
+
+            const hoverBounds = new THREE.Box3().setFromObject(qf01);
+            const hoverSize = hoverBounds.getSize(new THREE.Vector3());
+            const hoverCenter = hoverBounds.getCenter(new THREE.Vector3());
+            qf01.worldToLocal(hoverCenter);
+            const hoverRadius = Math.max(Math.max(hoverSize.x, hoverSize.y, hoverSize.z) * 0.45, 1.2);
+            const hoverTarget = new THREE.Mesh(
+              new THREE.SphereGeometry(hoverRadius, 16, 16),
+              new THREE.MeshStandardMaterial({ color: 0xffffff, transparent: true, opacity: 0 })
+            );
+            hoverTarget.name = 'QF01HoverTarget';
+            hoverTarget.renderOrder = -5;
+            hoverTarget.position.copy(hoverCenter);
+            hoverTarget.userData.baseEmissive = 0;
+            hoverTarget.material.depthWrite = false;
+            hoverTarget.material.depthTest = false;
+            hoverTarget.material.colorWrite = false;
+            qf01.add(hoverTarget);
+            registerInteractive(hoverTarget, {
+              baseEmissive: 0,
+              hoverActivityKey: 'island:east'
+            });
+            state.assetRefs.qf01HoverTarget = hoverTarget;
+
+            Aim120.attachToJet();
+
+            const basePosition = qf01.position.clone();
             const baseRotation = qf01.rotation.clone();
-            registerUpdater(({ elapsed = 0 }) => {
+            state.assetRefs.qf01BasePose = { position: basePosition, rotation: baseRotation };
+            let pausedPose = null;
+            let qf01LocalTime = 0;
+            registerUpdater(({ delta = 0, elapsed = 0 }) => {
               if (!qf01.parent) return;
-              const bob = Math.sin(elapsed * 1.6) * 0.08;
-              const roll = Math.sin(elapsed * 1.2) * THREE.MathUtils.degToRad(6);
-              qf01.position.y = baseY + bob;
-              qf01.rotation.set(
-                baseRotation.x + Math.sin(elapsed * 1.4) * THREE.MathUtils.degToRad(4),
-                baseRotation.y,
-                baseRotation.z + roll
-              );
+              const isActive = isIslandAnimationActive('island:east');
+              if (!isActive) {
+                if (!pausedPose) {
+                  pausedPose = {
+                    position: qf01.position.clone(),
+                    quaternion: qf01.quaternion.clone()
+                  };
+                } else {
+                  qf01.position.copy(pausedPose.position);
+                  qf01.quaternion.copy(pausedPose.quaternion);
+                  qf01.rotation.setFromQuaternion(pausedPose.quaternion);
+                }
+                return;
+              } else {
+                pausedPose = null;
+              }
+              qf01LocalTime += delta;
+              const animTime = qf01LocalTime;
+              const pending = state.qf01PitchPending;
+              if (pending) {
+                pending.timer += delta;
+                if (pending.timer >= pending.delay) {
+                  state.qf01PitchPending = null;
+                  Jet.triggerPitch();
+                }
+              }
+              const maneuver = state.qf01Maneuver;
+              const resetAnim = state.qf01Reset;
+              if (maneuver?.active) {
+                maneuver.timer += delta;
+                const duration = Math.max(maneuver.duration || QF01_MANEUVER_DURATION, 0.001);
+                const t = Math.min(maneuver.timer / duration, 1);
+                const eased = easeOutCubic(t);
+                const pitch = THREE.MathUtils.lerp(0, maneuver.pitch, eased);
+                const roll = THREE.MathUtils.lerp(0, maneuver.roll ?? 0, eased);
+                const yaw = THREE.MathUtils.lerp(0, maneuver.yaw ?? 0, eased);
+                const displacement = maneuver.distance * eased;
+                const orientation = new THREE.Euler(
+                  baseRotation.x + pitch,
+                  baseRotation.y + yaw,
+                  baseRotation.z + roll
+                );
+                const forward = new THREE.Vector3(0, 0, 1).applyEuler(orientation).normalize();
+                const newPosition = basePosition.clone().add(forward.multiplyScalar(displacement));
+                qf01.position.copy(newPosition);
+                qf01.rotation.copy(orientation);
+                if (t >= 1) {
+                  maneuver.active = false;
+                  maneuver.completed = true;
+                  maneuver.finalPosition = newPosition.clone();
+                  maneuver.finalRotation = orientation.clone();
+                  const last = state.assetRefs.qf01LastManeuver || (state.assetRefs.qf01LastManeuver = {});
+                  last.pitch = maneuver.pitch;
+                  last.roll = maneuver.roll ?? 0;
+                  last.yaw = maneuver.yaw ?? 0;
+                  last.distance = maneuver.distance;
+                  last.duration = maneuver.duration;
+                  last.finalPosition = maneuver.finalPosition.clone();
+                  last.finalRotation = maneuver.finalRotation.clone();
+                }
+              } else if (resetAnim?.active) {
+                resetAnim.timer += delta;
+                const duration = Math.max(resetAnim.duration || QF01_MANEUVER_DURATION, 0.001);
+                const t = Math.min(resetAnim.timer / duration, 1);
+                const eased = easeOutCubic(t);
+                const remaining = Math.max(1 - eased, 0);
+                const pitch = THREE.MathUtils.lerp(resetAnim.pitch, 0, eased);
+                const roll = THREE.MathUtils.lerp(resetAnim.roll ?? 0, 0, eased);
+                const yaw = THREE.MathUtils.lerp(resetAnim.yaw ?? 0, 0, eased);
+                const displacement = resetAnim.distance * remaining;
+                const orientation = new THREE.Euler(
+                  resetAnim.baseRotation.x + pitch,
+                  resetAnim.baseRotation.y + yaw,
+                  resetAnim.baseRotation.z + roll
+                );
+                const forward = new THREE.Vector3(0, 0, 1).applyEuler(orientation).normalize();
+                const newPosition = resetAnim.basePosition.clone().add(forward.multiplyScalar(displacement));
+                qf01.position.copy(newPosition);
+                qf01.rotation.copy(orientation);
+                if (t >= 1) {
+                  const settle = {
+                    active: true,
+                    timer: 0,
+                    duration: 0.45,
+                    startPosition: qf01.position.clone(),
+                    startQuaternion: qf01.quaternion.clone(),
+                    basePosition: resetAnim.basePosition.clone(),
+                    baseRotation: resetAnim.baseRotation.clone()
+                  };
+                  state.assetRefs.qf01Settle = settle;
+                  state.qf01Reset = null;
+                  state.assetRefs.qf01LastManeuver = null;
+                }
+              } else if (state.assetRefs.qf01Settle?.active) {
+                const settle = state.assetRefs.qf01Settle;
+                settle.timer += delta;
+                const duration = Math.max(settle.duration || 0.45, 0.001);
+                const t = Math.min(settle.timer / duration, 1);
+                const eased = easeOutCubic(t);
+                const idleBob = Math.sin(animTime * 1.6) * 0.08;
+                const idleRoll = Math.sin(animTime * 1.2) * THREE.MathUtils.degToRad(6);
+                const idlePitch = Math.sin(animTime * 1.4) * THREE.MathUtils.degToRad(4);
+                const targetPosition = settle.basePosition.clone();
+                targetPosition.y += idleBob;
+                const targetEuler = new THREE.Euler(
+                  settle.baseRotation.x + idlePitch,
+                  settle.baseRotation.y,
+                  settle.baseRotation.z + idleRoll
+                );
+                const targetQuaternion = new THREE.Quaternion().setFromEuler(targetEuler);
+                const blendedPosition = settle.startPosition.clone().lerp(targetPosition, eased);
+                const blendedQuaternion = settle.startQuaternion.clone().slerp(targetQuaternion, eased);
+                qf01.position.copy(blendedPosition);
+                qf01.quaternion.copy(blendedQuaternion);
+                qf01.rotation.setFromQuaternion(blendedQuaternion);
+                if (t >= 1) {
+                  state.assetRefs.qf01Settle = null;
+                }
+              } else if (maneuver?.completed) {
+                if (maneuver.finalPosition) {
+                  qf01.position.copy(maneuver.finalPosition);
+                }
+                if (maneuver.finalRotation) {
+                  qf01.rotation.copy(maneuver.finalRotation);
+                }
+              } else {
+                const bob = Math.sin(animTime * 1.6) * 0.08;
+                const roll = Math.sin(animTime * 1.2) * THREE.MathUtils.degToRad(6);
+                qf01.position.copy(basePosition);
+                qf01.position.y += bob;
+                qf01.rotation.set(
+                  baseRotation.x + Math.sin(animTime * 1.4) * THREE.MathUtils.degToRad(4),
+                  baseRotation.y,
+                  baseRotation.z + roll
+                );
+              }
+
             });
           },
           undefined,
-          error => console.error('Failed to load qf01RangerwNo.glb', error)
+          error => console.error('Failed to load qf01full.glb', error)
         );
-
 
         const stars = createStarField();
         state.scene.add(stars);
@@ -1870,19 +4215,26 @@ function createVolumetricCloud({
           const rect = sceneWrap.getBoundingClientRect();
           state.pointerTarget.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
           state.pointerTarget.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+          state.pointerActive = true;
         };
 
+        sceneWrap.addEventListener('pointerenter', () => {
+          state.pointerActive = true;
+        });
         sceneWrap.addEventListener('pointermove', updatePointer);
         sceneWrap.addEventListener('pointerdown', updatePointer);
         sceneWrap.addEventListener('pointerleave', () => {
+          state.pointerActive = false;
           state.pointerTarget.x = 0;
           state.pointerTarget.y = 0;
           setHoveredInteractive(null);
+          state.assetRefs.lastPointerHit = null;
+          syncIslandHoverStates([]);
         });
 
         sceneWrap.addEventListener('click', () => {
           if (state.hovered && state.hovered.userData?.onClick) {
-            state.hovered.userData.onClick();
+            state.hovered.userData.onClick(state.assetRefs?.lastPointerHit || null);
           }
         });
 
@@ -1890,13 +4242,32 @@ function createVolumetricCloud({
         window.addEventListener('resize', resizeRenderer);
 
         function render() {
+          const now = performance.now();
+          tickFpsDiag(now);
           resizeRenderer();
 
           const delta = state.clock ? state.clock.getDelta() : 0;
           const elapsed = state.clock ? state.clock.elapsedTime : 0;
 
           if (state.updaters.length) {
-            state.updaters.forEach(update => update({ delta, elapsed }));
+            if (updaterProfiler.enabled) {
+              state.updaters.forEach((update, index) => {
+                const start = performance.now();
+                update({ delta, elapsed });
+                const duration = performance.now() - start;
+                let entry = updaterProfiler.entries.get(update);
+                if (!entry) {
+                  const label = update.__tag || update.name || `updater_${index}`;
+                  entry = { name: label, total: 0, max: 0, count: 0 };
+                  updaterProfiler.entries.set(update, entry);
+                }
+                entry.total += duration;
+                entry.count += 1;
+                if (duration > entry.max) entry.max = duration;
+              });
+            } else {
+              state.updaters.forEach(update => update({ delta, elapsed }));
+            }
           }
 
           state.pointer.x += (state.pointerTarget.x - state.pointer.x) * 0.85;
@@ -1904,8 +4275,16 @@ function createVolumetricCloud({
 
           rayPointer.set(state.pointer.x, -state.pointer.y);
           raycaster.setFromCamera(rayPointer, state.camera);
-          const hit = raycaster.intersectObjects(state.interactives, false)[0];
-          setHoveredInteractive(hit ? hit.object : null);
+          const intersections = raycaster.intersectObjects(state.interactives, false);
+          syncIslandHoverStates(intersections);
+          const hitEntry =
+            intersections.find(intersection => !intersection.object.userData?.pointerPassthrough) ||
+            intersections[0] ||
+            null;
+          state.assetRefs.lastPointerHit = hitEntry;
+          setHoveredInteractive(hitEntry ? hitEntry.object : null, hitEntry);
+          const hoverSet = state.assetRefs.hoveredActivityKeys;
+          const pointerOverNorth = !!(state.pointerActive && hoverSet && hoverSet.has('island:north'));
 
           updateScroll();
           state.scroll.current += (state.scroll.target - state.scroll.current) * 0.08;
@@ -1916,11 +4295,16 @@ function createVolumetricCloud({
           state.stage.rotation.y += (targetY - state.stage.rotation.y) * 0.05;
           state.stage.rotation.x += (targetX - state.stage.rotation.x) * 0.05;
 
+          updateSkyYawFromCamera();
+
           state.stage.position.y = 1.55 + easedScroll * 2.8;
           state.stage.position.z = -4.8 - easedScroll * 2.2;
           state.stage.scale.setScalar(1 - easedScroll * 0.16);
 
           const backdrop = state.stage.userData?.backdrop;
+          stats.update();
+          updatePerfOverlay();
+
           if (backdrop) {
             const targetQuat = state.stage.quaternion.clone().invert().multiply(state.camera.quaternion);
             backdrop.quaternion.copy(targetQuat);
@@ -1941,7 +4325,24 @@ function createVolumetricCloud({
             stars.rotation.y -= 0.0003;
           }
 
-          state.renderer.render(state.scene, state.camera);
+          updateProfilerOverlay(now);
+
+          const nowTime = now;
+          const pointerMotion = Math.abs(state.pointer.x - state.pointerTarget.x) > 0.0008 || Math.abs(state.pointer.y - state.pointerTarget.y) > 0.0008;
+          const scrollMotion = Math.abs(state.scroll.target - state.scroll.current) > 0.0005;
+          const shouldRenderActive = pointerOverNorth || state.pointerActive || pointerMotion || scrollMotion;
+          if (shouldRenderActive) {
+            state.renderHoldUntil = nowTime + 850;
+          }
+          const shouldRenderFrame = shouldRenderActive || (state.renderHoldUntil || 0) > nowTime;
+
+          if (shouldRenderFrame) {
+            state.renderer.render(state.scene, state.camera);
+            state.lastIdleRender = nowTime;
+          } else if (!state.lastIdleRender || nowTime - state.lastIdleRender > 1200) {
+            state.renderer.render(state.scene, state.camera);
+            state.lastIdleRender = nowTime;
+          }
         }
 
         state.renderer.setAnimationLoop(render);
