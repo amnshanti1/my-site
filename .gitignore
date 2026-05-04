@@ -166,3 +166,10 @@ dist
 !.env.example
 .wrangler/
 .vscode/
+.DS_Store
+.playwright-mcp/
+mobile_tmp/
+tmp/
+tmp_*
+tmp_island_iters/
+public/node_modules/

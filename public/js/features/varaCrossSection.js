@@ -9,23 +9,18 @@ export function createVaraCrossSectionGuide({
   color = 0xff3333,
   material = null,
   sampleStep = 0.01,
-  smoothingSegments = 32,
   upstreamExtension = 0.18,
-  downstreamExtension = 0.22,
-  registerUpdater = null,
-  follower = {}
+  downstreamExtension = 0.22
 } = {}) {
   if (!THREE || !vara) return null;
 
   const {
     Box3,
     BufferGeometry,
-    CatmullRomCurve3,
     Line,
     LineBasicMaterial,
     Matrix4,
     MathUtils,
-    MeshPhysicalMaterial,
     Vector3
   } = THREE;
 
@@ -199,226 +194,15 @@ export function createVaraCrossSectionGuide({
 
   const offsetPoints = topPoints.map(point => new Vector3(planeX, point.y + offset, point.z));
 
-  let linePoints = offsetPoints;
-  if (offsetPoints.length >= 3) {
-    const curve = new CatmullRomCurve3(offsetPoints, false, 'catmullrom', 0.5);
-    linePoints = curve.getSpacedPoints(Math.max(offsetPoints.length, smoothingSegments));
-  }
-
-  const finalPoints = linePoints.map(point => point.clone());
+  const useTangentExtensions = false;
+  let finalPoints = offsetPoints.map(point => point.clone());
   const upstreamDistance = Math.max(0, upstreamExtension);
   const downstreamDistance = Math.max(0, downstreamExtension);
-  if (upstreamDistance > 0 && finalPoints.length) {
-    const upstreamPoint = finalPoints[0].clone();
-    upstreamPoint.x = planeX;
-    upstreamPoint.z += upstreamDistance;
-    finalPoints.unshift(upstreamPoint);
+  if (upstreamDistance > 0) {
+    extendEndpoint(finalPoints, upstreamDistance, true, useTangentExtensions, planeX);
   }
-  if (downstreamDistance > 0 && finalPoints.length) {
-    const downstreamPoint = finalPoints[finalPoints.length - 1].clone();
-    downstreamPoint.x = planeX;
-    downstreamPoint.z -= downstreamDistance;
-    finalPoints.push(downstreamPoint);
-  }
-
-  let followerState = null;
-  const followerDefaults = {
-    enabled: true,
-    radius: 0.05,
-    color: 0xffffff,
-    emissive: 0x181818,
-    roughness: 0.3,
-    metalness: 0.1,
-    speed: 0.25,
-    loop: true,
-    offsetY: 0,
-    material: null,
-    type: 'metaball',
-    MarchingCubes: null,
-    count: 1,
-    spacing: 0.08,
-    resolution: 28,
-    maxPolyCount: 8000,
-    isolation: 60,
-    strength: 0.65,
-    subtract: 5.5,
-    scale: null,
-    dropColor: null,
-    pulseFrequency: 2.2,
-    pulseAmplitude: 0.04,
-    offsetPhase: 0
-  };
-  const followerOptions = { ...followerDefaults, ...(follower || {}) };
-
-  const enableFollower =
-    attach &&
-    typeof registerUpdater === 'function' &&
-    followerOptions.enabled !== false &&
-    finalPoints.length >= 2;
-
-  let followerGeometry = null;
-  let followerMaterial = followerOptions.material || null;
-  let followerMaterialOwned = false;
-
-  if (enableFollower) {
-    const segmentLengths = [];
-    const cumulative = [0];
-    let totalLength = 0;
-    for (let i = 1; i < finalPoints.length; i += 1) {
-      const length = finalPoints[i].distanceTo(finalPoints[i - 1]);
-      segmentLengths.push(length);
-      totalLength += length;
-      cumulative.push(totalLength);
-    }
-
-    if (totalLength > 0) {
-      const getPointAt = t => {
-        if (t <= 0) return finalPoints[0];
-        if (t >= 1) return finalPoints[finalPoints.length - 1];
-        const targetDistance = t * totalLength;
-        let segmentIndex = 0;
-        while (segmentIndex < segmentLengths.length && cumulative[segmentIndex + 1] < targetDistance) {
-          segmentIndex += 1;
-        }
-        const segmentStart = finalPoints[segmentIndex];
-        const segmentEnd = finalPoints[segmentIndex + 1];
-        const segmentLength = segmentLengths[segmentIndex] || 1;
-        const distanceIntoSegment = targetDistance - cumulative[segmentIndex];
-        const segmentT = Math.min(Math.max(distanceIntoSegment / segmentLength, 0), 1);
-        return segmentStart.clone().lerp(segmentEnd, segmentT);
-      };
-
-      const MarchingCubesCtor = followerOptions.MarchingCubes;
-      const useMetaball =
-        followerOptions.type === 'metaball' && typeof MarchingCubesCtor === 'function';
-      const radius = Math.max(0.005, followerOptions.radius);
-      const speed = Math.max(0, followerOptions.speed);
-      const loop = followerOptions.loop !== false;
-      let progress = followerOptions.offsetPhase || 0;
-      const count = Math.max(1, Math.floor(followerOptions.count ?? 1));
-      const spacingDistance = Math.max(0, followerOptions.spacing ?? 0.08);
-      const spacingT = spacingDistance / Math.max(totalLength, 1e-4);
-
-      if (useMetaball) {
-        if (!followerMaterial) {
-          followerMaterial = new MeshPhysicalMaterial({
-            color: followerOptions.color,
-            emissive: followerOptions.emissive,
-            roughness: followerOptions.roughness,
-            metalness: followerOptions.metalness,
-            transmission: 0.75,
-            thickness: 0.85,
-            transparent: true,
-            opacity: 1,
-            envMapIntensity: 1.1,
-            depthWrite: false
-          });
-          followerMaterialOwned = true;
-        }
-
-        const dropColor = followerOptions.dropColor ?? followerOptions.color;
-        const baseStrength = followerOptions.strength;
-        const subtract = followerOptions.subtract;
-        const pulseAmp = Math.max(0, followerOptions.pulseAmplitude);
-        const pulseFreq = followerOptions.pulseFrequency;
-
-        const pathBounds = new Box3();
-        finalPoints.forEach(point => pathBounds.expandByPoint(point));
-        const boundsSize = pathBounds.getSize(new Vector3());
-        const safeSize = new Vector3(
-          Math.max(boundsSize.x, 0.001),
-          Math.max(boundsSize.y, 0.001),
-          Math.max(boundsSize.z, 0.001)
-        );
-
-        const maxDimension = Math.max(safeSize.x, safeSize.y, safeSize.z);
-        const dropField = new MarchingCubesCtor(
-          followerOptions.resolution,
-          followerMaterial,
-          true,
-          false,
-          followerOptions.maxPolyCount
-        );
-        dropField.name = 'VaraMetaballStream';
-        const boundsCenter = pathBounds.getCenter(new Vector3());
-        dropField.position.copy(boundsCenter);
-        dropField.scale.setScalar(maxDimension);
-        dropField.isolation = followerOptions.isolation;
-        dropField.frustumCulled = false;
-        vara.add(dropField);
-
-        const normalizePoint = point => {
-          const normalized = new Vector3(
-            (point.x - boundsCenter.x) / maxDimension + 0.5,
-            (point.y - boundsCenter.y) / maxDimension + 0.5,
-            (point.z - boundsCenter.z) / maxDimension + 0.5
-          );
-          normalized.x = Math.min(Math.max(normalized.x, 1e-4), 0.9999);
-          normalized.y = Math.min(Math.max(normalized.y, 1e-4), 0.9999);
-          normalized.z = Math.min(Math.max(normalized.z, 1e-4), 0.9999);
-          return normalized;
-        };
-
-        const drops = Array.from({ length: count }, (_, index) => ({
-          offset: spacingT * index,
-          progress: 0,
-          lastPoint: null
-        }));
-
-        const applyField = (elapsed = 0) => {
-          dropField.reset();
-          drops.forEach(drop => {
-            const point = getPointAt(drop.progress);
-            drop.lastPoint = point.clone();
-            const normalized = normalizePoint(point);
-            const strength =
-              baseStrength + pulseAmp * Math.sin(elapsed * pulseFreq + drop.progress * Math.PI * 2);
-            dropField.addBall(normalized.x, normalized.y, normalized.z, strength, subtract, dropColor);
-          });
-          dropField.update();
-        };
-
-        drops.forEach(drop => {
-          let initialProgress = progress - drop.offset;
-          if (loop) {
-            initialProgress = ((initialProgress % 1) + 1) % 1;
-          } else {
-            initialProgress = Math.max(0, Math.min(1, initialProgress));
-          }
-          drop.progress = initialProgress;
-        });
-        applyField(0);
-
-        const unregister = registerUpdater(({ delta = 0, elapsed = 0 }) => {
-          if (!dropField.parent) return;
-          const deltaProgress = speed * delta / Math.max(totalLength, 1e-4);
-          progress += deltaProgress;
-          drops.forEach(drop => {
-            let nextProgress = progress - drop.offset;
-            if (loop) {
-              nextProgress = ((nextProgress % 1) + 1) % 1;
-            } else {
-              nextProgress = Math.max(0, Math.min(1, nextProgress));
-            }
-            drop.progress = nextProgress;
-          });
-          applyField(elapsed);
-        });
-
-        followerGeometry = dropField.geometry;
-        followerState = {
-          mesh: dropField,
-          unregister,
-          geometry: followerGeometry,
-          material: followerMaterial,
-          options: followerOptions,
-          field: dropField,
-          drops,
-          bounds: pathBounds,
-          normalizePoint
-        };
-      }
-    }
+  if (downstreamDistance > 0) {
+    extendEndpoint(finalPoints, downstreamDistance, false, useTangentExtensions, planeX);
   }
 
   const geometry = new BufferGeometry().setFromPoints(finalPoints);
@@ -449,24 +233,42 @@ export function createVaraCrossSectionGuide({
     if (!material) {
       lineMaterial.dispose();
     }
-    if (followerState) {
-      followerState.unregister?.();
-      if (followerState.field) {
-        followerState.field.parent?.remove(followerState.field);
-        followerState.field.geometry?.dispose?.();
-      }
-      if (followerMaterialOwned) {
-        followerState.material?.dispose?.();
-      }
-      followerState = null;
-    }
   };
 
   return {
     line,
     points: finalPoints,
     planeX,
-    dispose,
-    follower: followerState
+    dispose
   };
+
+  function extendEndpoint(points, distance, atStart, useTangent, plane) {
+    if (!points?.length || distance <= 0) return;
+    if (!useTangent) {
+      const idx = atStart ? 0 : points.length - 1;
+      const clone = points[idx].clone();
+      clone.x = plane;
+      clone.z += atStart ? distance : -distance;
+      if (atStart) {
+        points.unshift(clone);
+      } else {
+        points.push(clone);
+      }
+      return;
+    }
+    const idx = atStart ? 0 : points.length - 1;
+    const neighborIdx = atStart ? Math.min(1, points.length - 1) : Math.max(points.length - 2, 0);
+    if (idx === neighborIdx) return;
+    const tangent = points[idx].clone().sub(points[neighborIdx]);
+    if (!tangent.lengthSq()) return;
+    tangent.normalize().multiplyScalar(distance);
+    const extended = points[idx].clone().add(tangent);
+    extended.x = plane;
+    if (atStart) {
+      points.unshift(extended);
+    } else {
+      points.push(extended);
+    }
+  }
+
 }
