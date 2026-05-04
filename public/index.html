@@ -101,30 +101,46 @@
 
     const SKY_PRESETS = {
       sunset: {
-        turbidity: 10,
-        rayleigh: 3,
-        mieCoefficient: 0.005,
-        mieDirectionalG: 0.7,
-        elevation: 5,
-        azimuth: 210,
+        turbidity: 4.55,
+        rayleigh: 3.285,
+        mieCoefficient: 0.0038,
+        mieDirectionalG: 0.714,
+        elevation: 6.3,
+        elevationOffset: -6,
+        azimuth: 205,
         exposure: 0.5,
-        cloudCoverage: 0.42,
-        cloudDensity: 0.38,
-        cloudElevation: 0.42,
-        showSunDisc: true
+        cloudScale: 0.00112,
+        cloudSpeed: 0.00041,
+        cloudCoverage: 0.854,
+        cloudDensity: 0.302,
+        cloudElevation: 0.442,
+        cloudQuality: 0,
+        showSunDisc: true,
+        animateTime: true,
+        timeScale: 1,
+        timeOffset: 0,
+        manualTime: 0
       },
       fullsun: {
-        turbidity: 10,
-        rayleigh: 3,
+        turbidity: 0,
+        rayleigh: 0.165,
         mieCoefficient: 0.005,
-        mieDirectionalG: 0.7,
+        mieDirectionalG: 0.269,
         elevation: 12,
+        elevationOffset: -7.44,
         azimuth: 210,
-        exposure: 0.5,
+        exposure: 0.95,
+        cloudScale: 0.0002,
+        cloudSpeed: 0.0001,
         cloudCoverage: 0.34,
         cloudDensity: 0.3,
         cloudElevation: 0.55,
-        showSunDisc: true
+        cloudQuality: 0.3,
+        showSunDisc: false,
+        animateTime: false,
+        timeScale: 1,
+        timeOffset: 0,
+        manualTime: 0
       },
       night: {
         turbidity: 2.0,
@@ -157,7 +173,7 @@
     const SKY_DEBUG_DEFAULTS = {
       yawFollow: 1,
       pitchFollow: 0.75,
-      pitchOffsetDeg: -4.5
+      pitchOffsetDeg: -0.4
     };
     const skyControlState = {
       preset: 'sunset',
@@ -168,15 +184,15 @@
       mieCoefficient: SKY_PRESETS.sunset.mieCoefficient,
       mieDirectionalG: SKY_PRESETS.sunset.mieDirectionalG,
       elevation: SKY_PRESETS.sunset.elevation,
-      elevationOffset: SKY_ELEVATION_OFFSET,
+      elevationOffset: SKY_PRESETS.sunset.elevationOffset ?? SKY_ELEVATION_OFFSET,
       azimuth: SKY_PRESETS.sunset.azimuth,
       exposure: SKY_PRESETS.sunset.exposure,
-      cloudScale: SKY_EXAMPLE_DEFAULTS.cloudScale,
-      cloudSpeed: SKY_EXAMPLE_DEFAULTS.cloudSpeed,
+      cloudScale: SKY_PRESETS.sunset.cloudScale ?? SKY_EXAMPLE_DEFAULTS.cloudScale,
+      cloudSpeed: SKY_PRESETS.sunset.cloudSpeed ?? SKY_EXAMPLE_DEFAULTS.cloudSpeed,
       cloudCoverage: SKY_PRESETS.sunset.cloudCoverage,
       cloudDensity: SKY_PRESETS.sunset.cloudDensity,
       cloudElevation: SKY_PRESETS.sunset.cloudElevation,
-      cloudQuality: SKY_EXAMPLE_DEFAULTS.cloudQuality,
+      cloudQuality: SKY_PRESETS.sunset.cloudQuality ?? SKY_EXAMPLE_DEFAULTS.cloudQuality,
       showSunDisc: SKY_PRESETS.sunset.showSunDisc,
       upX: SKY_EXAMPLE_DEFAULTS.upX,
       upY: SKY_EXAMPLE_DEFAULTS.upY,
@@ -185,10 +201,10 @@
       pitchFollow: SKY_DEBUG_DEFAULTS.pitchFollow,
       horizon: SKY_DEBUG_DEFAULTS.pitchOffsetDeg,
       yawLocked: false,
-      animateTime: false,
-      timeScale: 1,
-      timeOffset: 0,
-      manualTime: 0,
+      animateTime: SKY_PRESETS.sunset.animateTime ?? false,
+      timeScale: SKY_PRESETS.sunset.timeScale ?? 1,
+      timeOffset: SKY_PRESETS.sunset.timeOffset ?? 0,
+      manualTime: SKY_PRESETS.sunset.manualTime ?? 0,
       renderMode: getInitialSkyRenderMode()
     };
     const skyControlControllers = [];
@@ -293,7 +309,7 @@
     perfOverlay.style.whiteSpace = 'pre-line';
     perfOverlay.style.zIndex = '49';
     perfOverlay.style.pointerEvents = 'none';
-    perfOverlay.style.display = PERF_DEBUG_VISIBLE ? 'block' : 'none';
+    perfOverlay.style.display = 'none';
     mountDebugUi(perfOverlay);
 
     const skyRenderOverlay = document.createElement('div');
@@ -307,7 +323,7 @@
     skyRenderOverlay.style.whiteSpace = 'pre-line';
     skyRenderOverlay.style.zIndex = '49';
     skyRenderOverlay.style.pointerEvents = 'none';
-    skyRenderOverlay.style.display = PERF_DEBUG_VISIBLE ? 'block' : 'none';
+    skyRenderOverlay.style.display = 'none';
     mountDebugUi(skyRenderOverlay);
 
     const perfDumpButton = document.createElement('button');
@@ -323,7 +339,7 @@
     perfDumpButton.style.zIndex = '50';
     perfDumpButton.style.cursor = 'pointer';
     perfDumpButton.style.boxShadow = '0 8px 18px rgba(0,0,0,0.25)';
-    perfDumpButton.style.display = PERF_DEBUG_VISIBLE ? 'block' : 'none';
+    perfDumpButton.style.display = 'none';
     mountDebugUi(perfDumpButton, true);
 
     const skyToggleButton = document.createElement('button');
@@ -339,6 +355,7 @@
     skyToggleButton.style.zIndex = '50';
     skyToggleButton.style.cursor = 'pointer';
     skyToggleButton.style.boxShadow = '0 8px 18px rgba(0,0,0,0.25)';
+    skyToggleButton.style.display = 'none';
     mountDebugUi(skyToggleButton, true);
 
     const skyLockButton = document.createElement('button');
@@ -354,6 +371,7 @@
     skyLockButton.style.zIndex = '50';
     skyLockButton.style.cursor = 'pointer';
     skyLockButton.style.boxShadow = '0 8px 18px rgba(0,0,0,0.25)';
+    skyLockButton.style.display = 'none';
     mountDebugUi(skyLockButton, true);
 
     const cameraModeButton = document.createElement('button');
@@ -369,11 +387,12 @@
     cameraModeButton.style.zIndex = '50';
     cameraModeButton.style.cursor = 'pointer';
     cameraModeButton.style.boxShadow = '0 8px 18px rgba(0,0,0,0.25)';
+    cameraModeButton.style.display = 'none';
     mountDebugUi(cameraModeButton, true);
 
     const skyYawFollowPanel = document.createElement('div');
     skyYawFollowPanel.style.position = 'relative';
-    skyYawFollowPanel.style.display = 'flex';
+    skyYawFollowPanel.style.display = 'none';
     skyYawFollowPanel.style.flexDirection = 'column';
     skyYawFollowPanel.style.gap = '6px';
     skyYawFollowPanel.style.padding = '10px';
@@ -452,10 +471,10 @@
     skyPitchOffsetInput.min = '-45';
     skyPitchOffsetInput.max = '45';
     skyPitchOffsetInput.step = '0.1';
-    skyPitchOffsetInput.value = '-4.5';
+    skyPitchOffsetInput.value = String(SKY_DEBUG_DEFAULTS.pitchOffsetDeg);
     skyPitchOffsetInput.style.width = '92px';
     const skyPitchOffsetValue = document.createElement('span');
-    skyPitchOffsetValue.textContent = '-4.5';
+    skyPitchOffsetValue.textContent = String(SKY_DEBUG_DEFAULTS.pitchOffsetDeg);
     skyPitchOffsetValue.style.minWidth = '34px';
     skyPitchOffsetValue.style.textAlign = 'right';
     skyPitchOffsetRow.appendChild(skyPitchOffsetText);
@@ -1081,11 +1100,14 @@
     state.assetRefs.skyYawLocked = false;
     state.assetRefs.skyYawLockValue = null;
     state.assetRefs.skyYawFollow = 1;
-    state.assetRefs.skyPitchAdjustment = -4.5 * Math.PI / 180;
+    state.assetRefs.skyPitchAdjustment = SKY_DEBUG_DEFAULTS.pitchOffsetDeg * Math.PI / 180;
 
     function getSkyPresetNumber(preset, key) {
       const value = preset?.[key];
       if (Number.isFinite(value)) return value;
+      if (key === 'elevationOffset') return SKY_ELEVATION_OFFSET;
+      if (key === 'timeScale') return 1;
+      if (key === 'timeOffset' || key === 'manualTime') return 0;
       return SKY_EXAMPLE_DEFAULTS[key] ?? 0;
     }
 
@@ -1161,6 +1183,7 @@
       preset.mieCoefficient = skyControlState.mieCoefficient;
       preset.mieDirectionalG = skyControlState.mieDirectionalG;
       preset.elevation = skyControlState.elevation;
+      preset.elevationOffset = skyControlState.elevationOffset;
       preset.azimuth = skyControlState.azimuth;
       preset.exposure = skyControlState.exposure;
       preset.cloudScale = skyControlState.cloudScale;
@@ -1173,6 +1196,10 @@
       preset.upX = skyControlState.upX;
       preset.upY = skyControlState.upY;
       preset.upZ = skyControlState.upZ;
+      preset.animateTime = skyControlState.animateTime;
+      preset.timeScale = skyControlState.timeScale;
+      preset.timeOffset = skyControlState.timeOffset;
+      preset.manualTime = skyControlState.manualTime;
     }
 
     function syncSkyControlStateFromPreset(name = state.assetRefs.skyPreset || skyControlState.preset, { updateDisplays = true } = {}) {
@@ -1184,6 +1211,7 @@
       skyControlState.mieCoefficient = preset.mieCoefficient;
       skyControlState.mieDirectionalG = preset.mieDirectionalG;
       skyControlState.elevation = preset.elevation;
+      skyControlState.elevationOffset = getSkyPresetNumber(preset, 'elevationOffset');
       skyControlState.azimuth = preset.azimuth;
       skyControlState.exposure = preset.exposure;
       skyControlState.cloudScale = getSkyPresetNumber(preset, 'cloudScale');
@@ -1196,6 +1224,10 @@
       skyControlState.upX = getSkyPresetNumber(preset, 'upX');
       skyControlState.upY = getSkyPresetNumber(preset, 'upY');
       skyControlState.upZ = getSkyPresetNumber(preset, 'upZ');
+      skyControlState.animateTime = getSkyPresetBool(preset, 'animateTime');
+      skyControlState.timeScale = getSkyPresetNumber(preset, 'timeScale');
+      skyControlState.timeOffset = getSkyPresetNumber(preset, 'timeOffset');
+      skyControlState.manualTime = getSkyPresetNumber(preset, 'manualTime');
       skyControlState.yawFollow = Number.isFinite(state.assetRefs.skyYawFollow) ? state.assetRefs.skyYawFollow : SKY_DEBUG_DEFAULTS.yawFollow;
       skyControlState.pitchFollow = Number.isFinite(state.assetRefs.skyPitchFollow) ? state.assetRefs.skyPitchFollow : SKY_DEBUG_DEFAULTS.pitchFollow;
       skyControlState.horizon = Number.isFinite(state.assetRefs.skyPitchAdjustment)
@@ -1438,7 +1470,7 @@
         }
         sunBase.normalize();
       } else {
-        const elevation = preset.elevation + skyControlState.elevationOffset;
+        const elevation = preset.elevation + getSkyPresetNumber(preset, 'elevationOffset');
         const phi = THREE.MathUtils.degToRad(90 - elevation);
         const theta = THREE.MathUtils.degToRad(preset.azimuth);
         sunBase.setFromSphericalCoords(1, phi, theta);
@@ -1493,7 +1525,7 @@
         }
         sunTarget.normalize();
       } else {
-        const elevation = preset.elevation + skyControlState.elevationOffset;
+        const elevation = preset.elevation + getSkyPresetNumber(preset, 'elevationOffset');
         const phi = THREE.MathUtils.degToRad(90 - elevation);
         const theta = THREE.MathUtils.degToRad(preset.azimuth);
         sunTarget.setFromSphericalCoords(1, phi, theta);
