@@ -15,12 +15,13 @@ function main({ pane, contextID, glslVersion}) {
 	} = GPUIO;
 
 	const INFLOW_DEFAULT_SPEED = 3;
+	const EMBED_MODE = typeof window !== 'undefined' && window.parent && window.parent !== window;
 	const ENABLE_POINTER_FORCES = false; // disable pointer forces for embed/perf
 	const PARAMS = {
 		trailLength: 1,
 		render: 'Fluid',
 		inflowSpeed: INFLOW_DEFAULT_SPEED,
-		paused: true,
+		paused: EMBED_MODE ? true : false,
 	};
 	const telemetry = {
 		outletMinSpeed: 0,
@@ -38,8 +39,8 @@ function main({ pane, contextID, glslVersion}) {
 	// Scaling factor for touch interactions.
 	const TOUCH_FORCE_SCALE = 2;
 	// Approx avg num particles per px (reduced to lower GPU cost).
-	const PARTICLE_DENSITY = 0.05;
-	const MAX_NUM_PARTICLES = 60000;
+	const PARTICLE_DENSITY = 0.035;
+	const MAX_NUM_PARTICLES = 50000;
 	// How long do the particles last before they are reset.
 	// If we don't have then reset they tend to clump up.
 	const PARTICLE_LIFETIME = 100;
@@ -57,6 +58,7 @@ function main({ pane, contextID, glslVersion}) {
 	// We are storing abs position (2 components) and displacements (2 components) in this buffer.
 	// This decreases error when rendering to half float.
 	const POSITION_NUM_COMPONENTS = 4;
+	let velocityMaxObserved = Math.max(INFLOW_DEFAULT_SPEED * 2, 5);
 
 	let shouldSavePNG = false;
 	let telemetryPending = false;
@@ -65,6 +67,9 @@ function main({ pane, contextID, glslVersion}) {
 	let lastPressureSample = 0;
 	let pressureMaxAbs = 1;
 	const canvas = document.createElement('canvas');
+	if (EMBED_MODE) {
+		canvas.style.pointerEvents = 'none';
+	}
 	document.body.appendChild(canvas);
 	const obstacleOverlay = document.createElement('canvas');
 	obstacleOverlay.style.position = 'absolute';
@@ -628,13 +633,27 @@ function main({ pane, contextID, glslVersion}) {
 		fragmentShader: `
 			in vec2 v_uv;
 			uniform sampler2D u_trailState;
+			uniform sampler2D u_velocity;
+			uniform float u_speedMax;
 			out vec4 out_color;
 			void main() {
-				vec3 background = vec3(0.98, 0.922, 0.843);
-				vec3 particle = vec3(0, 0, 0.2);
-				out_color = vec4(mix(background, particle, texture(u_trailState, v_uv).x), 1);
+				float intensity = texture(u_trailState, v_uv).x;
+				vec2 vel = texture(u_velocity, v_uv).xy;
+				float speed = length(vel);
+				float speedNorm = clamp(speed / max(u_speedMax, 0.0001), 0.0, 1.0);
+				// Bright blue (slow) to red (fast).
+				vec3 cLow = vec3(0.0, 0.35, 1.0);
+				vec3 cHigh = vec3(1.0, 0.0, 0.1);
+				vec3 trailColor = mix(cLow, cHigh, speedNorm);
+				float alpha = clamp(intensity * 1.4, 0.0, 1.0);
+				out_color = vec4(trailColor, alpha);
 			}
 		`,
+		uniforms: [
+			{ name: 'u_trailState', value: 0, type: INT },
+			{ name: 'u_velocity', value: 1, type: INT },
+			{ name: 'u_speedMax', value: velocityMaxObserved, type: FLOAT },
+		],
 	});
 	const renderPressure = new GPUProgram(composer, {
 		name: 'renderPressure',
@@ -651,8 +670,9 @@ function main({ pane, contextID, glslVersion}) {
 			float maxAbs = max(u_maxAbs, 1e-5);
 			float ratio = clamp(abs(value) / maxAbs, 0.0, 1.0);
 			vec3 tint = value >= 0.0 ? POS_COLOR : NEG_COLOR;
-			vec3 color = mix(BASE_COLOR, tint, ratio);
-			out_color = vec4(color, 1.0);
+			// Show only red/blue; alpha scales with magnitude.
+			float alpha = ratio; // 0 at zero pressure, up to 1 at maxAbs
+			out_color = vec4(tint, alpha);
 		}
 		`,
 		uniforms: [
@@ -718,7 +738,7 @@ function main({ pane, contextID, glslVersion}) {
 				layer: velocityState,
 				vectorSpacing: 22, // fewer arrows (coarser grid)
 				vectorScale: 3,
-				color: [0, 0, 0],
+				color: [1.0, 0.25, 0.05], // bright orange-red
 			});
 		} else {
 			// Increment particle age.
@@ -753,7 +773,7 @@ function main({ pane, contextID, glslVersion}) {
 			// Render particle trails to screen.
 			composer.step({
 				program: renderTrails,
-				input: trailState,
+				input: [trailState, velocityState],
 			});
 		}
 		if (shouldSavePNG) {
@@ -869,6 +889,9 @@ function main({ pane, contextID, glslVersion}) {
 	}));
 	ui.push(pane.addButton({ title: 'Reset' }).on('click', onResize));
 	ui.push(pane.addButton({ title: 'Save PNG (p)' }).on('click', savePNG));
+	if (EMBED_MODE) {
+		pane.hidden = true;
+	}
 
 	// Add 'p' hotkey to print screen.
 	function savePNG() {
@@ -898,6 +921,8 @@ function main({ pane, contextID, glslVersion}) {
 		if (!event.source || typeof event.source.postMessage !== 'function') return;
 		event.source.postMessage(payload, '*');
 	}
+	// Wrapper already ticks every frame; this is a no-op placeholder to avoid errors when unpausing from parent.
+	function scheduleFluidFrame() {}
 	function onParentMessage(event) {
 		const { data } = event;
 		if (!data || typeof data !== 'object') return;
@@ -1066,6 +1091,18 @@ async function updateOutletTelemetry() {
 		const values = await velocityState.getValuesAsync();
 		const stats = computeInletOutletStats(values, velocityState.width, velocityState.height, velocityState.numComponents);
 		telemetry.outletMinSpeed = stats.outletMinSpeed;
+		// Compute max speed for dynamic colormap.
+		let maxSpeed = 0;
+		for (let i = 0; i < values.length; i += velocityState.numComponents) {
+			const vx = values[i];
+			const vy = values[i + 1] || 0;
+			const s = Math.hypot(vx, vy);
+			if (s > maxSpeed) maxSpeed = s;
+		}
+		if (maxSpeed > 0) {
+			velocityMaxObserved = maxSpeed;
+			renderTrails.setUniform('u_speedMax', Math.max(maxSpeed, 1e-3));
+		}
 	} catch (error) {
 		console.warn('Failed to sample outlet min speed', error);
 	} finally {

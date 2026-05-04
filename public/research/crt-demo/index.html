@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>CRT Demo</title>
+    <script type="importmap">
+      {
+        "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.156.1/examples/jsm/",
+        "three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.156.1/examples/jsm/",
+        "pdfjs-dist": "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.2.67/legacy/build/pdf.mjs"
+      }
+    }
+    </script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #02050b;
+        display: grid;
+        place-items: center;
+        color: #ccd8ff;
+        font-family: system-ui, sans-serif;
+      }
+
+      .wrapper {
+        display: grid;
+        gap: 16px;
+        place-items: center;
+      }
+
+      canvas {
+        width: 100%;
+        height: auto;
+        image-rendering: pixelated;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 18px rgba(64, 128, 255, 0.35);
+      }
+
+      button {
+        background: rgba(25, 45, 90, 0.7);
+        color: inherit;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 6px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: rgba(40, 70, 130, 0.85);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <canvas id="crt-canvas"></canvas>
+      <button id="toggle">Pause</button>
+    </div>
+    <script>
+      window.addEventListener('message', (event) => {
+        const payload = event.data;
+        if (!payload || payload.type !== 'crt-pointer') return;
+        const canvas = document.getElementById('crt-canvas');
+        if (!canvas) return;
+        if (!canvas.__crtSyntheticPointerCaptureShim) {
+          const nativeSetPointerCapture = canvas.setPointerCapture?.bind(canvas);
+          const nativeReleasePointerCapture = canvas.releasePointerCapture?.bind(canvas);
+          const nativeHasPointerCapture = canvas.hasPointerCapture?.bind(canvas);
+          canvas.__crtSyntheticPointerCaptureShim = true;
+          canvas.setPointerCapture = pointerId => {
+            try {
+              nativeSetPointerCapture?.(pointerId);
+            } catch {
+              canvas.__crtSyntheticPointerId = pointerId;
+            }
+          };
+          canvas.releasePointerCapture = pointerId => {
+            try {
+              nativeReleasePointerCapture?.(pointerId);
+            } catch {
+              if (canvas.__crtSyntheticPointerId === pointerId) canvas.__crtSyntheticPointerId = null;
+            }
+          };
+          canvas.hasPointerCapture = pointerId => {
+            try {
+              return nativeHasPointerCapture?.(pointerId) || canvas.__crtSyntheticPointerId === pointerId;
+            } catch {
+              return canvas.__crtSyntheticPointerId === pointerId;
+            }
+          };
+        }
+        const rect = canvas.getBoundingClientRect();
+        const x = rect.left + (payload.x ?? 0) * rect.width;
+        const y = rect.top + (payload.y ?? 0) * rect.height;
+        if (payload.kind === 'wheel') {
+          const wheelEvent = new WheelEvent('wheel', {
+            clientX: x,
+            clientY: y,
+            deltaY: payload.deltaY ?? 0,
+            bubbles: true
+          });
+          canvas.dispatchEvent(wheelEvent);
+          return;
+        }
+        const pointerEvent = new PointerEvent(payload.kind || 'pointermove', {
+          clientX: x,
+          clientY: y,
+          button: payload.button ?? 0,
+          buttons: payload.buttons ?? 0,
+          pointerId: payload.pointerId ?? 1,
+          pointerType: payload.pointerType || 'mouse',
+          bubbles: true,
+          cancelable: true
+        });
+        canvas.dispatchEvent(pointerEvent);
+      });
+    </script>
+    <script type="module" src="./playground.js"></script>
+  </body>
+</html>
