@@ -2,12 +2,15 @@
 	"name": "my-site",
 	"version": "0.0.0",
 	"private": true,
+	"type": "module",
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
-		"start": "wrangler dev"
+		"start": "wrangler dev",
+		"test": "node --test tests/*.test.mjs"
 	},
 	"devDependencies": {
+		"three": "^0.160.0",
 		"wrangler": "^4.39.0"
 	}
 }
