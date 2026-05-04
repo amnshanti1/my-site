@@ -1,6 +1,7 @@
 'use strict';
 (function bootstrapGpuIoWrapper() {
 	function initWrapper() {
+		const EMBED_MODE = typeof window !== 'undefined' && window.parent && window.parent !== window;
 		if (typeof GPUIO === 'undefined') {
 			requestAnimationFrame(initWrapper);
 			return;
@@ -27,6 +28,10 @@
 			pane.expanded = false;
 			paneToggle.expanded = true;
 		});
+		if (EMBED_MODE) {
+			pane.hidden = true;
+			paneToggle.hidden = true;
+		}
 
 		MicroModal.init();
 
@@ -89,14 +94,16 @@
 		title = `${webGLSettings.webGLVersion}`;
 		settings.title = title;
 
-		CanvasCapture.dispose();
-		CanvasCapture.init(canvas, { showRecDot: true, showDialogs: true, showAlerts: true, recDotCSS: { left: '0', right: 'auto' } });
-		CanvasCapture.bindKeyToVideoRecord('v', {
-			format: CanvasCapture.WEBM,
-			name: 'screen_recording',
-			fps: RECORD_FPS,
-			quality: 1,
-		});
+		if (!EMBED_MODE) {
+			CanvasCapture.dispose();
+			CanvasCapture.init(canvas, { showRecDot: true, showDialogs: true, showAlerts: true, recDotCSS: { left: '0', right: 'auto' } });
+			CanvasCapture.bindKeyToVideoRecord('v', {
+				format: CanvasCapture.WEBM,
+				name: 'screen_recording',
+				fps: RECORD_FPS,
+				quality: 1,
+			});
+		}
 	}
 	const settings = pane.addFolder({
 		title,
@@ -145,7 +152,9 @@
 		} else {
 			numFrames = 0;
 		}
-		CanvasCapture.checkHotkeys();
+		if (!EMBED_MODE) {
+			CanvasCapture.checkHotkeys();
+		}
 		window.requestAnimationFrame(outerLoop);
 	}
 	outerLoop();

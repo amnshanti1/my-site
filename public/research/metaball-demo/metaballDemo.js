@@ -70,7 +70,7 @@ scene.add(pathLine);
 const tubeSettings = {
   tubularSegments: 160,
   radialSegments: 16,
-  radius: 0.015
+  radius: 0.008
 };
 
 const tubeMaterial = new THREE.MeshBasicMaterial({
@@ -84,7 +84,10 @@ const FLOW_CONFIG = {
   growSpeed: 0.7,
   slideSpeed: 0.45,
   shrinkSpeed: 0.45,
-  maxFlows: 3
+  maxFlows: 6,
+  scaleAmp: 0.2,
+  scaleSpeed: 2.2,
+  scaleFreq: Math.PI * 4
 };
 
 const flows = [];
@@ -153,7 +156,8 @@ function spawnFlow() {
     mesh,
     head: FLOW_CONFIG.minSpan,
     tail: 0,
-    state: 'growing'
+    state: 'growing',
+    scalePhase: Math.random() * Math.PI * 2
   };
   flows.push(flow);
   return flow;
@@ -219,6 +223,8 @@ function updateFlows(delta) {
         break;
     }
 
+    flow.scalePhase += delta * FLOW_CONFIG.scaleSpeed;
+
     if (flow.state === 'done') {
       disposeFlow(flow);
       flows.splice(i, 1);
@@ -250,7 +256,33 @@ function rebuildFlowGeometry(flow) {
     tubeSettings.radialSegments,
     false
   );
+  applyCrossSectionWarp(flow.mesh.geometry, flow, tubularSegs);
   flow.mesh.visible = true;
+}
+
+function applyCrossSectionWarp(geometry, flow, tubularSegs) {
+  const position = geometry.attributes.position;
+  const normal = geometry.attributes.normal;
+  if (!position || !normal) return;
+  const radialCount = tubeSettings.radialSegments + 1;
+
+  for (let i = 0; i < position.count; i++) {
+    const ringIndex = Math.floor(i / radialCount);
+    const progress = tubularSegs > 0 ? ringIndex / tubularSegs : 0;
+    const scale = 1 + FLOW_CONFIG.scaleAmp * Math.sin(flow.scalePhase + progress * FLOW_CONFIG.scaleFreq);
+    const offset = tubeSettings.radius * (scale - 1);
+    if (Math.abs(offset) < 1e-5) continue;
+    const nx = normal.getX(i);
+    const ny = normal.getY(i);
+    const nz = normal.getZ(i);
+    position.setXYZ(
+      i,
+      position.getX(i) + nx * offset,
+      position.getY(i) + ny * offset,
+      position.getZ(i) + nz * offset
+    );
+  }
+  position.needsUpdate = true;
 }
 
 function disposeFlow(flow) {
